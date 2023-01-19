@@ -18,6 +18,6 @@ To run frontend:
 - [FPL API docs](https://fpl.readthedocs.io/en/latest/)
 - [FPL API Github](https://github.com/amosbastian/fpl)
 - [Understat API docs](https://understat.readthedocs.io/en/latest/)
-- [Understat API Github](https://github.com/amosbastian/understat)
+- [Understat API Github](https://github.com/amosbastian/understat/blob/master/understat/understat.py)
 
 - [Backend structure example](https://github.com/tiangolo/full-stack-fastapi-postgresql/tree/master/%7B%7Bcookiecutter.project_slug%7D%7D/backend)

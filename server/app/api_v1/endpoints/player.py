@@ -1,10 +1,25 @@
 from fastapi import APIRouter
 from typing import Union
+
 from app import schemas
+from app.data.players import get_player, get_understat_player_matches, get_understat_player_seasons
 
 router = APIRouter()
 
 
-@router.get('/{id}', response_model=Union[schemas.Player, None])
-def get_player(id: int):
-    return {'id': 1, 'name': 'Jordan Henderson', 'xG': 0.02, 'xA': 0.11}
+@router.get('/{id}')#, response_model=Union[schemas.Player, None])
+async def read_player(id: int):
+    player = await get_player(id)
+    return player
+
+
+@router.get('/{id}/seasons')
+async def read_seasons(id: int):
+    seasons = await get_understat_player_seasons(id)
+    return seasons
+
+
+@router.get('/{id}/matches')
+async def read_matches(id: int, year: Union[str, None] = None):
+    matches = await get_understat_player_matches(id, year)
+    return matches
