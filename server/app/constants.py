@@ -1,0 +1,1 @@
+PLAYER_ID_URL = 'https://raw.githubusercontent.com/vaastav/Fantasy-Premier-League/master/data/{}/id_dict.csv'

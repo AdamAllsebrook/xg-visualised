@@ -6,6 +6,12 @@ class TeamStripped(BaseModel):
     name: str
     prefix : str = 'team'
 
+    def create(fpl_team_json):
+        return {
+            'id': fpl_team_json['id'],
+            'name': fpl_team_json['name'],
+            'prefix': 'team'
+        }
 
 
 class Team(BaseModel):
