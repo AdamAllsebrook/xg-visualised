@@ -16,7 +16,7 @@ To run frontend:
 - [picocss](https://picocss.com/docs/)
 
 - [FPL API docs](https://fpl.readthedocs.io/en/latest/)
-- [FPL API Github](https://github.com/amosbastian/fpl)
+- [FPL API Github](https://github.com/amosbastian/fpl/blob/master/fpl/fpl.py)
 - [Understat API docs](https://understat.readthedocs.io/en/latest/)
 - [Understat API Github](https://github.com/amosbastian/understat/blob/master/understat/understat.py)
 
