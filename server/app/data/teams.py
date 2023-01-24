@@ -1,5 +1,4 @@
 from fpl import FPL
-from understat import Understat
 import aiohttp
 import csv
 import os
@@ -39,37 +38,3 @@ async def get_fpl_team_matches(id):
         'results': team_results,
         'fixtures': team_fixtures
     }
-
-
-async def get_understat_team_matches(id, year=None):
-    team_name = await get_understat_team_name(id)
-    if year is None:
-        year = await get_year()
-    async with aiohttp.ClientSession() as session:
-        understat = Understat(session)
-        matches = await understat.get_team_results(team_name, {'season': str(year)})
-    return matches
-
-
-async def get_teams_index():
-    team_names_index = {}
-    with open(dir_path + '/index/team_index.csv') as csvfile:
-        reader = csv.reader(csvfile, delimiter=',', quotechar='"')
-        for i, row in enumerate(reader):
-            if i > 0:
-                if len(row[1]) == 0:
-                    team_names_index[row[0]] = row[0]
-                else:
-                    team_names_index[row[0]] = row[1]
-
-    teams = await get_all_teams()
-    team_ids_index = {}
-    for team in teams:
-        team_ids_index[team['id']] = team_names_index[team['name']]
-
-    return team_names_index, team_ids_index
-
-
-async def get_understat_team_name(fpl_id):
-    _, teams_index = await get_teams_index()
-    return teams_index[fpl_id]
