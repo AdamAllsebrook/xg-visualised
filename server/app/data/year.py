@@ -1,7 +1,10 @@
 from fpl import FPL
 import aiohttp
 
+from app.redis_utils import cache
 
+
+@cache
 async def get_year():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)

@@ -5,10 +5,12 @@ import os
 import csv
 
 from app.data.year import get_year
+from app.redis_utils import cache
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
+@cache
 async def get_all_players():
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
@@ -21,15 +23,19 @@ async def get_all_players():
     return players
 
 
-async def get_fpl_player(id):
+@cache
+async def get_fpl_player(fpl_id):
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
-        player = await fpl.get_player(id, return_json=True)
+        player = await fpl.get_player(fpl_id, return_json=True)
     return player
 
 
+@cache
 async def get_understat_player_matches(fpl_id, year=None):
-    id = get_understat_id(fpl_id)
+    id = await get_understat_id(fpl_id)
+    if id == -1:
+        return None
     if year is None:
         year = await get_year()
     async with aiohttp.ClientSession() as session:
@@ -38,21 +44,19 @@ async def get_understat_player_matches(fpl_id, year=None):
     return matches
 
 
+@cache
 async def get_understat_player_seasons(fpl_id):
-    id = get_understat_id(fpl_id)
+    id = await get_understat_id(fpl_id)
+    if id == -1:
+        return None
     async with aiohttp.ClientSession() as session:
         understat = Understat(session)
         grouped_stats = await understat.get_player_grouped_stats(id)
     return grouped_stats['season']
 
 
-async def get_player(fpl_id):
-    player = await get_fpl_player(fpl_id)
-
-    return player
-
-
-def get_id_index():
+@cache
+async def get_id_index():
     id_index = {}
     with open(os.path.join(dir_path, 'index', 'id_dict.csv'), encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
@@ -66,5 +70,9 @@ def get_id_index():
     return id_index
 
 
-def get_understat_id(fpl_id):
-    return get_id_index()[fpl_id]
+async def get_understat_id(fpl_id):
+    index = await get_id_index()
+    if fpl_id in index:
+        return index[fpl_id]
+    else:
+        return -1
