@@ -19,7 +19,7 @@ async def update_players(ctx):
         cached_understat_player = await get_understat_player_seasons(player['id'])
         new_understat_player = await get_understat_player_seasons(player['id'], reset_cache=True)
         if cached_understat_player != new_understat_player:
-            await get_understat_player_matches(player['id'], reset_cache=True)
+            await get_understat_player_matches(player['id'], year=None, reset_cache=True)
 
 
 async def update_teams(ctx):
