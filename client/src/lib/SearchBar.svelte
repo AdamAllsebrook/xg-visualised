@@ -12,10 +12,8 @@
     // load
     onMount(async () => {
         fetch('http://localhost:8000/items')
-        .then(res => res.json())
-        .then(data => {
-            items = data;
-        })
+            .then(res => res.json())
+            .then(data => items = data);
     });
 
     // behaviour

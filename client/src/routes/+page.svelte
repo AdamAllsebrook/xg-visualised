@@ -1,6 +1,7 @@
 <script>
-	import SearchBar from '/src/lib/SearchBar.svelte';
+	import SearchBar from '$lib/SearchBar.svelte';
 </script>
 
-<h1>FPL Website!</h1>
-<SearchBar />
+<div class="container">
+	<SearchBar />
+</div>
