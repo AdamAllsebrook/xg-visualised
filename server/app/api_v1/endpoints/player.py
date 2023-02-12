@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from typing import Union
 
 from app import schemas
-from app.data.players import get_fpl_player, get_understat_player_matches, get_understat_player_seasons
+from app.data.players import get_fpl_player, get_understat_player_matches, get_understat_player_seasons, get_understat_player_shots
 
 router = APIRouter()
 
@@ -27,3 +27,9 @@ async def read_seasons(id: int):
 async def read_matches(id: int, year: Union[str, None] = None):
     matches = await get_understat_player_matches(id, year)
     return list(reversed(matches))
+
+
+@router.get('/{id}/shots')
+async def read_seasons(id: int, year: Union[str, None] = None):
+    shots = await get_understat_player_shots(id, year=year)
+    return shots

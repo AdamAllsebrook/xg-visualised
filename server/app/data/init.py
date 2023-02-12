@@ -19,6 +19,7 @@ async def init_cache_values():
             for player in tqdm(players):
                 await get_fpl_player(player['id'])
                 await get_understat_player_matches(player['id'], year=None)
+                await get_understat_player_shots(player['id'], year=None)
                 await get_understat_player_seasons(player['id'])
 
             teams = await get_all_teams()
@@ -38,3 +39,4 @@ async def shutdown(ctx):
 if __name__ == '__main__':
     init_redis()
     asyncio.run(init_cache_values())
+ 

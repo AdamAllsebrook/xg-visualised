@@ -41,6 +41,7 @@ async def get_understat_player_matches(fpl_id, year=None):
     async with aiohttp.ClientSession() as session:
         understat = Understat(session)
         matches = await understat.get_player_matches(id, {'season': str(year)})
+        shots = await get_understat_player_shots(id, year=year)
         # get which team the player played for in each match
         for match in matches:
             match_players = await understat.get_match_players(match['id'])
@@ -50,8 +51,27 @@ async def get_understat_player_matches(fpl_id, year=None):
                 match['h_a'] = 'h'
             else:
                 match['h_a'] = 'a'
+            # add shots to the match object
+            # match['shots'] = sorted([
+            #     shot for shot in shots 
+            #     if shot['match_id'] == match['id']
+            #     ], 
+            #     key=lambda x: int(x['minute']))
     return matches
 
+
+@cache
+async def get_understat_player_shots(fpl_id, year=None):
+    id = await get_understat_id(fpl_id)
+    if id == -1:
+        return None
+    if year is None:
+        year = await get_year()
+    async with aiohttp.ClientSession() as session:
+        understat = Understat(session)
+        shots = await understat.get_player_shots(id, {'season': str(year)})
+    return shots
+    
 
 @cache
 async def get_understat_player_seasons(fpl_id):
