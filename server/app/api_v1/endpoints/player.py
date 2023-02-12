@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from typing import Union
 
 from app import schemas
@@ -9,7 +9,11 @@ router = APIRouter()
 
 @router.get('/{id}')#, response_model=Union[schemas.Player, None])
 async def read_player(id: int):
-    player = await get_fpl_player(id)
+    try:
+        player = await get_fpl_player(id)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Item not found")
+        
     return player
 
 
@@ -22,4 +26,4 @@ async def read_seasons(id: int):
 @router.get('/{id}/matches')
 async def read_matches(id: int, year: Union[str, None] = None):
     matches = await get_understat_player_matches(id, year)
-    return matches
+    return list(reversed(matches))
