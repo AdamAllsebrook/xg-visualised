@@ -17,15 +17,15 @@ async def init_cache_values():
 
             players = await get_all_players()
             for player in tqdm(players):
-                await get_fpl_player(player['id'])
-                await get_understat_player_matches(player['id'], year=None)
-                await get_understat_player_shots(player['id'], year=None)
-                await get_understat_player_seasons(player['id'])
+                await get_fpl_player(player.id)
+                await get_understat_player_matches(player.id, year=None)
+                await get_understat_player_shots(player.id, year=None)
+                await get_understat_player_seasons(player.id)
 
             teams = await get_all_teams()
             for team in tqdm(teams):
-                await get_team(team['id'])
-                await get_fpl_team_matches(team['id'])
+                await get_team(team.id)
+                await get_fpl_team_matches(team.id)
         except ClientConnectorError:
             print(f'Connection error {i}/20.')
 

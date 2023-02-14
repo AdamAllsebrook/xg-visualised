@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from typing import Union
 
 from app import schemas
@@ -7,19 +7,25 @@ from app.data.teams import get_team, get_fpl_team_matches
 router = APIRouter()
 
 
-@router.get('/{id}')#, response_model=Union[schemas.Team, None])
+@router.get('/{id}', response_model=schemas.Team)
 async def read_team(id: int):
     team = await get_team(id)
+    if team is None:
+        raise HTTPException(status_code=404, detail="Item not found")
     return team
 
 
-@router.get('/{id}/results')
+@router.get('/{id}/results', response_model=list[schemas.Result])
 async def read_results(id: int):
     matches = await get_fpl_team_matches(id)
-    return matches['results']
+    if matches is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return matches.results
 
 
-@router.get('/{id}/fixtures')
+@router.get('/{id}/fixtures', response_model=list[schemas.Fixture])
 async def read_fixtures(id: int):
     matches = await get_fpl_team_matches(id)
-    return matches['fixtures']
+    if matches is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return matches.fixtures
