@@ -22,7 +22,7 @@ export class TeamService {
     ): CancelablePromise<Team> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/team/{id}',
+            url: '/api/team/{id}',
             path: {
                 'id': id,
             },
@@ -43,7 +43,7 @@ export class TeamService {
     ): CancelablePromise<Array<Result>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/team/{id}/results',
+            url: '/api/team/{id}/results',
             path: {
                 'id': id,
             },
@@ -64,7 +64,7 @@ export class TeamService {
     ): CancelablePromise<Array<Fixture>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/team/{id}/fixtures',
+            url: '/api/team/{id}/fixtures',
             path: {
                 'id': id,
             },

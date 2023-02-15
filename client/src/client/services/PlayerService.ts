@@ -23,7 +23,7 @@ export class PlayerService {
     ): CancelablePromise<Player> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/player/{id}',
+            url: '/api/player/{id}',
             path: {
                 'id': id,
             },
@@ -44,7 +44,7 @@ export class PlayerService {
     ): CancelablePromise<Array<Season>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/player/{id}/seasons',
+            url: '/api/player/{id}/seasons',
             path: {
                 'id': id,
             },
@@ -67,7 +67,7 @@ export class PlayerService {
     ): CancelablePromise<Array<Match>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/player/{id}/matches',
+            url: '/api/player/{id}/matches',
             path: {
                 'id': id,
             },
@@ -93,7 +93,7 @@ export class PlayerService {
     ): CancelablePromise<Array<Shot>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/player/{id}/shots',
+            url: '/api/player/{id}/shots',
             path: {
                 'id': id,
             },

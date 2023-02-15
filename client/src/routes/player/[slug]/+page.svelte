@@ -1,8 +1,8 @@
-<script>
-	import GraphXg from '$lib/GraphXg.svelte';
+<script lang='ts'>
     import { matches, seasons, team } from './store.js';
+    import type { Player } from '$client';
 
-    export let data;
+    export let data: Player;
 
 </script>
 
@@ -11,5 +11,4 @@
         <h2>{data.first_name} {data.second_name}</h2>
         <h5>{$team.name}</h5>
     </div>
-    <GraphXg matches={$matches}/>
 </div>

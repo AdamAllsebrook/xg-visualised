@@ -1,18 +1,19 @@
-<script>
+<script lang='ts'>
     import { onMount } from 'svelte';
+    import { ItemsService } from '$client';
+    import type { PlayerSearch, TeamSearch } from '$client';
 
-    let items = [];
+    let items: (PlayerSearch | TeamSearch)[]  = [];
     let searchText = '';
     let prevSearchText = '';
-    let filteredItems;
+    let filteredItems: (PlayerSearch | TeamSearch)[];
     let selectedIndex = -1;
-    let searchEl;
-    let linksContainerEl;
+    let searchEl: HTMLInputElement;
+    let linksContainerEl: HTMLElement;
 
     // load
     onMount(async () => {
-        fetch('http://localhost:8000/items')
-            .then(res => res.json())
+        ItemsService.itemsRead()
             .then(data => items = data);
     });
 
@@ -20,7 +21,7 @@
     $: filteredItems = items.filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()));
     $: searchText, selectedIndex = -1;
 
-    function handleKeydown(event) {
+    function handleKeydown(event: KeyboardEvent) {
         if (searchText.length > 0) {
             if (event.key === 'ArrowUp') {
                 selectedIndex -= 1;
@@ -37,22 +38,22 @@
                 event.preventDefault();
             }
             else if (event.key === 'Enter' && selectedIndex > -1) {
-                let links = linksContainerEl.children;
+                let links = linksContainerEl.querySelectorAll('a');
                 links[selectedIndex].click();
             }
             else {
-                prevSearchText = event.target.value;
+                prevSearchText = searchEl.value;
             }
         }
     }
 
-    function handleKeyup(event) {
-        if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown' && event.target.value !== prevSearchText) {
-            searchText = event.target.value;
+    function handleKeyup(event: KeyboardEvent) {
+        if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown' && searchEl.value !== prevSearchText) {
+            searchText = searchEl.value;
         }
     }
 
-    function handleWindowKeydown(event) {
+    function handleWindowKeydown(event: KeyboardEvent) {
         if (event.key == '/' && event.ctrlKey) {
             searchEl.focus();
         }

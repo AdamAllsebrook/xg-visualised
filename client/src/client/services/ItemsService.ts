@@ -18,7 +18,7 @@ export class ItemsService {
     public static itemsRead(): CancelablePromise<Array<(PlayerSearch | TeamSearch)>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/items/',
+            url: '/api/items/',
         });
     }
 

@@ -3,14 +3,6 @@ from typing import Union, Literal
 from datetime import date, datetime
 
 
-class PlayerSearch(BaseModel):
-    id: int
-    first_name: str
-    second_name: str
-    web_name: str
-    prefix: str = 'player'
-
-
 class Player(BaseModel):
     id: int
     first_name: str

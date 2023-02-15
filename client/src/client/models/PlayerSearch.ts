@@ -4,9 +4,10 @@
 
 export type PlayerSearch = {
     id: number;
+    name: string;
+    prefix?: string;
     first_name: string;
     second_name: string;
     web_name: string;
-    prefix?: string;
 };
 

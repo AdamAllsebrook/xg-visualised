@@ -3,12 +3,6 @@ from datetime import datetime
 from typing import Union
 
 
-class TeamSearch(BaseModel):
-    id: int
-    name: str
-    prefix : str = 'team'
-
-
 class Team(BaseModel):
     id: int
     name: str
