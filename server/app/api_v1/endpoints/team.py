@@ -7,15 +7,15 @@ from app.data.teams import get_team, get_fpl_team_matches
 router = APIRouter()
 
 
-@router.get('/{id}', response_model=schemas.Team)
-async def read_team(id: int):
+@router.get('/{id}', response_model=schemas.Team, tags=['team'])
+async def read(id: int):
     team = await get_team(id)
     if team is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return team
 
 
-@router.get('/{id}/results', response_model=list[schemas.Result])
+@router.get('/{id}/results', response_model=list[schemas.Result], tags=['team'])
 async def read_results(id: int):
     matches = await get_fpl_team_matches(id)
     if matches is None:
@@ -23,7 +23,7 @@ async def read_results(id: int):
     return matches.results
 
 
-@router.get('/{id}/fixtures', response_model=list[schemas.Fixture])
+@router.get('/{id}/fixtures', response_model=list[schemas.Fixture], tags=['team'])
 async def read_fixtures(id: int):
     matches = await get_fpl_team_matches(id)
     if matches is None:

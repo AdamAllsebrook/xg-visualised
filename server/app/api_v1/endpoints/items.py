@@ -8,8 +8,8 @@ from app import schemas
 router = APIRouter()
 
 
-@router.get('/', response_model=List[Union[schemas.PlayerSearch, schemas.TeamSearch]])
-async def read_items():
+@router.get('/', response_model=List[Union[schemas.PlayerSearch, schemas.TeamSearch]], tags=['items'])
+async def read():
     players = await get_all_players()
     players = [schemas.PlayerSearch(**player.dict()) for player in players]
     teams = await get_all_teams()
