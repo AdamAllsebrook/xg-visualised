@@ -28,6 +28,7 @@ class Match(BaseModel):
     goals: int
     shots: int
     time: int
+    time_started: int
     assists: int
     xG: float
     xA: float

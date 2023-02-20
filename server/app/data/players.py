@@ -52,10 +52,27 @@ async def get_understat_player_matches(fpl_id: int, year: Union[int, None] = Non
             # players who played for the home team
             h_ids: list[int] = [player['player_id']
                                 for player in match_players['h'].values()]
-            if id in h_ids:
+            if str(id) in h_ids:
                 match['h_a'] = 'h'
             else:
                 match['h_a'] = 'a'
+
+            # get when the player started
+            player_roster_id: str = '-1'
+            for key, match_data in match_players[match['h_a']].items():
+                if match_data['player_id'] == str(id):
+                    player_roster_id = key
+            if player_roster_id == '-1':
+                match['time_started'] = -1
+            else:
+                # get the time started by summing the minutes of every player in the chain of subsitutes preceding this player
+                time_started: int = 0
+                player_roster_id = match_players[match['h_a']][player_roster_id]['roster_out']
+                while player_roster_id != '0':
+                    time_started += int(match_players[match['h_a']][player_roster_id]['time'])
+                    player_roster_id = match_players[match['h_a']][player_roster_id]['roster_out']
+                match['time_started'] = time_started
+
     return [Match(**match) for match in matches]
 
 
