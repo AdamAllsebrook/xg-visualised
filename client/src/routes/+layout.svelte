@@ -1,9 +1,10 @@
 <script>
-    import '@picocss/pico/css/pico.css';
+    import '../app.css';
+    // import '@picocss/pico/css/pico.css';
 </script>
 
-<body>
-    <nav class="container-fluid">
+<body class='bg-[#343a77]'>
+    <nav class="w-full p-4">
         <ul>
             <li><strong><a href='/'>FPL Website</a></strong></li>
         </ul>

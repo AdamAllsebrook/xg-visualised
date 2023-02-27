@@ -1,5 +1,5 @@
 <script lang='ts'>
-    import { matches, seasons, team } from './store.js';
+    import { team } from './store.js';
     import type { Player } from '$client';
 
     export let data: Player;
@@ -11,4 +11,5 @@
         <h2>{data.first_name} {data.second_name}</h2>
         <h5>{$team.name}</h5>
     </div>
+    <a href="/player/{data.id}/xg_story">Go to the xG story.</a>
 </div>

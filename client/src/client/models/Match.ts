@@ -7,6 +7,7 @@ export type Match = {
     goals: number;
     shots: number;
     time: number;
+    time_started: number;
     assists: number;
     xG: number;
     xA: number;
