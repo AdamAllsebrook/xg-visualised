@@ -5,10 +5,8 @@ from datetime import date, datetime
 
 class Player(BaseModel):
     id: int
-    first_name: str
-    second_name: str
-    web_name: str
-    team: int
+    player_name: str
+    team_title: str
 
 
 class Season(BaseModel):

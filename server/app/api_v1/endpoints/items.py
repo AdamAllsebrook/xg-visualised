@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from typing import Union, List
 
 from app.data.players import get_all_players
-from app.data.teams import get_all_teams
 from app import schemas
 
 router = APIRouter()
@@ -13,11 +12,11 @@ async def read():
     players = await get_all_players()
     players = [
         schemas.PlayerSearch(
-            name=player.first_name + ' ' + player.second_name,
+            name=player.player_name,
             **player.dict()
             ) 
-        for player in players
+        for player in players.values()
         ]
-    teams = await get_all_teams()
-    teams = [schemas.TeamSearch(**team.dict()) for team in teams]
-    return players + teams
+    # teams = await get_all_teams()
+    # teams = [schemas.TeamSearch(**team.dict()) for team in teams]
+    return players

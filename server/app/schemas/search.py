@@ -8,9 +8,6 @@ class Search(BaseModel):
     prefix: Union[Literal['player'], Literal['team']]
 
 class PlayerSearch(Search):
-    first_name: str
-    second_name: str
-    web_name: str
     prefix: str = 'player'
 
 class TeamSearch(Search):
