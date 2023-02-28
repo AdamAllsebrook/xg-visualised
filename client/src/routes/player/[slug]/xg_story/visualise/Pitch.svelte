@@ -1,8 +1,23 @@
 <script lang='ts'>
     import { arc } from 'd3-shape';
+    import { scaleLinear } from 'd3-scale';
+    import type { Shot } from '$client';
+    import type { Tweened } from 'svelte/motion';
+    import { tweened } from 'svelte/motion';
+    import { cubicOut } from "svelte/easing";
 
     export let width: number;
     export let height: number;
+    export let shots: Shot[];
+    export let tweenedX: Tweened<any>;
+    export let tweenedY: Tweened<any>;
+
+    $: xScale = scaleLinear()
+        .domain([0, 1])
+        .range([width, 0])
+    $: yScale = scaleLinear()
+        .domain([0.5, 1])
+        .range([height, 0])
 
     $: arcD = arc()
         .innerRadius(width * 10/74)
@@ -27,6 +42,31 @@
         .outerRadius(width * 1/74 + 2)
         .startAngle(Math.PI)
         .endAngle(Math.PI * 3/2)
+
+
+    const tweenOptions = {
+        delay: 0,
+        duration: 750,
+        easing: cubicOut,
+    };
+
+    $: {xScale, yScale
+        if (!tweenedX && xScale && yScale) {
+            tweenedX = tweened(
+                shots.map(shot => xScale(shot.Y)),
+                tweenOptions
+            );
+            tweenedY = tweened(
+                shots.map(shot => yScale(shot.X)),
+                tweenOptions
+            );
+        }
+    }
+    $: {xScale, yScale; 
+        tweenedX.set(shots.map(shot => xScale(shot.Y)));
+        tweenedY.set(shots.map(shot => yScale(shot.X)));
+    }
+    
 
 </script>
 

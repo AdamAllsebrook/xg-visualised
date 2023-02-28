@@ -57,22 +57,17 @@ export class PlayerService {
     /**
      * Read Matches
      * @param id
-     * @param year
      * @returns Match Successful Response
      * @throws ApiError
      */
     public static playerReadMatches(
         id: number,
-        year?: number,
     ): CancelablePromise<Array<Match>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/player/{id}/matches',
             path: {
                 'id': id,
-            },
-            query: {
-                'year': year,
             },
             errors: {
                 422: `Validation Error`,

@@ -1,16 +1,18 @@
 <script lang='ts'>
     import { onMount } from 'svelte';
-    import { PlayerService, TeamService } from '$client';
-    import type { Player, Team, Match, Season, Shot } from '$client';
+    import { PlayerService } from '$client';
+    import type { Player, Match, Season, Shot } from '$client';
     import { scaleLinear } from 'd3-scale';
     import Scrolly from "$lib/Scrolly.svelte";
     import Pitch from './visualise/Pitch.svelte';
-    import Timeline from './visualise/Timeline.svelte';
+    import Matches from './visualise/Matches.svelte';
+    import { tweened } from 'svelte/motion';
+    import { cubicOut } from "svelte/easing";
+    import type { Tweened } from 'svelte/motion';
 
     import Intro from './content/Intro.svelte';
 
     export let data: Player;
-    let team: Team;
     let matches: Match[] = [];
     let seasons: Season[] = [];
     let shots: Shot[] = [];
@@ -22,7 +24,7 @@
     let screenWidth: number;
     let containerWidth = 400;
     $: width = screenWidth >= 1024 ? containerWidth * 2/5 : (screenWidth < 480 ? containerWidth * 1.25 : containerWidth);
-    $: margin = { top: width*0.04, right: screenWidth >= 1024 ? 32 : 5, left: 5 + (width > containerWidth ? containerWidth - width : 0), bottom: 0 };
+    $: margin = { top: width*0.04, right: screenWidth >= 1024 ? 32 : 5, left: 32 + (width > containerWidth ? containerWidth - width : 0), bottom: 0 };
     $: height = (width - margin.left - margin.right) * 0.5 * 115 / 74;
     $: xScale = scaleLinear()
         .domain([0, 1])
@@ -34,48 +36,13 @@
         .domain([0, 1])
         .range([Math.max(1, width*0.005), width*0.03])
 
-    let timelineScale = (shot: Shot) => {
-        return {x: -100, y: -100}
-    };
+    let tweenedX: Tweened<any>;
+    let tweenedY: Tweened<any>;
 
-    // const tweenOptions = {
-    //     delay: 0,
-    //     duration: 1000,
-    //     easing: cubicOut,
-    // };
-
-    // const tweenedX = tweened(
-    //     data.map((d) => d.foo),
-    //     tweenOptions
-    // );
-
-    // const tweenedY = tweened(
-    //     data.map((d) => d.bar),
-    //     tweenOptions
-    // );
-
-    // $: tweenedData = data.map((d, index) => ({
-    //     x: $tweenedX[index],
-    //     y: $tweenedY[index]
-    // }));
-
-    // function setTween(dimension, key) {
-    //     dimension.set(data.map((d) => +d[key]));
-    // }
-
-    // $: {
-    //     if (step == 0) {
-    //     setTween(tweenedX, "foo");
-    //     setTween(tweenedY, "bar");
-    //     }
-    //     if (step == 1) {
-    //     setTween(tweenedX, "foo");
-    //     setTween(tweenedY, "swag");
-    //     }
-    //     if (step == 2) {
-    //     setTween(tweenedX, "swag");
-    //     }
-    // }
+    $: tweenedData = shots.map((shot, index) => ({
+        x: tweenedX ? $tweenedX[index] : 0,
+        y: tweenedY ? $tweenedY[index] : 0
+    }));
 
     $: content = [
         Intro,
@@ -84,8 +51,6 @@
     ]
 
     onMount(async () => {
-        TeamService.teamRead(data.team)
-            .then(data => team = data);
         PlayerService.playerReadMatches(data.id)
             .then(data => {
                 matches = data;
@@ -104,8 +69,8 @@
 
 <svelte:window bind:innerWidth={screenWidth} />
 <div class="!px-0" style="contain: paint;" bind:clientWidth={containerWidth}>
-    <div class='bg-[#343a77] mb-16 relative z-50'>
-        <h1 class="text-6xl font-display font-bold text-stone-100">{data.first_name} {data.second_name}</h1>
+    <div class='bg-[#343a77] mb-16 relative z-50 lg:w-1/2'>
+        <h1 class="text-6xl font-display font-bold text-stone-100">{data.player_name}</h1>
         <h2 class="text-md font-display text-stone-300 font-bold">The xG Story</h2>
     </div>
 
@@ -114,20 +79,24 @@
     {:else}
         <svg {width} {height} class='sticky top-[50%] -translate-y-1/2 lg:float-right'>
             <g transform='translate({margin.left}, {margin.top})'>
-                <!-- <Pitch width={width - margin.left - margin.right} height={height - margin.top - margin.bottom}/> -->
-                {#if !isLoadingMatches }
-                    <Timeline width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} {matches} bind:scale={timelineScale} />
+                {#if currentStep == 0}
+                    <Pitch width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} {shots} bind:tweenedX bind:tweenedY/>
+                {:else if currentStep == 1}
+                    {#if !isLoadingMatches }
+                        <Matches width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} {matches} {shots}  bind:tweenedX bind:tweenedY/>
+                    {/if}
                 {/if}
-                {#each shots as shot, i}
-                    <circle 
-                        cx={timelineScale(shot).x}
-                        cy={timelineScale(shot).y}
-                        r={rScale(shot.xG)}
-                        fill={shot.result === 'Goal' ? "#00FF7Faa" : "#999999aa"}
-                        stroke="#000000aa"
-                        stroke-width=1
-                    />
-                {/each}
+            
+            {#each tweenedData as d, i}
+                <circle 
+                    cx={d.x}
+                    cy={d.y}
+                    r={rScale(shots[i].xG)}
+                    fill={shots[i].result === 'Goal' ? "#00FF7Faa" : "#999999aa"}
+                    stroke="#000000aa"
+                    stroke-width=1
+                />
+            {/each}
             </g>
         </svg>
 

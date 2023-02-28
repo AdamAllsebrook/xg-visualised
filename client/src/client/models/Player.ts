@@ -4,9 +4,7 @@
 
 export type Player = {
     id: number;
-    first_name: string;
-    second_name: string;
-    web_name: string;
-    team: number;
+    player_name: string;
+    team_title: string;
 };
 

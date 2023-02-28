@@ -11,7 +11,7 @@
 
 <h3 class='font-bold text-2xl mb-2'>Introduction</h3>
 <p>
-    {player.web_name} has taken {shots.length} shots this season, 
+    {player.player_name} has taken {shots.length} shots this season, 
     scoring {shots.filter(d => d.result === 'Goal').length} goals. 
 </p>
 <p>
