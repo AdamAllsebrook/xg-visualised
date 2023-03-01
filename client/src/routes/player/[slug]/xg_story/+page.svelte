@@ -91,7 +91,7 @@
                         cy={d.y}
                         r={rScale(shots[i].xG)}
                         fill={(shots[i].result === 'Goal' ? "#00FF7F" : "#999999") + (hoveredData == null ? "aa" : hoveredData[1] == i ? "cc" : "33")}
-                        stroke="#000000aa"
+                        stroke={"#000000" + (hoveredData == null ? "aa" : hoveredData[1] == i ? "cc" : "33")}
                         stroke-width=1
                         on:mouseover={() => {
                             hoveredData = [shots[i], i];
@@ -100,13 +100,13 @@
                             hoveredData = [shots[i], i];
                         }}
                         tabIndex="0"
-                        style='transition: fill 0.1s'
+                        style='transition: fill 300ms'
                     />
                 {/each}
                 </g>
             </svg>
             {#if hoveredData}
-                <Tooltip shot={hoveredData[0]} index={hoveredData[1]} {tweenedX} {tweenedY} x={margin.left} y={margin.top + rScale(hoveredData[0].xG)/2} />
+                <Tooltip shot={hoveredData[0]} index={hoveredData[1]} {tweenedX} {tweenedY} x={margin.left} y={margin.top} r={rScale(hoveredData[0].xG)} width={width-margin.right} {height} />
             {/if}
         </div>
 
