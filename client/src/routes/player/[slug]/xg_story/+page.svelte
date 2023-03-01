@@ -6,9 +6,8 @@
     import Scrolly from "$lib/Scrolly.svelte";
     import Pitch from './visualise/Pitch.svelte';
     import Matches from './visualise/Matches.svelte';
-    import { tweened } from 'svelte/motion';
-    import { cubicOut } from "svelte/easing";
-    import type { Tweened } from 'svelte/motion';
+    import type { Spring } from 'svelte/motion';
+    import Tooltip from '$lib/Tooltip.svelte';
 
     import Intro from './content/Intro.svelte';
 
@@ -22,27 +21,25 @@
     let currentStep: number;
 
     let screenWidth: number;
+    let screenHeight: number;
     let containerWidth = 400;
     $: width = screenWidth >= 1024 ? containerWidth * 2/5 : (screenWidth < 480 ? containerWidth * 1.25 : containerWidth);
     $: margin = { top: width*0.04, right: screenWidth >= 1024 ? 32 : 5, left: 32 + (width > containerWidth ? containerWidth - width : 0), bottom: 0 };
-    $: height = (width - margin.left - margin.right) * 0.5 * 115 / 74;
-    $: xScale = scaleLinear()
-        .domain([0, 1])
-        .range([width - margin.left - margin.right, 0])
-    $: yScale = scaleLinear()
-        .domain([0.5, 1])
-        .range([height - margin.top - margin.bottom, 0])
+    $: height = screenHeight * 0.8;
     $: rScale = scaleLinear()
         .domain([0, 1])
         .range([Math.max(1, width*0.005), width*0.03])
 
-    let tweenedX: Tweened<any>;
-    let tweenedY: Tweened<any>;
+    let tweenedX: Spring<any>;
+    let tweenedY: Spring<any>;
 
     $: tweenedData = shots.map((shot, index) => ({
         x: tweenedX ? $tweenedX[index] : 0,
         y: tweenedY ? $tweenedY[index] : 0
     }));
+
+    let hoveredData: any[] | null;
+    let svg;
 
     $: content = [
         Intro,
@@ -67,7 +64,7 @@
 
 </script>
 
-<svelte:window bind:innerWidth={screenWidth} />
+<svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} />
 <div class="!px-0" style="contain: paint;" bind:clientWidth={containerWidth}>
     <div class='bg-[#343a77] mb-16 relative z-50 lg:w-1/2'>
         <h1 class="text-6xl font-display font-bold text-stone-100">{data.player_name}</h1>
@@ -77,28 +74,41 @@
     {#if isLoadingShots}
         <p>Loading...</p>
     {:else}
-        <svg {width} {height} class='sticky top-[50%] -translate-y-1/2 lg:float-right'>
-            <g transform='translate({margin.left}, {margin.top})'>
-                {#if currentStep == 0}
-                    <Pitch width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} {shots} bind:tweenedX bind:tweenedY/>
-                {:else if currentStep == 1}
-                    {#if !isLoadingMatches }
-                        <Matches width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} {matches} {shots}  bind:tweenedX bind:tweenedY/>
+        <div class='sticky top-[50%] -translate-y-1/2 lg:float-right' style='width: {width}px; height: {height}px' on:mouseleave={() => hoveredData = null}>
+            <svg {width} {height} bind:this={svg}>
+                <g transform='translate({margin.left}, {margin.top})'>
+                    {#if currentStep == 0 || currentStep == undefined}
+                        <Pitch width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} {shots} bind:tweenedX bind:tweenedY/>
+                    {:else if currentStep == 1}
+                        {#if !isLoadingMatches }
+                            <Matches width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} {matches} {shots}  bind:tweenedX bind:tweenedY/>
+                        {/if}
                     {/if}
-                {/if}
-            
-            {#each tweenedData as d, i}
-                <circle 
-                    cx={d.x}
-                    cy={d.y}
-                    r={rScale(shots[i].xG)}
-                    fill={shots[i].result === 'Goal' ? "#00FF7Faa" : "#999999aa"}
-                    stroke="#000000aa"
-                    stroke-width=1
-                />
-            {/each}
-            </g>
-        </svg>
+                
+                {#each tweenedData as d, i}
+                    <circle 
+                        cx={d.x}
+                        cy={d.y}
+                        r={rScale(shots[i].xG)}
+                        fill={(shots[i].result === 'Goal' ? "#00FF7F" : "#999999") + (hoveredData == null ? "aa" : hoveredData[1] == i ? "cc" : "33")}
+                        stroke="#000000aa"
+                        stroke-width=1
+                        on:mouseover={() => {
+                            hoveredData = [shots[i], i];
+                        }}
+                        on:focus={() => {
+                            hoveredData = [shots[i], i];
+                        }}
+                        tabIndex="0"
+                        style='transition: fill 0.1s'
+                    />
+                {/each}
+                </g>
+            </svg>
+            {#if hoveredData}
+                <Tooltip shot={hoveredData[0]} index={hoveredData[1]} {tweenedX} {tweenedY} x={margin.left} y={margin.top + rScale(hoveredData[0].xG)/2} />
+            {/if}
+        </div>
 
         <Scrolly bind:value={currentStep}>
             {#each content as item, i}

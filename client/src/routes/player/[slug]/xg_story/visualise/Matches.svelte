@@ -1,14 +1,16 @@
 <script lang="ts">
     import type { Match, Shot } from '$client';
     import { scaleLinear} from 'd3-scale';
-    import type { Tweened } from 'svelte/motion';
+    import type { Spring } from 'svelte/motion';
+	import { fade } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
     
     export let width: number;
     export let height: number;
     export let matches: Match[];
     export let shots: Shot[];
-    export let tweenedX: Tweened<any>;
-    export let tweenedY: Tweened<any>;
+    export let tweenedX: Spring<any>;
+    export let tweenedY: Spring<any>;
     
 
     $: paddingY = height / (matches.length+1);
@@ -32,31 +34,33 @@
 
 </script>
 
-{#each matchesSorted as match, i}
-    <line
-        x1=0
-        x2={match.time_started * width / 90}
-        y1={Math.round(i*paddingY)}
-        y2={Math.round(i*paddingY)}
-        stroke="#aaaaaa66"
-        stroke-width=1
-    />
-    <rect
-        x={match.time_started * width / 90}
-        width={match.time * width / 90}
-        y={Math.round(i*paddingY)-3}
-        height=6
-        rx=2
-        stroke="black"
-        stroke-width=1
-        fill="#aaaaaa66"
-    />
-    <line
-        x1={(match.time_started + match.time) * width / 90}
-        x2={width}
-        y1={Math.round(i*paddingY)}
-        y2={Math.round(i*paddingY)}
-        stroke="#aaaaaa66"
-        stroke-width=1
-    />
-{/each}
+<g  transition:fade="{{delay: 0, duration: 300, easing: cubicOut}}">
+    {#each matchesSorted as match, i}
+        <line
+            x1=0
+            x2={match.time_started * width / 90}
+            y1={Math.round(i*paddingY)}
+            y2={Math.round(i*paddingY)}
+            stroke="#aaaaaa66"
+            stroke-width=1
+        />
+        <rect
+            x={match.time_started * width / 90}
+            width={match.time * width / 90}
+            y={Math.round(i*paddingY)-3}
+            height=6
+            rx=2
+            stroke="black"
+            stroke-width=1
+            fill="#aaaaaa66"
+        />
+        <line
+            x1={(match.time_started + match.time) * width / 90}
+            x2={width}
+            y1={Math.round(i*paddingY)}
+            y2={Math.round(i*paddingY)}
+            stroke="#aaaaaa66"
+            stroke-width=1
+        />
+    {/each}
+</g>
