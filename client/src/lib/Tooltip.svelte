@@ -17,18 +17,20 @@
 
     let selfWidth: number;
     let selfHeight: number;
+    let screenWidth: number;
 </script>
 
+<svelte:window bind:innerWidth={screenWidth}/>
 <div 
     class='fixed bg-[#e5e7ffcc] -translate-x-1/2 transition-all pointer-events-none shadow-lg p-2 rounded-sm whitespace-nowrap' 
     style='top: {$tweenedY[index] + y + 3*r/2 + selfHeight > height ? $tweenedY[index] + y - selfHeight - 3*r/2 : $tweenedY[index] + y + 3*r/2}px; 
-           left: {$tweenedX[index] + x + selfWidth/2 > width ? width - selfWidth/2 : $tweenedX[index] + x}px'
+           left: {screenWidth < 480 ? width/2 + x : $tweenedX[index] + x + selfWidth/2 > width ? width - selfWidth/2 : $tweenedX[index] + x}px'
     bind:clientWidth={selfWidth} 
     bind:clientHeight={selfHeight}
     transition:fade="{{delay: 0, duration: 300, easing: cubicOut}}"
     >
     {#if shot}
-        <p class='font-medium'>{shot.h_team} {shot.h_goals} - {shot.a_goals} {shot.a_team}</p>
+        <p class='font-medium'>{`${shot.h_team} ${shot.h_goals} - ${shot.a_goals} ${shot.a_team}`.replaceAll('rhampton Wanderers', 's')}</p>
         <p class='text-center mb-2 pb-2 border-b-[1px] border-slate-900'>{(new Date(shot.date)).toLocaleDateString()}</p>
         <div class='inline-block pr-2 pl-3 text-right text-slate-900'>
             <p>Minute</p>

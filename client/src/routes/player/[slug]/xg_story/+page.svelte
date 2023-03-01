@@ -23,8 +23,13 @@
     let screenWidth: number;
     let screenHeight: number;
     let containerWidth = 400;
-    $: width = screenWidth >= 1024 ? containerWidth * 2/5 : (screenWidth < 480 ? containerWidth * 1.25 : containerWidth);
-    $: margin = { top: width*0.04, right: screenWidth >= 1024 ? 32 : 5, left: 32 + (width > containerWidth ? containerWidth - width : 0), bottom: 0 };
+    $: width = screenWidth >= 1024 ? containerWidth * 2/5 : ((screenWidth < 480 && currentStep == 0 || currentStep == undefined) ? containerWidth * 1.25 : containerWidth);
+    $: margin = { 
+        top: width*0.04, 
+        right: screenWidth >= 1024 ? 32 : 10, 
+        left: screenWidth >= 1024 ? 32 : 10 + (width > containerWidth ? containerWidth - width : 0), 
+        bottom: 0 
+    };
     $: height = screenHeight * 0.8;
     $: rScale = scaleLinear()
         .domain([0, 1])
@@ -99,6 +104,7 @@
                         on:focus={() => {
                             hoveredData = [shots[i], i];
                         }}
+                        on:focusout={() => hoveredData = null}
                         tabIndex="0"
                         style='transition: fill 300ms'
                     />
@@ -106,7 +112,7 @@
                 </g>
             </svg>
             {#if hoveredData}
-                <Tooltip shot={hoveredData[0]} index={hoveredData[1]} {tweenedX} {tweenedY} x={margin.left} y={margin.top} r={rScale(hoveredData[0].xG)} width={width-margin.right} {height} />
+                <Tooltip shot={hoveredData[0]} index={hoveredData[1]} {tweenedX} {tweenedY} x={margin.left} y={margin.top} r={rScale(hoveredData[0].xG)} width={width-margin.right-margin.left} {height} />
             {/if}
         </div>
 
