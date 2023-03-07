@@ -58,3 +58,7 @@ class Shot(BaseModel):
     h_a: Union[Literal['h'], Literal['a']]
     date: datetime
 
+class SimpleShot(BaseModel):
+    X: float
+    Y: float
+    xG: float

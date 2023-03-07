@@ -1,10 +1,19 @@
-# from fastapi import APIRouter, HTTPException
-# from typing import Union
+from fastapi import APIRouter, HTTPException
+from typing import Union
 
-# from app import schemas
-# from app.data.teams import get_team, get_fpl_team_matches
+from app import schemas
+from app.data.teams import get_all_teams
+from app.data.year import get_year
 
-# router = APIRouter()
+router = APIRouter()
+
+
+@router.get('/all', response_model=list[schemas.Team], tags=['team'])
+async def read_all(year: Union[int, None] = None):
+    if year is None:
+        year = await get_year()
+    teams = await get_all_teams(year=year)
+    return teams
 
 
 # @router.get('/{id}', response_model=schemas.Team, tags=['team'])

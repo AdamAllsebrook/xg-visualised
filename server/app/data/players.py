@@ -4,8 +4,9 @@ import os
 import csv
 from typing import Any, Union
 
-from app.schemas import Player, Match, Season, Shot
+from app.schemas import Player, Match, Season, Shot, SimpleShot
 from app.data.year import get_year
+from app.data.teams import get_all_teams
 from app.redis_utils import cache
 
 
@@ -69,13 +70,27 @@ async def get_player_matches(id: int, year: Union[int, None] = None) -> Union[li
 
 
 @cache
-async def get_player_shots(id: int, year: Union[int, None] = None) -> Union[list[Shot], None]:
-    if year is None:
-        year = await get_year()
+async def get_player_shots(id: int, year: int) -> Union[list[Shot], None]:
     async with aiohttp.ClientSession() as session:
         understat = Understat(session)
         shots = await understat.get_player_shots(id, {'season': str(year)})
     return [Shot(**shot) for shot in shots]
+
+
+@cache
+async def get_all_shots_against_teams(year: int) -> dict[str, list[SimpleShot]]:
+    h_a_rev = {'a': 'h', 'h': 'a'}
+    players = await get_all_players()
+    teams = await get_all_teams(year)
+    shots = {team.title: [] for team in teams}
+    for id, _ in players.items():
+        player_shots = await get_player_shots(id, year)     
+        if player_shots is None: continue
+        for shot in player_shots:
+            team = shot.dict()[f'{h_a_rev[shot.h_a]}_team']
+            if team in shots:
+                shots[team].append(SimpleShot(**shot.dict()))
+    return shots
 
 
 @cache

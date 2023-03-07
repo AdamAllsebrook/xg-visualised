@@ -1,22 +1,26 @@
 # from fpl import FPL
-# import aiohttp
-# import csv
-# import os
-# from typing import Any, Union
+from understat import Understat
+import aiohttp
+import csv
+import os
+from typing import Any, Union
 
-# from app.schemas import Team, Result, Fixture, TeamMatches
-# from app.data.year import get_year
-# from app.redis_utils import cache
+from app.schemas import Team
+from app.redis_utils import cache
 
 # dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
-# @cache
-# async def get_all_teams() -> list[Team]:
-#     async with aiohttp.ClientSession() as session:
-#         fpl = FPL(session)
-#         teams: list[Any] = await fpl.get_teams(return_json=True)
-#     return [Team(**team) for team in teams]
+@cache
+async def get_all_teams(year: int) -> list[Team]:
+    async with aiohttp.ClientSession() as session:
+        understat = Understat(session)
+        teams: list[Any] = await understat.get_teams('epl', year)
+    for team in teams:
+        team['xG'] = sum(map(lambda x: x['xG'], team['history']))
+        team['xGA'] = sum(map(lambda x: x['xGA'], team['history']))
+        team['games'] = len(team['history'])
+    return [Team(**team) for team in teams]
 
 
 # @cache

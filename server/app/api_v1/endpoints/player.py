@@ -2,10 +2,19 @@ from fastapi import APIRouter, HTTPException
 from typing import Union, List
 
 from app import schemas
-from app.data.players import get_player, get_player_matches, get_player_seasons, get_player_shots
+from app.data.players import get_player, get_player_matches, get_player_seasons, get_player_shots, get_all_shots_against_teams 
+from app.data.year import get_year
 
 
 router = APIRouter()
+
+
+@router.get('/all_shots', response_model=dict[str, list[schemas.SimpleShot]], tags=['player'])
+async def read_all_shots(year: Union[int, None] = None):
+    if year is None:
+        year = await get_year()
+    shots = await get_all_shots_against_teams(year)
+    return shots
 
 
 @router.get('/{id}', response_model=schemas.Player, tags=['player'])
@@ -34,6 +43,8 @@ async def read_matches(id: int):
 
 @router.get('/{id}/shots', response_model=List[schemas.Shot], tags=['player'])
 async def read_shots(id: int, year: Union[int, None] = None):
+    if year is None:
+        year = await get_year()
     shots = await get_player_shots(id, year=year)
     if shots is None:
         raise HTTPException(status_code=404, detail="Item not found")
