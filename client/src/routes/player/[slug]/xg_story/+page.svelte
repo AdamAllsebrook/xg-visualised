@@ -1,7 +1,7 @@
 <script lang='ts'>
     import { onMount } from 'svelte';
     import { PlayerService } from '$client';
-    import type { Player, Match, Season, Shot } from '$client';
+    import type { Player, Match, Season, Shot, SimpleShot } from '$client';
     import { scaleLinear } from 'd3-scale';
     import Scrolly from "$lib/Scrolly.svelte";
     import Pitch from './visualise/Pitch.svelte';
@@ -10,11 +10,13 @@
     import Tooltip from '$lib/Tooltip.svelte';
 
     import Intro from './content/Intro.svelte';
+	import Heatmap from './visualise/Heatmap.svelte';
 
     export let data: Player;
     let matches: Match[] = [];
     let seasons: Season[] = [];
     let shots: Shot[] = [];
+    let shotsAgainst: Record<string, SimpleShot[]> = {};
     let isLoadingShots = true;
     let isLoadingMatches = true;
 
@@ -65,6 +67,8 @@
                 shots = data;
                 isLoadingShots = false;
             });
+        PlayerService.playerReadAllShots()
+            .then(data => shotsAgainst = data);
     })
 
 </script>
@@ -82,6 +86,7 @@
         <div class='sticky top-[50%] -translate-y-1/2 lg:float-right' style='width: {width}px; height: {height}px' on:mouseleave={() => hoveredData = null}>
             <svg {width} {height} bind:this={svg}>
                 <g transform='translate({margin.left}, {margin.top})'>
+                    <Heatmap {shotsAgainst} width={width - margin.left - margin.right} height={height - margin.top - margin.bottom}/>
                     {#if currentStep == 0 || currentStep == undefined}
                         <Pitch width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} {shots} bind:tweenedX bind:tweenedY/>
                     {:else if currentStep == 1}

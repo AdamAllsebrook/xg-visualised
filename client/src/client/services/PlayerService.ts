@@ -5,12 +5,34 @@ import type { Match } from '../models/Match';
 import type { Player } from '../models/Player';
 import type { Season } from '../models/Season';
 import type { Shot } from '../models/Shot';
+import type { SimpleShot } from '../models/SimpleShot';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class PlayerService {
+
+    /**
+     * Read All Shots
+     * @param year
+     * @returns SimpleShot Successful Response
+     * @throws ApiError
+     */
+    public static playerReadAllShots(
+        year?: number,
+    ): CancelablePromise<Record<string, Array<SimpleShot>>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/player/all_shots',
+            query: {
+                'year': year,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
 
     /**
      * Read

@@ -3,6 +3,7 @@
     // import '@picocss/pico/css/pico.css';
 </script>
 
+<!-- <body class='bg-[#0A2342]'> -->
 <body class='bg-[#343a77]'>
     <nav class="w-full p-4">
         <ul>
