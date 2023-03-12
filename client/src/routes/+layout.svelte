@@ -1,14 +1,14 @@
 <script>
     import '../app.css';
-    // import '@picocss/pico/css/pico.css';
+    import { colours } from '$lib/colours';
+
 </script>
 
-<!-- <body class='bg-[#0A2342]'> -->
-<body class='bg-[#343a77]'>
+<body style='background-color: {colours.primary}'>
     <nav class="w-full p-4">
-        <ul>
-            <li><strong><a href='/'>FPL Website</a></strong></li>
-        </ul>
+        <!-- <ul> -->
+        <!--     <li><strong><a href='/'>FPL Website</a></strong></li> -->
+        <!-- </ul> -->
     </nav>
     <slot></slot>
 </body>

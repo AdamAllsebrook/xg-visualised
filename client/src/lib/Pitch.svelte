@@ -55,6 +55,7 @@
             tweenedY = spring(
                 shots.map(shot => yScale(shot.X) + (height - customHeight) / 2)
             );
+            console.log(tweenedY, shots[0].X, height, customHeight);
             tweenedX.stiffness = 0.05;
             tweenedX.damping = 0.3;
             tweenedX.precision = 0.01;
