@@ -3,6 +3,7 @@ from typing import Union, List
 
 from app import schemas
 from app.data.players import get_player, get_player_matches, get_player_seasons, get_player_shots, get_all_shots_against_teams 
+from app.data.teams import get_team_fixtures
 from app.data.year import get_year
 
 
@@ -39,6 +40,19 @@ async def read_matches(id: int):
     if matches is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return list(reversed(matches))
+
+
+@router.get('/{id}/fixtures', response_model=List[schemas.Fixture], tags=['player'])
+async def read_fixtures(id: int, year: Union[int, None] = None):
+    if year is None:
+        year = await get_year()
+    player = await get_player(id)
+    if player is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    fixtures = await get_team_fixtures(player.team_title, year)
+    if fixtures is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return fixtures
 
 
 @router.get('/{id}/shots', response_model=List[schemas.Shot], tags=['player'])

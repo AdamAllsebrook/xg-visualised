@@ -5,7 +5,7 @@ import csv
 import os
 from typing import Any, Union
 
-from app.schemas import Team
+from app.schemas import Team, Player, Fixture
 from app.redis_utils import cache
 
 # dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -21,6 +21,17 @@ async def get_all_teams(year: int) -> list[Team]:
         team['xGA'] = sum(map(lambda x: x['xGA'], team['history']))
         team['games'] = len(team['history'])
     return [Team(**team) for team in teams]
+
+
+@cache
+async def get_team_fixtures(team_name: str, year: int) -> Union[list[Fixture], None]:
+    async with aiohttp.ClientSession() as session:
+        understat = Understat(session)
+        try:
+            fixtures: list[Any] = await understat.get_team_fixtures(team_name, year)
+        except UnboundLocalError:
+            return None
+    return [Fixture(**fixture) for fixture in fixtures]
 
 
 # @cache

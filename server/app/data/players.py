@@ -60,10 +60,13 @@ async def get_player_matches(id: int, year: Union[int, None] = None) -> Union[li
             else:
                 # get the time started by summing the minutes of every player in the chain of subsitutes preceding this player
                 time_started: int = 0
-                player_roster_id = match_players[match['h_a']][player_roster_id]['roster_out']
+                player_roster_id = match_players[match['h_a']
+                                                 ][player_roster_id]['roster_out']
                 while player_roster_id != '0':
-                    time_started += int(match_players[match['h_a']][player_roster_id]['time'])
-                    player_roster_id = match_players[match['h_a']][player_roster_id]['roster_out']
+                    time_started += int(match_players[match['h_a']]
+                                        [player_roster_id]['time'])
+                    player_roster_id = match_players[match['h_a']
+                                                     ][player_roster_id]['roster_out']
                 match['time_started'] = time_started
 
     return [Match(**match) for match in matches]
@@ -84,8 +87,9 @@ async def get_all_shots_against_teams(year: int) -> dict[str, list[SimpleShot]]:
     teams = await get_all_teams(year)
     shots = {team.title: [] for team in teams}
     for id, _ in players.items():
-        player_shots = await get_player_shots(id, year)     
-        if player_shots is None: continue
+        player_shots = await get_player_shots(id, year)
+        if player_shots is None:
+            continue
         for shot in player_shots:
             team = shot.dict()[f'{h_a_rev[shot.h_a]}_team']
             if team in shots:

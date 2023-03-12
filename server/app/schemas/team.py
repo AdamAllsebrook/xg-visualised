@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Union
+from typing import Union, Literal
 
 
 class Team(BaseModel):
@@ -9,6 +9,21 @@ class Team(BaseModel):
     xG: float
     xGA: float
     games: int
+
+
+class FixtureTeam(BaseModel):
+    id: int
+    title: str
+    short_title: str
+
+
+class Fixture(BaseModel):
+    id: int
+    side: Union[Literal['h'], Literal['a']]
+    h: FixtureTeam
+    a: FixtureTeam
+    datetime: datetime
+
 
 # class Result(BaseModel):
 #     id: int
