@@ -6,6 +6,8 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { Fixture } from './models/Fixture';
+export type { FixtureTeam } from './models/FixtureTeam';
 export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { Match } from './models/Match';
 export type { Player } from './models/Player';

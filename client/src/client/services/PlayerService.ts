@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Fixture } from '../models/Fixture';
 import type { Match } from '../models/Match';
 import type { Player } from '../models/Player';
 import type { Season } from '../models/Season';
@@ -90,6 +91,32 @@ export class PlayerService {
             url: '/api/player/{id}/matches',
             path: {
                 'id': id,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Read Fixtures
+     * @param id
+     * @param year
+     * @returns Fixture Successful Response
+     * @throws ApiError
+     */
+    public static playerReadFixtures(
+        id: number,
+        year?: number,
+    ): CancelablePromise<Array<Fixture>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/player/{id}/fixtures',
+            path: {
+                'id': id,
+            },
+            query: {
+                'year': year,
             },
             errors: {
                 422: `Validation Error`,

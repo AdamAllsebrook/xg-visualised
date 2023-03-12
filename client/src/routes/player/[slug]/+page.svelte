@@ -4,7 +4,7 @@
     import { scaleLinear } from 'd3-scale';
 
     import { PlayerService } from '$client';
-    import type { Player, Match, Season, Shot, SimpleShot } from '$client';
+    import type { Player, Match, Season, Shot, SimpleShot, Fixture, Team } from '$client';
 
     import Scrolly from "$lib/Scrolly.svelte";
     import Tooltip from '$lib/Tooltip.svelte';
@@ -21,6 +21,8 @@
     let player: Player = data.player;
     let matches: Match[] = data.matches;
     let shots: Shot[] = data.shots;
+    let fixtures: Fixture[] = data.fixtures;
+    let teams: Map<string, Team> = new Map(data.teams.map(x => [x.title, x]));
 
     let isMounted = false;
     let currentStep: number;
@@ -107,6 +109,8 @@
             {player}
             {shots}
             {matches}
+            {fixtures}
+            {teams}
             {allShotsAgainst}
         />
     </Scrolly>
