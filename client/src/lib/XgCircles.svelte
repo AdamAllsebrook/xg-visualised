@@ -1,7 +1,7 @@
 <script lang='ts'>
     import type { Shot } from '$client';
     import Circle from '$lib/Circle.svelte';
-    import type { HoveredData } from '$lib/hoveredData';
+    import { type HoveredData, HoveredDataType } from '$lib/hoveredData';
     import ShotTooltip from '$lib/ShotTooltip.svelte';
 
     export let data: any;
@@ -19,10 +19,10 @@
         faded={hoveredData != null && hoveredData.index != i}
         spotlight={hoveredData != null && hoveredData.index == i}
         on:mouseover={() => {
-           hoveredData = {data: shots[i], index: i, component: ShotTooltip};
+           hoveredData = {data: shots[i], index: i, component: ShotTooltip, type: HoveredDataType.Shot};
         }}
         on:focus={() => {
-           hoveredData = {data: shots[i], index: i, component: ShotTooltip}
+           hoveredData = {data: shots[i], index: i, component: ShotTooltip, type: HoveredDataType.Shot}
         }}
         on:focusout={() => hoveredData = null}
     />

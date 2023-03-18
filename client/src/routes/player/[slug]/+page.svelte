@@ -14,7 +14,7 @@
     import ContentManager from '$lib/ContentManager.svelte';
     import VizManager from '$lib/VizManager.svelte';
     import { colours } from '$lib/colours';
-    import type { HoveredData } from '$lib/hoveredData';
+    import { type HoveredData, HoveredDataType } from '$lib/hoveredData';
 
     import Title from './Title.svelte';
     import { allShotsAgainst } from './stores.js';
@@ -90,16 +90,13 @@
                     />
                 </g>
             </svg>
-            {#if hoveredData}
+            {#if hoveredData && hoveredData.type == HoveredDataType.Shot}
                 <Tooltip 
                     limits={{right: width-margin.right-margin.left, bottom: height, left: margin.left, top:0}}
                     x={$tweenedX[hoveredData.index] + margin.left}
                     y={$tweenedY[hoveredData.index] + margin.top}
                     offset={rScale(hoveredData.data.xG)*3/2}
                 >
-                    <!-- <ShotTooltip -->
-                    <!--     shot={hoveredData.data} -->
-                    <!-- /> -->
                     {#if hoveredData != null}
                         <svelte:component this={hoveredData.component} data={hoveredData.data}/>
                     {/if}
@@ -119,4 +116,14 @@
             bind:hoveredData
         />
     </Scrolly>
+    {#if hoveredData && hoveredData.type == HoveredDataType.Fixture}
+        <Tooltip
+            limits={{right: screenWidth, bottom: screenHeight, left: 0}}
+            x={hoveredData.data.position.x}
+            y={hoveredData.data.position.y}
+            offset={0}
+        >
+            <svelte:component this={hoveredData.component} data={hoveredData.data} />
+        </Tooltip>
+    {/if}
 </div>

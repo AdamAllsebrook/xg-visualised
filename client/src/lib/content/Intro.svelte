@@ -1,5 +1,6 @@
 <script lang='ts'>
     import type { Player, Match, Shot, Fixture, Team } from '$client';
+	import FixtureList from '$lib/FixtureList.svelte';
     import FixtureSummary from '$lib/FixtureSummary.svelte';
 	import type { HoveredData } from '$lib/hoveredData';
 
@@ -23,10 +24,8 @@
     He has accumulated a total of {sumXG.toFixed(2)} xG over {matches.length} matches, or <i class='underline-thick decoration-[#00FF7Faa] font-extrabold'>{(sumXG / sumMins * 90).toFixed(2)}</i> xG90.
 </p>
 
-{#each fixtures.slice(0, 5) as fixture}
-    <FixtureSummary
-        {fixture}
-        {teams}
-        bind:hoveredData
-    />
-{/each}
+<FixtureList
+    fixtures={fixtures.slice(0, 5)}
+    {teams}
+    bind:hoveredData
+/>

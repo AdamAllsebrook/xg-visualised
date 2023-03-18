@@ -2,7 +2,7 @@
     import type { Fixture, Team, FixtureTeam } from '$client';
     import { scaleLinear } from 'd3-scale';
     import { colours } from '$lib/colours';
-	import type { HoveredData } from '$lib/hoveredData';
+	import { type HoveredData, HoveredDataType } from '$lib/hoveredData';
 	import FixtureTooltip from '$lib/FixtureTooltip.svelte';
     
     export let fixture: Fixture;
@@ -14,6 +14,11 @@
     let opponentData = teams.get(opponent.title);
     let xGA = opponentData.xGA / opponentData.games;
 
+    let el: HTMLElement;
+    $: x = el ? el.getBoundingClientRect().x : 0;
+    $: y = el ? el.getBoundingClientRect().y : 0;
+    let width: number;
+
     let colourScale = scaleLinear()
         .domain([3, 0])
         .range([colours.secondary, colours.accent2]);
@@ -21,10 +26,13 @@
 </script>
 
 <div 
+    bind:this={el}
+    bind:clientWidth={width}
     class='border inline-block m-1 relative rounded drop-shadow-lg'
     on:mouseover={() => {
-        hoveredData = {data: opponentData, index: -1, component: FixtureTooltip};    
+        hoveredData = {data: {opponent: opponentData, position: {x: x, y: y, width: width}}, index: -1, component: FixtureTooltip, type: HoveredDataType.Fixture}; 
     }}
+    on:mouseout={() => hoveredData = null}
 >
     <!-- <div class='absolute opacity-20 w-full bottom-0' style='background-color: {colour}; height: {Math.min(xGA/3, 1) * 100}%' /> -->
     <div class='w-2 h-full float-left border-r absolute' style='background-color: {colour}'/>
