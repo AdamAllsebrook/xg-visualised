@@ -1,12 +1,14 @@
 <script lang='ts'>
     import type { Player, Match, Shot, Fixture, Team } from '$client';
     import FixtureSummary from '$lib/FixtureSummary.svelte';
+	import type { HoveredData } from '$lib/hoveredData';
 
     export let player: Player;
     export let shots: Shot[];
     export let matches: Match[];
     export let fixtures: Fixture[];
     export let teams: Map<string, Team>;
+    export let hoveredData: HoveredData;
 
     $: sumXG = shots.map(d => d.xG).reduce((x, y) => x+y, 0);
     $: sumMins = matches.map(d => d.time).reduce((x, y) => x+y, 0)
@@ -21,9 +23,10 @@
     He has accumulated a total of {sumXG.toFixed(2)} xG over {matches.length} matches, or <i class='underline-thick decoration-[#00FF7Faa] font-extrabold'>{(sumXG / sumMins * 90).toFixed(2)}</i> xG90.
 </p>
 
-{#each fixtures.slice(5) as fixture}
+{#each fixtures.slice(0, 5) as fixture}
     <FixtureSummary
         {fixture}
         {teams}
+        bind:hoveredData
     />
 {/each}

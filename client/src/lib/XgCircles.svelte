@@ -1,10 +1,13 @@
 <script lang='ts'>
+    import type { Shot } from '$client';
     import Circle from '$lib/Circle.svelte';
+    import type { HoveredData } from '$lib/hoveredData';
+    import ShotTooltip from '$lib/ShotTooltip.svelte';
 
-    export let data;
-    export let hoveredData;
-    export let shots;
-    export let rScale;
+    export let data: any;
+    export let hoveredData: HoveredData | null;
+    export let shots: Shot[];
+    export let rScale: any;
 </script>
 
 {#each data as d, i}
@@ -13,13 +16,13 @@
         cy={d.y}
         r={rScale(shots[i].xG)}
         highlight={shots[i].result == 'Goal'}
-        faded={hoveredData != null && hoveredData[1] != i}
-        spotlight={hoveredData != null && hoveredData[1] == i}
+        faded={hoveredData != null && hoveredData.index != i}
+        spotlight={hoveredData != null && hoveredData.index == i}
         on:mouseover={() => {
-           hoveredData = [shots[i], i];
+           hoveredData = {data: shots[i], index: i, component: ShotTooltip};
         }}
         on:focus={() => {
-           hoveredData = [shots[i], i];
+           hoveredData = {data: shots[i], index: i, component: ShotTooltip}
         }}
         on:focusout={() => hoveredData = null}
     />

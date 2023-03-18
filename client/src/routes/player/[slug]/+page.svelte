@@ -8,11 +8,13 @@
 
     import Scrolly from "$lib/Scrolly.svelte";
     import Tooltip from '$lib/Tooltip.svelte';
+    import ShotTooltip from '$lib/ShotTooltip.svelte';
     import VizContainer from '$lib/VizContainer.svelte';
     import XgCircles from '$lib/XgCircles.svelte';
     import ContentManager from '$lib/ContentManager.svelte';
     import VizManager from '$lib/VizManager.svelte';
     import { colours } from '$lib/colours';
+    import type { HoveredData } from '$lib/hoveredData';
 
     import Title from './Title.svelte';
     import { allShotsAgainst } from './stores.js';
@@ -50,7 +52,7 @@
         y: tweenedY ? $tweenedY[index] : 0
     }));
 
-    let hoveredData: any[] | null;
+    let hoveredData: HoveredData | null;
     let svg;
 
     onMount(async () => {
@@ -90,16 +92,22 @@
             </svg>
             {#if hoveredData}
                 <Tooltip 
-                    shot={hoveredData[0]} 
-                    index={hoveredData[1]} 
+                    index={hoveredData.index} 
                     {tweenedX} 
                     {tweenedY} 
                     x={margin.left} 
                     y={margin.top} 
-                    r={rScale(hoveredData[0].xG)} 
+                    r={rScale(hoveredData.data.xG)} 
                     width={width-margin.right-margin.left} 
                     {height} 
-                />
+                >
+                    <!-- <ShotTooltip -->
+                    <!--     shot={hoveredData.data} -->
+                    <!-- /> -->
+                    {#if hoveredData != null}
+                        <svelte:component this={hoveredData.component} data={hoveredData.data}/>
+                    {/if}
+                </Tooltip>
             {/if}
         </VizContainer>
     {/if}
@@ -112,6 +120,7 @@
             {fixtures}
             {teams}
             {allShotsAgainst}
+            bind:hoveredData
         />
     </Scrolly>
 </div>
