@@ -92,14 +92,10 @@
             </svg>
             {#if hoveredData}
                 <Tooltip 
-                    index={hoveredData.index} 
-                    {tweenedX} 
-                    {tweenedY} 
-                    x={margin.left} 
-                    y={margin.top} 
-                    r={rScale(hoveredData.data.xG)} 
-                    width={width-margin.right-margin.left} 
-                    {height} 
+                    limits={{right: width-margin.right-margin.left, bottom: height, left: margin.left, top:0}}
+                    x={$tweenedX[hoveredData.index] + margin.left}
+                    y={$tweenedY[hoveredData.index] + margin.top}
+                    offset={rScale(hoveredData.data.xG)*3/2}
                 >
                     <!-- <ShotTooltip -->
                     <!--     shot={hoveredData.data} -->
