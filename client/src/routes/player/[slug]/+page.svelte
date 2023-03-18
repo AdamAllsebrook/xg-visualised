@@ -116,14 +116,14 @@
             {allShotsAgainst}
         />
     </Scrolly>
-    {#if $hoveredData && $hoveredData.type == HoveredDataType.Fixture}
-        <Tooltip
-            limits={{right: screenWidth, bottom: screenHeight, left: 0}}
-            x={$hoveredData.data.position.x}
-            y={$hoveredData.data.position.y}
-            offset={0}
-        >
-            <svelte:component this={$hoveredData.component} data={$hoveredData.data} />
-        </Tooltip>
-    {/if}
+    <!-- {#if $hoveredData && $hoveredData.type == HoveredDataType.Fixture} -->
+    <!--     <Tooltip -->
+    <!--         limits={{right: screenWidth, bottom: screenHeight, left: 0}} -->
+    <!--         x={$hoveredData.data.position.x} -->
+    <!--         y={$hoveredData.data.position.y} -->
+    <!--         offset={0} -->
+    <!--     > -->
+    <!--         <svelte:component this={$hoveredData.component} data={$hoveredData.data} /> -->
+    <!--     </Tooltip> -->
+    <!-- {/if} -->
 </div>
