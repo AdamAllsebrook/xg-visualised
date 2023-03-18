@@ -7,8 +7,7 @@
     export let matches: Match[];
     export let fixtures: Fixture[];
     export let teams: Map<string, Team>;
-
-    const nFixtures = 5;
+    export let nFixtures: number;
 
     $: fixturesSlice = fixtures.slice(0, nFixtures);
     const sideSwitch = {h: 'a', a: 'h'};

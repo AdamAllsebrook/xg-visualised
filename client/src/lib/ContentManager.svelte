@@ -1,10 +1,13 @@
 <script lang='ts'>
+    import type { Writable } from 'svelte/store';
     import type { Player, Shot, Match, SimpleShot, Fixture, Team} from '$client';
     import { colours } from '$lib/colours';
 
-    import Intro from '$lib/content/Intro.svelte';
-    import XgOverview from '$lib/content/XgOverview.svelte';
+    import Intro from './content/Intro.svelte';
+    import XgOverview from './content/XgOverview.svelte';
 	import FixturesOverview from './content/FixturesOverview.svelte';
+	import ShotsInBox from './content/ShotsInBox.svelte';
+	import { getContext } from 'svelte';
 
     export let currentStep: number;
     export let player: Player;
@@ -12,12 +15,21 @@
     export let matches: Match[];
     export let fixtures: Fixture[];
     export let teams: Map<string, Team>;
-    export let allShotsAgainst: Record<string, SimpleShot[]>;
+    let allShotsAgainst: Writable<Record<string, SimpleShot[]> | null> = getContext('allShotsAgainst');
+
+    const nFixtures = 5;
+    const sideSwitch = {h: 'a', a: 'h'};
+    let opponents: Team[];
+    $: opponents = fixtures.slice(0, nFixtures).map(d => teams.get(d[sideSwitch[d.side]].title))
+    $: opponentsNames = opponents.map(d => d.title);
+    $: allShotsAgainstFixtures = $allShotsAgainst == null ? [] :
+        Object.keys($allShotsAgainst).filter(key => opponentsNames.includes(key)).reduce((arr, key) => arr.concat($allShotsAgainst[key]), []);
 
     const content = [
         Intro,
         XgOverview,
         FixturesOverview,
+        ShotsInBox
     ];
 </script>
 
@@ -30,7 +42,7 @@
             class='p-8 w-full z-10 text-stone-100 font-display'
             style='background: linear-gradient(0deg, {colours.primary}33 0%, {colours.primary}ee 20%, {colours.primary}ee 80%, {colours.primary}33 100%)'
         >
-            <svelte:component this={item} {player} {shots} {matches} {fixtures} {teams} />
+            <svelte:component this={item} {player} {shots} {matches} {fixtures} {teams} {nFixtures} {allShotsAgainstFixtures}/>
         </div>
     </div>
 {/each}

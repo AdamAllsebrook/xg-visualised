@@ -56,6 +56,7 @@
 
     let hoveredData: Writable<HoveredData | null> = writable(null);
     setContext(hoveredDataKey, hoveredData);
+    setContext('allShotsAgainst', allShotsAgainst);
 
     onMount(async () => {
         isMounted = true;
