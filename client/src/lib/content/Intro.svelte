@@ -1,15 +1,12 @@
 <script lang='ts'>
     import type { Player, Match, Shot, Fixture, Team } from '$client';
 	import FixtureList from '$lib/FixtureList.svelte';
-    import FixtureSummary from '$lib/FixtureSummary.svelte';
-	import type { HoveredData } from '$lib/hoveredData';
 
     export let player: Player;
     export let shots: Shot[];
     export let matches: Match[];
     export let fixtures: Fixture[];
     export let teams: Map<string, Team>;
-    export let hoveredData: HoveredData;
 
     $: sumXG = shots.map(d => d.xG).reduce((x, y) => x+y, 0);
     $: sumMins = matches.map(d => d.time).reduce((x, y) => x+y, 0)
@@ -27,5 +24,4 @@
 <FixtureList
     fixtures={fixtures.slice(0, 5)}
     {teams}
-    bind:hoveredData
 />

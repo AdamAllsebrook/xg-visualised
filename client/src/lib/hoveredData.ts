@@ -9,3 +9,5 @@ export type HoveredData = {
     component: any, // I really tried to get this to be typed as a svelte component... 
     type: HoveredDataType
 }
+
+export const key = Symbol();

@@ -1,6 +1,8 @@
 <script lang='ts'>
     import { onMount } from 'svelte';
     import type { Spring } from 'svelte/motion';
+    import { onDestroy, setContext } from 'svelte';
+    import { writable, type Writable } from 'svelte/store';
     import { scaleLinear } from 'd3-scale';
 
     import { PlayerService } from '$client';
@@ -14,7 +16,7 @@
     import ContentManager from '$lib/ContentManager.svelte';
     import VizManager from '$lib/VizManager.svelte';
     import { colours } from '$lib/colours';
-    import { type HoveredData, HoveredDataType } from '$lib/hoveredData';
+    import { type HoveredData, HoveredDataType, key as hoveredDataKey } from '$lib/hoveredData';
 
     import Title from './Title.svelte';
     import { allShotsAgainst } from './stores.js';
@@ -52,8 +54,8 @@
         y: tweenedY ? $tweenedY[index] : 0
     }));
 
-    let hoveredData: HoveredData | null;
-    let svg;
+    let hoveredData: Writable<HoveredData | null> = writable(null);
+    setContext(hoveredDataKey, hoveredData);
 
     onMount(async () => {
         isMounted = true;
@@ -69,8 +71,8 @@
 <div class="!px-0" style="contain: paint;" bind:clientWidth={containerWidth}>
     <Title {player} />
     {#if isMounted}
-        <VizContainer {width} {height} on:mouseleave={() => hoveredData = null}>
-            <svg {width} {height} bind:this={svg}>
+        <VizContainer {width} {height} on:mouseleave={() => hoveredData.set(null)}>
+            <svg {width} {height}>
                 <g transform='translate({margin.left}, {margin.top})'>
                     <VizManager
                         {width}
@@ -86,19 +88,18 @@
                         {shots}
                         {rScale}
                         data={tweenedData}
-                        bind:hoveredData
                     />
                 </g>
             </svg>
-            {#if hoveredData && hoveredData.type == HoveredDataType.Shot}
+            {#if $hoveredData && $hoveredData.type == HoveredDataType.Shot}
                 <Tooltip 
                     limits={{right: width-margin.right-margin.left, bottom: height, left: margin.left, top:0}}
-                    x={$tweenedX[hoveredData.index] + margin.left}
-                    y={$tweenedY[hoveredData.index] + margin.top}
-                    offset={rScale(hoveredData.data.xG)*3/2}
+                    x={$tweenedX[$hoveredData.index] + margin.left}
+                    y={$tweenedY[$hoveredData.index] + margin.top}
+                    offset={rScale($hoveredData.data.xG)*3/2}
                 >
                     {#if hoveredData != null}
-                        <svelte:component this={hoveredData.component} data={hoveredData.data}/>
+                        <svelte:component this={$hoveredData.component} data={$hoveredData.data}/>
                     {/if}
                 </Tooltip>
             {/if}
@@ -113,17 +114,16 @@
             {fixtures}
             {teams}
             {allShotsAgainst}
-            bind:hoveredData
         />
     </Scrolly>
-    {#if hoveredData && hoveredData.type == HoveredDataType.Fixture}
+    {#if $hoveredData && $hoveredData.type == HoveredDataType.Fixture}
         <Tooltip
             limits={{right: screenWidth, bottom: screenHeight, left: 0}}
-            x={hoveredData.data.position.x}
-            y={hoveredData.data.position.y}
+            x={$hoveredData.data.position.x}
+            y={$hoveredData.data.position.y}
             offset={0}
         >
-            <svelte:component this={hoveredData.component} data={hoveredData.data} />
+            <svelte:component this={$hoveredData.component} data={$hoveredData.data} />
         </Tooltip>
     {/if}
 </div>
