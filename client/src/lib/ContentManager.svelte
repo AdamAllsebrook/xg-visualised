@@ -3,6 +3,7 @@
     import { colours } from '$lib/colours';
 
     import Intro from '$lib/content/Intro.svelte';
+    import XgOverview from '$lib/content/XgOverview.svelte';
 
     export let currentStep: number;
     export let player: Player;
@@ -14,7 +15,7 @@
 
     const content = [
         Intro,
-        Intro,
+        XgOverview,
         Intro,
     ];
 </script>
