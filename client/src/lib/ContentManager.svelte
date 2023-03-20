@@ -9,6 +9,7 @@
 	import ShotsInBox from './content/ShotsInBox.svelte';
 	import { getContext } from 'svelte';
 	import LeftRight from './content/LeftRight.svelte';
+	import TimelineIntro from './content/TimelineIntro.svelte';
 
     export let currentStep: number;
     export let player: Player;
@@ -31,7 +32,8 @@
         XgOverview,
         FixturesOverview,
         ShotsInBox,
-        LeftRight
+        LeftRight,
+        TimelineIntro
     ];
 </script>
 
