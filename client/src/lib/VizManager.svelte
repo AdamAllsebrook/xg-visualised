@@ -13,8 +13,8 @@
 </script>
 
 
-{#if currentStep == 0 || currentStep == undefined}
+{#if currentStep == undefined || (0 <= currentStep && currentStep <= 4)}
     <Pitch width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} {shots} bind:tweenedX bind:tweenedY/>
-{:else if currentStep == 1}
+{:else if 5 <= currentStep && currentStep <= 7}
     <Matches width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} {matches} {shots}  bind:tweenedX bind:tweenedY/>
 {/if}
