@@ -11,6 +11,7 @@
 	import LeftRight from './content/LeftRight.svelte';
 	import TimelineIntro from './content/TimelineIntro.svelte';
 	import HomeAway from './content/HomeAway.svelte';
+	import Padding from './content/Padding.svelte';
 
     export let currentStep: number;
     export let player: Player;
@@ -36,6 +37,8 @@
         LeftRight,
         TimelineIntro,
         HomeAway
+        HomeAway,
+        Padding
     ];
 </script>
 
