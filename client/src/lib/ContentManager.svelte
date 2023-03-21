@@ -11,6 +11,7 @@
 	import LeftRight from './content/LeftRight.svelte';
 	import TimelineIntro from './content/TimelineIntro.svelte';
 	import HomeAway from './content/HomeAway.svelte';
+	import FirstSecondHalf from './content/FirstSecondHalf.svelte';
 	import Padding from './content/Padding.svelte';
 
     export let currentStep: number;
@@ -36,15 +37,15 @@
         ShotsInBox,
         LeftRight,
         TimelineIntro,
-        HomeAway
         HomeAway,
+        FirstSecondHalf,
         Padding
     ];
 </script>
 
 {#each content as item, i}
     <div 
-        class='h-[85vh] flex place-items-center justify-center lg:block lg:w-3/5' 
+        class='h-[100vh] lg:h-[60vh] flex place-items-center justify-center lg:block lg:w-3/5' 
         class:active={currentStep === i}
     >
         <div 
