@@ -36,6 +36,7 @@ export class ShotData extends SimpleShotData {
 
     penalties: number;
     penaltiesScored: number;
+    npxG: number;
 
     isOverperforming: boolean;
     overperformance: number;
@@ -48,6 +49,7 @@ export class ShotData extends SimpleShotData {
         let penalties = shots.filter(ShotData.isPenalty);
         this.penalties = penalties.length;
         this.penaltiesScored = penalties.filter(ShotData.isGoal).length;
+        this.npxG = SimpleShotData.xGsum(shots.filter(x => !ShotData.isPenalty(x)));
 
         this.isOverperforming = this.scored > this.xG;
         this.overperformance = this.scored - this.xG;
