@@ -7,18 +7,18 @@ function sum(x: number, y: number) {
 
 
 export class SimpleShotData {
-    shots: number
-    xG: number
+    shots: number;
+    xG: number;
 
-    insideBox: number
-    outsideBox: number
+    insideBox: number;
+    outsideBox: number;
     
     constructor(shots: SimpleShot[]) {
         this.shots = shots.length;
         this.xG = SimpleShotData.xGsum(shots);
 
         this.insideBox = shots.filter(SimpleShotData.isInBox).length;
-        this.outsideBox= this.shots - this.insideBox;
+        this.outsideBox = this.shots - this.insideBox;
     }
 
     private static isInBox(shot: SimpleShot) {
@@ -32,7 +32,7 @@ export class SimpleShotData {
 
 
 export class ShotData extends SimpleShotData {
-    scored: number
+    scored: number;
 
     penalties: number;
     penaltiesScored: number;
