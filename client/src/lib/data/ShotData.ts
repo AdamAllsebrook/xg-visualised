@@ -19,11 +19,15 @@ export class SimpleShotData {
 
 
 export class ShotData extends SimpleShotData {
+    scored: number
+
     penalties: number;
     penaltiesScored: number;
 
     constructor(shots: Shot[]) {
         super(shots as SimpleShot[]);
+
+        this.scored = shots.filter(ShotData.isGoal).length;
 
         let penalties = shots.filter(ShotData.isPenalty);
         this.penalties = penalties.length;
