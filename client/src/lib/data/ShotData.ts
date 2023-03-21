@@ -15,7 +15,7 @@ export class SimpleShotData {
     
     constructor(shots: SimpleShot[]) {
         this.shots = shots.length;
-        this.xG = shots.map(x => x.xG).reduce(sum)
+        this.xG = SimpleShotData.xGsum(shots);
 
         this.insideBox = shots.filter(SimpleShotData.isInBox).length;
         this.outsideBox= this.shots - this.insideBox;
@@ -23,6 +23,10 @@ export class SimpleShotData {
 
     private static isInBox(shot: SimpleShot) {
         return shot.Y > 15/74 && shot.Y < 59/74 && shot.X > 97/115;
+    }
+
+    protected static xGsum(shots: SimpleShot[]) {
+        return shots.map(x => x.xG).reduce(sum);
     }
 }
 
