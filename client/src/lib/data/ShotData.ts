@@ -1,13 +1,22 @@
 import type { Shot, SimpleShot } from '$client';
 
 
+function sum(x: number, y: number) {
+    return x + y;
+}
+
+
 export class SimpleShotData {
     shots: number
+    xG: number
+
     insideBox: number
     outsideBox: number
     
     constructor(shots: SimpleShot[]) {
         this.shots = shots.length;
+        this.xG = shots.map(x => x.xG).reduce(sum)
+
         this.insideBox = shots.filter(SimpleShotData.isInBox).length;
         this.outsideBox= this.shots - this.insideBox;
     }
