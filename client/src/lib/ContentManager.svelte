@@ -10,6 +10,7 @@
 	import { getContext } from 'svelte';
 	import LeftRight from './content/LeftRight.svelte';
 	import TimelineIntro from './content/TimelineIntro.svelte';
+	import HomeAway from './content/HomeAway.svelte';
 
     export let currentStep: number;
     export let player: Player;
@@ -33,7 +34,8 @@
         FixturesOverview,
         ShotsInBox,
         LeftRight,
-        TimelineIntro
+        TimelineIntro,
+        HomeAway
     ];
 </script>
 

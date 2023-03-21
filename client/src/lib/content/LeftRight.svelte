@@ -1,4 +1,3 @@
-
 <script lang='ts'>
     import { getContext } from 'svelte';
     import type { Player, Match, Shot, Fixture, Team, SimpleShot } from '$client';
