@@ -7,5 +7,6 @@ export type SimpleShot = {
     'Y': number;
     xG: number;
     h_a: ('h' | 'a');
+    minute: number;
 };
 

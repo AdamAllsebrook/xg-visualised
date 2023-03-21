@@ -64,3 +64,4 @@ class SimpleShot(BaseModel):
     Y: float
     xG: float
     h_a: Union[Literal['h'], Literal['a']]
+    minute: int
