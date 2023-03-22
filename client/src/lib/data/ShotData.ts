@@ -47,6 +47,7 @@ export class ShotData extends SimpleShotData {
 
     isOverperforming: boolean;
     overperformance: number;
+    underperformance: number;
 
     constructor(shots: Shot[]) {
         super(shots as SimpleShot[]);
@@ -60,6 +61,7 @@ export class ShotData extends SimpleShotData {
 
         this.isOverperforming = this.scored > this.xG;
         this.overperformance = this.scored - this.xG;
+        this.underperformance = -this.overperformance;
     }
 
     private static isGoal(shot: Shot) {
