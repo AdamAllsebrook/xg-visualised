@@ -11,16 +11,26 @@ export class SimpleShotData {
     insideBox: number;
     outsideBox: number;
 
+    left: number;
+    right: number;
+
     constructor(shots: SimpleShot[]) {
         this.shots = shots.length;
         this.xG = SimpleShotData.xGsum(shots);
 
         this.insideBox = shots.filter(SimpleShotData.isInBox).length;
         this.outsideBox = this.shots - this.insideBox;
+
+        this.left = shots.filter(SimpleShotData.isLeft).length;
+        this.right = this.shots - this.left;
     }
 
     private static isInBox(shot: SimpleShot) {
         return shot.Y > 15 / 74 && shot.Y < 59 / 74 && shot.X > 97 / 115;
+    }
+
+    private static isLeft(shot: SimpleShot) {
+        return shot.Y > 0.5;
     }
 
     protected static xGsum(shots: SimpleShot[]) {
