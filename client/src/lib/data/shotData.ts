@@ -31,6 +31,17 @@ export class SimpleShotData {
         this.secondHalf = this.shots - this.firstHalf;
     }
 
+    static minuteBins(shots: SimpleShot[], size: number): number[] {
+        if (90 % size != 0 || size <= 0 || size > 90) {
+            throw new Error('Bin size must be a factor of 90.');
+        }
+        let minutes: number[] = shots.map((shot) => shot.minute);
+        let bins: number[] = [...Array(90 / size).keys()]
+            .map((bin) => bin * size)
+            .map((bin) => minutes.filter((minute) => minute >= bin && minute < bin + size).length);
+        return bins;
+    }
+
     private static isInBox(shot: SimpleShot) {
         return shot.Y > 15 / 74 && shot.Y < 59 / 74 && shot.X > 97 / 115;
     }
