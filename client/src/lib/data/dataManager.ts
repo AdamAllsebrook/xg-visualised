@@ -1,5 +1,5 @@
 import type { Player, Shot, Team, Match, Fixture } from '$client';
-import { ShotData } from './ShotData';
+import { ShotData } from './shotData';
 
 export class DataManager {
     player: Player;
