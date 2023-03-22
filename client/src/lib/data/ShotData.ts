@@ -1,10 +1,8 @@
 import type { Shot, SimpleShot } from '$client';
 
-
 function sum(x: number, y: number) {
     return x + y;
 }
-
 
 export class SimpleShotData {
     shots: number;
@@ -12,7 +10,7 @@ export class SimpleShotData {
 
     insideBox: number;
     outsideBox: number;
-    
+
     constructor(shots: SimpleShot[]) {
         this.shots = shots.length;
         this.xG = SimpleShotData.xGsum(shots);
@@ -22,14 +20,13 @@ export class SimpleShotData {
     }
 
     private static isInBox(shot: SimpleShot) {
-        return shot.Y > 15/74 && shot.Y < 59/74 && shot.X > 97/115;
+        return shot.Y > 15 / 74 && shot.Y < 59 / 74 && shot.X > 97 / 115;
     }
 
     protected static xGsum(shots: SimpleShot[]) {
-        return shots.map(x => x.xG).reduce(sum);
+        return shots.map((x) => x.xG).reduce(sum);
     }
 }
-
 
 export class ShotData extends SimpleShotData {
     scored: number;
@@ -49,7 +46,7 @@ export class ShotData extends SimpleShotData {
         let penalties = shots.filter(ShotData.isPenalty);
         this.penalties = penalties.length;
         this.penaltiesScored = penalties.filter(ShotData.isGoal).length;
-        this.npxG = SimpleShotData.xGsum(shots.filter(x => !ShotData.isPenalty(x)));
+        this.npxG = SimpleShotData.xGsum(shots.filter((x) => !ShotData.isPenalty(x)));
 
         this.isOverperforming = this.scored > this.xG;
         this.overperformance = this.scored - this.xG;
@@ -63,4 +60,3 @@ export class ShotData extends SimpleShotData {
         return shot.situation === 'Penalty';
     }
 }
-
