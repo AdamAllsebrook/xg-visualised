@@ -14,6 +14,9 @@ export class SimpleShotData {
     left: number;
     right: number;
 
+    firstHalf: number;
+    secondHalf: number;
+
     constructor(shots: SimpleShot[]) {
         this.shots = shots.length;
         this.xG = SimpleShotData.xGsum(shots);
@@ -23,6 +26,9 @@ export class SimpleShotData {
 
         this.left = shots.filter(SimpleShotData.isLeft).length;
         this.right = this.shots - this.left;
+
+        this.firstHalf = shots.filter(SimpleShotData.isFirstHalf).length;
+        this.secondHalf = this.shots - this.firstHalf;
     }
 
     private static isInBox(shot: SimpleShot) {
@@ -31,6 +37,10 @@ export class SimpleShotData {
 
     private static isLeft(shot: SimpleShot) {
         return shot.Y > 0.5;
+    }
+
+    private static isFirstHalf(shot: SimpleShot) {
+        return shot.minute <= 45;
     }
 
     protected static xGsum(shots: SimpleShot[]) {
