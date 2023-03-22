@@ -17,6 +17,7 @@
     import VizManager from '$lib/VizManager.svelte';
     import { colours } from '$lib/colours';
     import { type HoveredData, HoveredDataType, key as hoveredDataKey } from '$lib/hoveredData';
+    import { DataManager } from '$lib/data/dataManager';
 
     import Title from './Title.svelte';
     import { allShotsAgainst } from './stores.js';
@@ -57,6 +58,8 @@
     let hoveredData: Writable<HoveredData | null> = writable(null);
     setContext(hoveredDataKey, hoveredData);
     setContext('allShotsAgainst', allShotsAgainst);
+
+    let dataManager = new DataManager(player, shots, teams, matches, fixtures);
 
     onMount(async () => {
         isMounted = true;
