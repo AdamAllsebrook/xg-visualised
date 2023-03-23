@@ -1,6 +1,9 @@
 <script lang='ts'>
+    import { getContext } from 'svelte';
     import Pitch from '$lib/Pitch.svelte';
     import Matches from '$lib/Matches.svelte';
+    import { key, DataManager } from '$lib/data/dataManager';
+    import type { Match, Shot } from '$client';
 
     export let width: number;
     export let height: number;
@@ -8,8 +11,10 @@
     export let currentStep: number;
     export let tweenedX;
     export let tweenedY;
-    export let matches;
-    export let shots;
+
+    const dataManager: DataManager = getContext(key);
+    const shots: Shot[] = dataManager.shots;
+    const matches: Match[] = dataManager.matches;
 </script>
 
 

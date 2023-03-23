@@ -84,8 +84,6 @@
                         {height}
                         {margin}
                         {currentStep}
-                        {shots}
-                        {matches}
                         bind:tweenedX
                         bind:tweenedY
                     />
