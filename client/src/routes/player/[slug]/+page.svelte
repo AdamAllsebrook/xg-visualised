@@ -112,11 +112,6 @@
     <Scrolly bind:value={currentStep}>
         <ContentManager
             {currentStep}
-            {player}
-            {shots}
-            {matches}
-            {fixtures}
-            {teams}
             {allShotsAgainst}
         />
     </Scrolly>
