@@ -4,14 +4,17 @@
     import type { Spring } from 'svelte/motion';
 	import { fade } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
+    import { key as dataKey, type DataManager } from './data/dataManager';
+    import { getContext } from 'svelte';
     
     export let width: number;
     export let height: number;
-    export let matches: Match[];
-    export let shots: Shot[];
     export let tweenedX: Spring<number[]>;
     export let tweenedY: Spring<number[]>;
     
+    const dataManager: DataManager = getContext(dataKey);
+    const shots: Shot[] = dataManager.shots;
+    const matches: Match[] = dataManager.matches;
 
     $: paddingY = height / (matches.length+1);
     $: matchesSorted = matches.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
