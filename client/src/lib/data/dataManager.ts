@@ -4,7 +4,7 @@ import { ShotData } from './shotData';
 export class DataManager {
     player: Player;
     shots: Shot[];
-    teams: Team[];
+    teams: Map<string, Team>;
     matches: Match[];
     fixtures: Fixture[];
 
@@ -13,7 +13,7 @@ export class DataManager {
     constructor(
         player: Player,
         shots: Shot[],
-        teams: Team[],
+        teams: Map<string, Team>,
         matches: Match[],
         fixtures: Fixture[],
     ) {
