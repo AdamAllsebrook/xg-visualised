@@ -4,6 +4,14 @@ function sum(x: number, y: number) {
     return x + y;
 }
 
+function bins(nums: number[], nBins: number, min: number, max: number): number[] {
+    const size = max / nBins;
+    let bins: number[] = [...Array(nBins).keys()]
+        .map((bin) => bin * size)
+        .map((bin) => nums.filter((num) => num >= bin && num < bin + size).length);
+    return bins;
+}
+
 export class SimpleShotData {
     shots: number;
     xG: number;
@@ -32,21 +40,13 @@ export class SimpleShotData {
     }
 
     static minuteBins(shots: SimpleShot[], nBins: number): number[] {
-        const size = 90 / nBins;
         let minutes: number[] = shots.map((shot) => shot.minute);
-        let bins: number[] = [...Array(nBins).keys()]
-            .map((bin) => bin * size)
-            .map((bin) => minutes.filter((minute) => minute >= bin && minute < bin + size).length);
-        return bins;
+        return bins(minutes, nBins, 0, 90);
     }
 
     static pitchXBins(shots: SimpleShot[], nBins: number): number[] {
-        const size = 1 / nBins;
         let xs: number[] = shots.map((shot) => shot.X);
-        let bins: number[] = [...Array(nBins).keys()]
-            .map((bin) => bin * size)
-            .map((bin) => xs.filter((x) => x >= bin && x < bin + size).length);
-        return bins;
+        return bins(xs, nBins, 0, 1);
     }
 
     private static isInBox(shot: SimpleShot) {
