@@ -1,6 +1,5 @@
 <script lang="ts">
     import type { Match, Shot } from '$client';
-    import { scaleLinear} from 'd3-scale';
     import type { Spring } from 'svelte/motion';
 	import { fade } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
@@ -20,9 +19,6 @@
     $: matchesSorted = matches.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     $: matchesMap = new Map(matchesSorted.map((match, i) => [match.id, i]));
 
-    $: rScale = scaleLinear()
-        .domain([0, 1])
-        .range([Math.max(1, width*0.005), width*0.03])
     $: scale = (shot: Shot) => {
         return {
             x: Math.min(shot.minute, 90) * width / 90,
