@@ -51,20 +51,20 @@
         .endAngle(Math.PI * 3/2)
 
     $: {xScale, yScale
+    const springConfig = {
+        stiffness: 0.05,
+        damping: 0.3,
+        precision: 0.01,
+    };
         if (!tweenedX && xScale && yScale) {
             tweenedX = spring(
-                shots.map(shot => xScale(shot.Y))
+                shots.map((shot) => xScale(shot.Y)),
+                springConfig,
             );
             tweenedY = spring(
-                shots.map(shot => yScale(shot.X) + (height - customHeight) / 2)
+                shots.map((shot) => yScale(shot.X) + (height - customHeight) / 2),
+                springConfig,
             );
-            console.log(tweenedY, shots[0].X, height, customHeight);
-            tweenedX.stiffness = 0.05;
-            tweenedX.damping = 0.3;
-            tweenedX.precision = 0.01;
-            tweenedY.stiffness = 0.05;
-            tweenedY.damping = 0.3;
-            tweenedY.precision = 0.01;
         }
     }
     $: {xScale, yScale; 
