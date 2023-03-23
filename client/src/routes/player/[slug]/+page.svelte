@@ -90,7 +90,6 @@
                         bind:tweenedY
                     />
                     <XgCircles
-                        {shots}
                         {rScale}
                         data={tweenedData}
                     />
