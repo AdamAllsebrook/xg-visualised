@@ -49,6 +49,11 @@ export class SimpleShotData {
         return bins(xs, nBins, 0, 1);
     }
 
+    static pitchYBins(shots: SimpleShot[], nBins: number): number[] {
+        let ys: number[] = shots.map((shot) => shot.Y);
+        return bins(ys, nBins, 0, 1);
+    }
+
     private static isInBox(shot: SimpleShot) {
         return shot.Y > 15 / 74 && shot.Y < 59 / 74 && shot.X > 97 / 115;
     }
