@@ -17,6 +17,7 @@
     import VizManager from '$lib/VizManager.svelte';
     import { colours } from '$lib/colours';
     import { type HoveredData, HoveredDataType, key as hoveredDataKey } from '$lib/hoveredData';
+    import type { Margin } from '$lib/margin';
     import { DataManager, key as dataKey } from '$lib/data/dataManager';
 
     import Title from './Title.svelte';
@@ -36,6 +37,7 @@
     let screenHeight: number;
     let containerWidth = 400;
     $: width = screenWidth >= 1024 ? containerWidth * 2/5 : ((screenWidth < 480 && currentStep == 0 || currentStep == undefined) ? containerWidth * 1.25 : containerWidth);
+    let margin: Margin;
     $: margin = { 
         top: width*0.04, 
         right: screenWidth >= 1024 ? 32 : 10, 

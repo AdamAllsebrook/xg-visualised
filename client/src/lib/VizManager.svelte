@@ -4,10 +4,11 @@
     import Matches from '$lib/Matches.svelte';
     import { key, DataManager } from '$lib/data/dataManager';
     import type { Match, Shot } from '$client';
+    import type { Margin } from './margin';
 
     export let width: number;
     export let height: number;
-    export let margin;
+    export let margin: Margin;
     export let currentStep: number;
     export let tweenedX;
     export let tweenedY;
