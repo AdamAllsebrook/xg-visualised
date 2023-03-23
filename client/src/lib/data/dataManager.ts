@@ -1,6 +1,8 @@
 import type { Player, Shot, Team, Match, Fixture } from '$client';
 import { ShotData } from './shotData';
 
+export const key = Symbol();
+
 export class DataManager {
     player: Player;
     shots: Shot[];
