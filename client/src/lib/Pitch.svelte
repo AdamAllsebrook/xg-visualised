@@ -6,15 +6,18 @@
     import { spring } from 'svelte/motion';
 	import { fade } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
+    import { key as dataKey, type DataManager } from './data/dataManager';
+    import { getContext } from 'svelte';
 
     export let width: number;
     export let height: number;
-    export let shots: Shot[];
     export let tweenedX: Spring<number[]>;
     export let tweenedY: Spring<number[]>;
     $: customHeight = width * 0.5 * 115 / 74
 
         // (width - margin.left - margin.right) * 0.5 * 115 / 74
+    const dataManager: DataManager = getContext(dataKey);
+    const shots: Shot[] = dataManager.shots;
 
     $: xScale = scaleLinear()
         .domain([0, 1])
