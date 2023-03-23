@@ -9,8 +9,8 @@
     export let height: number;
     export let matches: Match[];
     export let shots: Shot[];
-    export let tweenedX: Spring<any>;
-    export let tweenedY: Spring<any>;
+    export let tweenedX: Spring<number[]>;
+    export let tweenedY: Spring<number[]>;
     
 
     $: paddingY = height / (matches.length+1);

@@ -10,8 +10,8 @@
     export let width: number;
     export let height: number;
     export let shots: Shot[];
-    export let tweenedX: Spring<any>;
-    export let tweenedY: Spring<any>;
+    export let tweenedX: Spring<number[]>;
+    export let tweenedY: Spring<number[]>;
     $: customHeight = width * 0.5 * 115 / 74
 
         // (width - margin.left - margin.right) * 0.5 * 115 / 74

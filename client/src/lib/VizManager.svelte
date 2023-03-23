@@ -5,13 +5,14 @@
     import { key, DataManager } from '$lib/data/dataManager';
     import type { Match, Shot } from '$client';
     import type { Margin } from './margin';
+    import type { Spring } from 'svelte/motion';
 
     export let width: number;
     export let height: number;
     export let margin: Margin;
     export let currentStep: number;
-    export let tweenedX;
-    export let tweenedY;
+    export let tweenedX: Spring<number[]>;
+    export let tweenedY: Spring<number[]>;
 
     const dataManager: DataManager = getContext(key);
     const shots: Shot[] = dataManager.shots;

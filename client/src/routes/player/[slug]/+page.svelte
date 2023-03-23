@@ -49,8 +49,8 @@
         .domain([0, 1])
         .range([Math.max(1, width*0.005), width*0.03])
 
-    let tweenedX: Spring<any>;
-    let tweenedY: Spring<any>;
+    let tweenedX: Spring<number[]>;
+    let tweenedY: Spring<number[]>;
 
     $: tweenedData = shots.map((shot, index) => ({
         x: tweenedX ? $tweenedX[index] : 0,
