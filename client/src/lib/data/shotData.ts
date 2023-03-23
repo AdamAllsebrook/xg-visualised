@@ -31,12 +31,10 @@ export class SimpleShotData {
         this.secondHalf = this.shots - this.firstHalf;
     }
 
-    static minuteBins(shots: SimpleShot[], size: number): number[] {
-        if (90 % size != 0 || size <= 0 || size > 90) {
-            throw new Error('Bin size must be a factor of 90.');
-        }
+    static minuteBins(shots: SimpleShot[], nBins: number): number[] {
+        const size = 90 / nBins;
         let minutes: number[] = shots.map((shot) => shot.minute);
-        let bins: number[] = [...Array(90 / size).keys()]
+        let bins: number[] = [...Array(nBins).keys()]
             .map((bin) => bin * size)
             .map((bin) => minutes.filter((minute) => minute >= bin && minute < bin + size).length);
         return bins;
