@@ -1,31 +1,26 @@
 <script lang='ts'>
-    import type { Player, Match, Shot, Fixture, Team } from '$client';
+    import type { Team } from '$client';
+    import type { DataManager } from '$lib/data/dataManager';
     import FixtureList from '$lib/FixtureList.svelte';
+    import { key as dataKey } from '$lib/hoveredData';
+    import { getContext } from 'svelte';
 
-    export let player: Player;
-    export let shots: Shot[];
-    export let matches: Match[];
-    export let fixtures: Fixture[];
-    export let teams: Map<string, Team>;
-    export let nFixtures: number;
+    const dataManager: DataManager = getContext(dataKey);
+    const player = dataManager.player;
+    const teams = dataManager.teams;
+    const fixtures = dataManager.fixtures;
 
-    $: fixturesSlice = fixtures.slice(0, nFixtures);
-    const sideSwitch = {h: 'a', a: 'h'};
-    let opponents: Team[];
-    $: opponents = fixturesSlice.map(d => teams.get(d[sideSwitch[d.side]].title))
-    $: averageXGA = (opponents.map(d => d.xGA / d.games).reduce((x,y) => x + y, 0) / nFixtures).toFixed(2);
-    function per90(n: number, mins: number) {
-        return (n / mins * 90).toFixed(2);
-    }
+    const opponents = dataManager.opponents.teams;
+    $: averageXGA = (opponents.map(d => d.xGA / d.games).reduce((x,y) => x + y, 0) / opponents.length).toFixed(2);
 
 </script>
 
 <h3 class='font-bold text-2xl'>Fixtures</h3>
 <p>
-    {player.team_title}'s next {nFixtures} games are against:
+    {player.team_title}'s next {opponents.length} games are against:
 </p>
 <FixtureList
-    fixtures={fixtures.slice(0, nFixtures)}
+    fixtures={fixtures.slice(0, opponents.length)}
     {teams}
 />
 <p>(Hover/ tap for more data)</p>
