@@ -39,6 +39,10 @@ export class SimpleShotData {
         this.secondHalf = this.shots - this.firstHalf;
     }
 
+    strPercent(nShots: number, dp: number = 2, totalShots: number | null = null) {
+        return ((nShots / (totalShots || this.shots)) * 100).toFixed(dp);
+    }
+
     static minuteBins(shots: SimpleShot[], nBins: number): number[] {
         let minutes: number[] = shots.map((shot) => shot.minute);
         return bins(minutes, nBins, 0, 90);
