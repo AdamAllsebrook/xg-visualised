@@ -24,6 +24,9 @@ export class SimpleShotData {
 
     firstHalf: number;
     secondHalf: number;
+    
+    home: number;
+    away: number;
 
     constructor(shots: SimpleShot[]) {
         this.shots = shots.length;
@@ -37,6 +40,9 @@ export class SimpleShotData {
 
         this.firstHalf = shots.filter(SimpleShotData.isFirstHalf).length;
         this.secondHalf = this.shots - this.firstHalf;
+        
+        this.home = shots.filter(SimpleShotData.isHome).length;
+        this.away = this.shots - this.home;
     }
 
     strPercent(nShots: number, dp: number = 2, totalShots: number | null = null) {
@@ -68,6 +74,10 @@ export class SimpleShotData {
 
     private static isFirstHalf(shot: SimpleShot) {
         return shot.minute <= 45;
+    }
+
+    private static isHome(shot: SimpleShot) {
+        return shot.h_a === 'h';
     }
 
     protected static xGsum(shots: SimpleShot[]) {
