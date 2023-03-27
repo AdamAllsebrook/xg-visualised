@@ -1,29 +1,30 @@
-<script lang='ts'>
+<script lang="ts">
+    import type { SimpleShot } from '$client';
     import { getContext } from 'svelte';
-    import type { Player, Match, Shot, Fixture, Team, SimpleShot } from '$client';
-    import FixtureList from '$lib/FixtureList.svelte';
+    import { key as dataKey, type DataManager } from '$lib/data/dataManager';
 
-    export let player: Player;
-    export let shots: Shot[];
-    export let matches: Match[];
-    export let fixtures: Fixture[];
-    export let teams: Map<string, Team>;
     export let allShotsAgainstFixtures: SimpleShot[];
+    const dataManager: DataManager = getContext(dataKey);
+    const player = dataManager.player;
 
-    function isLeft(shot: Shot | SimpleShot) {
-        return shot.Y > 0.5
-    }
-
-    $: leftShots = shots.filter(d => isLeft(d));
-    $: prefersLeft = leftShots.length / shots.length > 0.5;
-
-    $: fixturesLeftShots = allShotsAgainstFixtures.filter(d => isLeft(d));
+    const prefersLeft = dataManager.shotData.left > dataManager.shotData.right;
+    const leftShotsPercent = dataManager.shotData.strPercent(dataManager.shotData.left);
+    const rightShotsPercent = dataManager.shotData.strPercent(dataManager.shotData.right);
+    // $: fixturesLeftShots = allShotsAgainstFixtures.filter((d) => isLeft(d));
+    const fixturesLeftShots = [];
 </script>
 
-<h3 class='font-bold text-2xl'>Left or Right?</h3>
+<h3 class="font-bold text-2xl">Left or Right?</h3>
 <p>
-    {player.player_name} prefers shooting from the {prefersLeft ? 'left' : 'right'} side, with {(Math.max(leftShots.length / shots.length, 1 - leftShots.length / shots.length) * 100).toFixed(2)}% of his shots coming from that side of the pitch.
+    {player.player_name} prefers shooting from the {prefersLeft ? 'left' : 'right'} side, with {prefersLeft
+        ? leftShotsPercent
+        : rightShotsPercent}% of his shots coming from that side of the pitch.
 </p>
 <p>
-   {player.team_title}'s next opponents have conceded {(leftShots.length / shots.length > 0.5 ? fixturesLeftShots.length / allShotsAgainstFixtures.length * 100 : 100 - fixturesLeftShots.length / allShotsAgainstFixtures.length * 100).toFixed(0)}% of their total shots conceded from the {leftShots.length / shots.length > 0.5 ? 'left' : 'right'} side of the box. 
+    {player.team_title}'s next opponents have conceded
+    {(prefersLeft
+        ? (fixturesLeftShots.length / allShotsAgainstFixtures.length) * 100
+        : 100 - (fixturesLeftShots.length / allShotsAgainstFixtures.length) * 100
+    ).toFixed(0)}% of their total shots conceded from the
+    {prefersLeft ? 'left' : 'right'} side of the box.
 </p>
