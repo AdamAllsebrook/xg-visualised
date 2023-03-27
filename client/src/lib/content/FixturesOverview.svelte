@@ -1,8 +1,7 @@
 <script lang='ts'>
     import type { Team } from '$client';
-    import type { DataManager } from '$lib/data/dataManager';
     import FixtureList from '$lib/FixtureList.svelte';
-    import { key as dataKey } from '$lib/hoveredData';
+    import { key as dataKey, type DataManager } from '$lib/data/dataManager';
     import { getContext } from 'svelte';
 
     const dataManager: DataManager = getContext(dataKey);

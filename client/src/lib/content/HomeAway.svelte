@@ -1,7 +1,6 @@
 <script lang="ts">
     import type { SimpleShot } from '$client';
-    import type { DataManager } from '$lib/data/dataManager';
-    import { key as dataKey } from '$lib/hoveredData';
+    import { type DataManager, key as dataKey } from '$lib/data/dataManager';
     import { getContext } from 'svelte';
 
     export let allShotsAgainstFixtures: SimpleShot[];
