@@ -1,29 +1,35 @@
-<script lang='ts'>
+<script lang="ts">
     import { getContext } from 'svelte';
-    import type { Player, Match, Shot, Fixture, Team, SimpleShot } from '$client';
-    import FixtureList from '$lib/FixtureList.svelte';
+    import type { SimpleShot } from '$client';
+    import { key as dataKey, type DataManager } from '$lib/data/dataManager';
 
-    export let player: Player;
-    export let shots: Shot[];
-    export let matches: Match[];
-    export let fixtures: Fixture[];
-    export let teams: Map<string, Team>;
     export let allShotsAgainstFixtures: SimpleShot[];
+    const dataManager: DataManager = getContext(dataKey);
+    const player = dataManager.player;
+    const shots = dataManager.shotData.shots;
 
-    function isInBox(shot: Shot | SimpleShot) {
-        return shot.Y > 15/74 && shot.Y < 59/74 && shot.X > 97/115
-    }
+    const prefersInBox = dataManager.shotData.insideBox > dataManager.shotData.outsideBox;
+    const shotsInBox = dataManager.shotData.insideBox;
+    const shotsOutBox = dataManager.shotData.outsideBox;
+    const nPreferred = prefersInBox
+        ? dataManager.shotData.insideBox
+        : dataManager.shotData.outsideBox;
+    const preferPercent = dataManager.shotData.strPercent(nPreferred);
 
-    $: shotsInBox = shots.filter(d => isInBox(d));
-    $: shotsOutBox = shots.filter(d => !isInBox(d));
-
-    $: fixturesShotsInBox = allShotsAgainstFixtures.filter(d => isInBox(d));
+    $: fixturesShotsInBox = [];
 </script>
 
-<h3 class='font-bold text-2xl'>Fox in the Box</h3>
+<h3 class="font-bold text-2xl">Fox in the Box</h3>
 <p>
-    Of {player.player_name}'s {shots.length} shots, {Math.max(shotsInBox.length, shotsOutBox.length)} ({(Math.max(shotsInBox.length, shotsOutBox.length) / shots.length * 100).toFixed(0)}%) were from {shotsInBox.length > shotsOutBox.length ? 'inside' : 'outside'} of the box.
+    Of {player.player_name}'s {shots} shots, {nPreferred} ({preferPercent}%) were from {prefersInBox
+        ? 'inside'
+        : 'outside'} of the box.
 </p>
 <p>
-   {player.team_title}'s next opponents have conceded {(shotsInBox.length > shotsOutBox.length ? fixturesShotsInBox.length / allShotsAgainstFixtures.length * 100 : 100 - fixturesShotsInBox.length / allShotsAgainstFixtures.length * 100).toFixed(0)}% of their total shots conceded from {shotsInBox.length > shotsOutBox.length ? 'inside' : 'outside'} of the box. 
+    {player.team_title}'s next opponents have conceded
+    {(shotsInBox > shotsOutBox
+        ? (fixturesShotsInBox.length / allShotsAgainstFixtures.length) * 100
+        : 100 - (fixturesShotsInBox.length / allShotsAgainstFixtures.length) * 100
+    ).toFixed(0)}% of their total shots conceded from
+    {shotsInBox > shotsOutBox ? 'inside' : 'outside'} of the box.
 </p>
