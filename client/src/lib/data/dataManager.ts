@@ -1,4 +1,5 @@
 import type { Player, Shot, Team, Match, Fixture } from '$client';
+import { MatchData } from './matchData';
 import { Opponents } from './opponents';
 import { ShotData } from './shotData';
 
@@ -12,6 +13,7 @@ export class DataManager {
     fixtures: Fixture[];
 
     shotData: ShotData;
+    matchData: MatchData
     opponents: Opponents;
 
     constructor(
@@ -29,6 +31,7 @@ export class DataManager {
         this.fixtures = fixtures;
 
         this.shotData = new ShotData(shots);
+        this.matchData = new MatchData(matches);
         this.opponents = new Opponents(fixtures.slice(0, nFixtures), teams);
     }
 }
