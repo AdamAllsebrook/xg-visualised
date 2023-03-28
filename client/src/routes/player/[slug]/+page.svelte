@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
     import { onMount } from 'svelte';
     import type { Spring } from 'svelte/motion';
     import { onDestroy, setContext } from 'svelte';
@@ -8,7 +8,7 @@
     import { PlayerService } from '$client';
     import type { Player, Match, Season, Shot, SimpleShot, Fixture, Team } from '$client';
 
-    import Scrolly from "$lib/Scrolly.svelte";
+    import Scrolly from '$lib/Scrolly.svelte';
     import Tooltip from '$lib/Tooltip.svelte';
     import ShotTooltip from '$lib/ShotTooltip.svelte';
     import VizContainer from '$lib/VizContainer.svelte';
@@ -34,25 +34,30 @@
     let screenWidth: number;
     let screenHeight: number;
     let containerWidth = 400;
-    $: width = screenWidth >= 1024 ? containerWidth * 2/5 : ((screenWidth < 480 && currentStep == 0 || currentStep == undefined) ? containerWidth * 1.25 : containerWidth);
+    $: width =
+        screenWidth >= 1024
+            ? (containerWidth * 2) / 5
+            : (screenWidth < 480 && currentStep == 0) || currentStep == undefined
+            ? containerWidth * 1.25
+            : containerWidth;
     let margin: Margin;
-    $: margin = { 
-        top: width*0.04, 
-        right: screenWidth >= 1024 ? 32 : 10, 
-        left: screenWidth >= 1024 ? 32 : 10 + (width > containerWidth ? containerWidth - width : 0), 
-        bottom: 0 
+    $: margin = {
+        top: width * 0.04,
+        right: screenWidth >= 1024 ? 32 : 10,
+        left: screenWidth >= 1024 ? 32 : 10 + (width > containerWidth ? containerWidth - width : 0),
+        bottom: 0,
     };
     $: height = screenHeight * 0.8;
     $: rScale = scaleLinear()
         .domain([0, 1])
-        .range([Math.max(1, width*0.005), width*0.03])
+        .range([Math.max(1, width * 0.005), width * 0.03]);
 
     let tweenedX: Spring<number[]>;
     let tweenedY: Spring<number[]>;
 
     $: tweenedData = dataManager.shots.map((shot, index) => ({
         x: tweenedX ? $tweenedX[index] : 0,
-        y: tweenedY ? $tweenedY[index] : 0
+        y: tweenedY ? $tweenedY[index] : 0,
     }));
 
     let hoveredData: Writable<HoveredData | null> = writable(null);
@@ -62,7 +67,9 @@
     onMount(async () => {
         isMounted = true;
         if ($leagueShotsConceded == null) {
-            PlayerService.playerReadAllShots().then((data) => leagueShotsConceded.set(new LeagueShotsConceded(data)));
+            PlayerService.playerReadAllShots().then((data) =>
+                leagueShotsConceded.set(new LeagueShotsConceded(data)),
+            );
         }
     });
 </script>
@@ -73,7 +80,7 @@
     {#if isMounted}
         <VizContainer {width} {height} on:mouseleave={() => hoveredData.set(null)}>
             <svg {width} {height}>
-                <g transform='translate({margin.left}, {margin.top})'>
+                <g transform="translate({margin.left}, {margin.top})">
                     <VizManager
                         {width}
                         {height}
@@ -82,21 +89,23 @@
                         bind:tweenedX
                         bind:tweenedY
                     />
-                    <XgCircles
-                        {rScale}
-                        data={tweenedData}
-                    />
+                    <XgCircles {rScale} data={tweenedData} />
                 </g>
             </svg>
             {#if $hoveredData && $hoveredData.type == HoveredDataType.Shot}
-                <Tooltip 
-                    limits={{right: width-margin.right-margin.left, bottom: height, left: margin.left, top:0}}
+                <Tooltip
+                    limits={{
+                        right: width - margin.right - margin.left,
+                        bottom: height,
+                        left: margin.left,
+                        top: 0,
+                    }}
                     x={$tweenedX[$hoveredData.index] + margin.left}
                     y={$tweenedY[$hoveredData.index] + margin.top}
-                    offset={rScale($hoveredData.data.xG)*3/2}
+                    offset={(rScale($hoveredData.data.xG) * 3) / 2}
                 >
                     {#if hoveredData != null}
-                        <svelte:component this={$hoveredData.component} data={$hoveredData.data}/>
+                        <svelte:component this={$hoveredData.component} data={$hoveredData.data} />
                     {/if}
                 </Tooltip>
             {/if}
