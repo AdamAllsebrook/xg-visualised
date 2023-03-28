@@ -1,6 +1,7 @@
 import { error, type Load } from '@sveltejs/kit';
 import { PlayerService, TeamService } from '$client';
 import type { Player, Match, Shot, Fixture, Team } from '$client';
+import { DataManager } from '$lib/data/dataManager';
 
 export const load: Load = async ({ params }) => {
     if (!params.slug) throw error(400, 'Must include a player ID.');
@@ -16,10 +17,12 @@ export const load: Load = async ({ params }) => {
     ]);
 
     return {
-        player: player,
-        matches: matches,
-        shots: shots,
-        fixtures: fixtures,
-        teams: teams
+        data: new DataManager(
+            player,
+            shots,
+            teams,
+            matches,
+            fixtures
+        )
     };
 }

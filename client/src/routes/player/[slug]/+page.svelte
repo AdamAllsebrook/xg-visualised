@@ -24,11 +24,8 @@
     import { allShotsAgainst } from './stores.js';
 
     export let data: any;
-    let player: Player = data.player;
-    let matches: Match[] = data.matches;
-    let shots: Shot[] = data.shots;
-    let fixtures: Fixture[] = data.fixtures;
-    let teams: Map<string, Team> = new Map(data.teams.map(x => [x.title, x]));
+    const dataManager: DataManager = data.data;
+    setContext(dataKey, dataManager);
 
     let isMounted = false;
     let currentStep: number;
@@ -52,7 +49,7 @@
     let tweenedX: Spring<number[]>;
     let tweenedY: Spring<number[]>;
 
-    $: tweenedData = shots.map((shot, index) => ({
+    $: tweenedData = dataManager.shots.map((shot, index) => ({
         x: tweenedX ? $tweenedX[index] : 0,
         y: tweenedY ? $tweenedY[index] : 0
     }));
@@ -60,9 +57,6 @@
     let hoveredData: Writable<HoveredData | null> = writable(null);
     setContext(hoveredDataKey, hoveredData);
     setContext('allShotsAgainst', allShotsAgainst);
-
-    const dataManager = new DataManager(player, shots, teams, matches, fixtures);
-    setContext(dataKey, dataManager);
 
     onMount(async () => {
         isMounted = true;
@@ -76,7 +70,7 @@
 
 <svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} />
 <div class="!px-0" style="contain: paint;" bind:clientWidth={containerWidth}>
-    <Title {player} />
+    <Title player={dataManager.player} />
     {#if isMounted}
         <VizContainer {width} {height} on:mouseleave={() => hoveredData.set(null)}>
             <svg {width} {height}>
