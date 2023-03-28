@@ -1,12 +1,22 @@
-import type { Fixture, Team } from '$client';
+import type { Fixture, SimpleShot, Team } from '$client';
+import { SimpleShotData } from './shotData';
 
 export class Opponents {
     teams: Team[];
+    shotsConceded: SimpleShotData | null = null;
 
     constructor(fixtures: Fixture[], teams: Map<string, Team>) {
         this.teams = fixtures
             .map((d) => teams.get(Opponents.opponentName(d)))
             .filter((d) => d !== undefined) as Team[];
+    }
+
+    setShotsConceded(shotsConceded: Map<string, SimpleShot[]>) {
+        this.shotsConceded = new SimpleShotData(
+            this.teams
+                .map((team) => shotsConceded.get(team.title) || [])
+                .reduce((arr, shots) => arr.concat(shots), []),
+        );
     }
 
     private static sideSwitch(side: 'a' | 'h'): 'a' | 'h' {

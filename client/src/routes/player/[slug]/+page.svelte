@@ -71,6 +71,9 @@
                 leagueShotsConceded.set(new LeagueShotsConceded(data)),
             );
         }
+        if ($leagueShotsConceded != null) {
+            dataManager.opponents.setShotsConceded($leagueShotsConceded.teamShots);
+        }
     });
 </script>
 
