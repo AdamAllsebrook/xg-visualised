@@ -21,7 +21,8 @@
     import { DataManager, key as dataKey } from '$lib/data/dataManager';
 
     import Title from './Title.svelte';
-    import { allShotsAgainst } from './stores.js';
+    import { leagueShotsConceded } from './stores.js';
+    import { LeagueShotsConceded, key as concedeKey } from '$lib/data/leagueShotsConceded';
 
     export let data: any;
     const dataManager: DataManager = data.data;
@@ -56,16 +57,14 @@
 
     let hoveredData: Writable<HoveredData | null> = writable(null);
     setContext(hoveredDataKey, hoveredData);
-    setContext('allShotsAgainst', allShotsAgainst);
+    setContext(concedeKey, leagueShotsConceded);
 
     onMount(async () => {
         isMounted = true;
-        if ($allShotsAgainst == null) {
-            PlayerService.playerReadAllShots()
-                .then(data => allShotsAgainst.set(data));
+        if ($leagueShotsConceded == null) {
+            PlayerService.playerReadAllShots().then((data) => leagueShotsConceded.set(new LeagueShotsConceded(data)));
         }
-    })
-
+    });
 </script>
 
 <svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} />
@@ -104,10 +103,7 @@
         </VizContainer>
     {/if}
     <Scrolly bind:value={currentStep}>
-        <ContentManager
-            {currentStep}
-            {allShotsAgainst}
-        />
+        <ContentManager {currentStep} {leagueShotsConceded} />
     </Scrolly>
     <!-- {#if $hoveredData && $hoveredData.type == HoveredDataType.Fixture} -->
     <!--     <Tooltip -->

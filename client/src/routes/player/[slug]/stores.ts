@@ -1,5 +1,5 @@
 import { writable, type Writable } from 'svelte/store';
-import type { SimpleShot } from '$client';
+import type { LeagueShotsConceded } from '$lib/data/leagueShotsConceded';
 
-export const allShotsAgainst: Writable<Record<string, SimpleShot[]> | null> = writable(null);
+export const leagueShotsConceded: Writable<LeagueShotsConceded | null> = writable(null);
 
