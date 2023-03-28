@@ -19,19 +19,19 @@ export class DataManager {
     constructor(
         player: Player,
         shots: Shot[],
-        teams: Map<string, Team>,
+        teams: Team[], 
         matches: Match[],
         fixtures: Fixture[],
         nFixtures: number = 5,
     ) {
         this.player = player;
         this.shots = shots;
-        this.teams = teams;
+        this.teams = new Map(teams.map(t => [t.title, t]));
         this.matches = matches;
         this.fixtures = fixtures;
 
         this.shotData = new ShotData(shots);
         this.matchData = new MatchData(matches);
-        this.opponents = new Opponents(fixtures.slice(0, nFixtures), teams);
+        this.opponents = new Opponents(fixtures.slice(0, nFixtures), this.teams);
     }
 }
