@@ -112,7 +112,7 @@
         </VizContainer>
     {/if}
     <Scrolly bind:value={currentStep}>
-        <ContentManager {currentStep} {leagueShotsConceded} />
+        <ContentManager {currentStep} />
     </Scrolly>
     <!-- {#if $hoveredData && $hoveredData.type == HoveredDataType.Fixture} -->
     <!--     <Tooltip -->
