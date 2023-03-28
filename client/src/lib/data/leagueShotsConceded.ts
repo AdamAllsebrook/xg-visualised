@@ -4,10 +4,12 @@ import { SimpleShotData } from "./shotData";
 export const key = Symbol();
 
 export class LeagueShotsConceded {
-    teams: Map<string, SimpleShotData>;
+    teamShots: Map<string, SimpleShot[]>;
+    data: Map<string, SimpleShotData>;
 
     constructor(teamsShotsConceded: Record<string, SimpleShot[]>) {
-        this.teams = new Map(
+        this.teamShots = new Map(Object.entries(teamsShotsConceded));
+        this.data = new Map(
             Object.entries(teamsShotsConceded).map(([team, shots]) => [team, new SimpleShotData(shots)])
         );
     }
