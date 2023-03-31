@@ -25,7 +25,7 @@
     import { LeagueShotsConceded, key as concedeKey } from '$lib/data/leagueShotsConceded';
 
     export let data: any;
-    const dataManager: DataManager = data.data;
+    const dataManager: Writable<DataManager> = writable(data.data);
     setContext(dataKey, dataManager);
 
     let isMounted = false;
@@ -55,7 +55,7 @@
     let tweenedX: Spring<number[]>;
     let tweenedY: Spring<number[]>;
 
-    $: tweenedData = dataManager.shots.map((shot, index) => ({
+    $: tweenedData = $dataManager.shots.map((shot, index) => ({
         x: tweenedX ? $tweenedX[index] : 0,
         y: tweenedY ? $tweenedY[index] : 0,
     }));
@@ -64,22 +64,33 @@
     setContext(hoveredDataKey, hoveredData);
     setContext(concedeKey, leagueShotsConceded);
 
+    function injectShotsConceded(data: DataManager) {
+        if ($leagueShotsConceded == null) {
+            console.log('Tried to inject leagueShotsConceded, but it was null!');
+            return data;
+        }
+        data.opponents.setShotsConceded($leagueShotsConceded.teamShots);
+        return data;
+    }
+
     onMount(async () => {
         isMounted = true;
         if ($leagueShotsConceded == null) {
-            PlayerService.playerReadAllShots().then((data) =>
-                leagueShotsConceded.set(new LeagueShotsConceded(data)),
-            );
+            PlayerService.playerReadAllShots().then((data) => {
+                const leagueShotsConcededObject = new LeagueShotsConceded(data);
+                leagueShotsConceded.set(leagueShotsConcededObject);
+                dataManager.update(injectShotsConceded);
+            });
         }
         if ($leagueShotsConceded != null) {
-            dataManager.opponents.setShotsConceded($leagueShotsConceded.teamShots);
+            dataManager.update(injectShotsConceded);
         }
     });
 </script>
 
 <svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} />
 <div class="!px-0" style="contain: paint;" bind:clientWidth={containerWidth}>
-    <Title player={dataManager.player} />
+    <Title player={$dataManager.player} />
     {#if isMounted}
         <VizContainer {width} {height} on:mouseleave={() => hoveredData.set(null)}>
             <svg {width} {height}>

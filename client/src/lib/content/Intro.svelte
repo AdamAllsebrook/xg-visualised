@@ -2,16 +2,17 @@
     import { key as dataKey, type DataManager } from '$lib/data/dataManager';
     import FixtureList from '$lib/FixtureList.svelte';
     import { getContext } from 'svelte';
+    import type { Writable } from 'svelte/store';
 
-    const dataManager: DataManager = getContext(dataKey);
-    const player = dataManager.player;
-    const shots = dataManager.shots;
-    const teams = dataManager.teams;
-    const matches = dataManager.matches;
-    const fixtures = dataManager.fixtures;
+    const dataManager: Writable<DataManager> = getContext(dataKey);
+    const player = $dataManager.player;
+    const shots = $dataManager.shots;
+    const teams = $dataManager.teams;
+    const matches = $dataManager.matches;
+    const fixtures = $dataManager.fixtures;
 
-    const sumXG = dataManager.shotData.xG;
-    const sumMins = dataManager.matchData.minutes;
+    const sumXG = $dataManager.shotData.xG;
+    const sumMins = $dataManager.matchData.minutes;
 </script>
 
 <h3 class="font-bold text-2xl mb-2">Introduction</h3>

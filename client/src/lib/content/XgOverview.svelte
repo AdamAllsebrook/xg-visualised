@@ -1,19 +1,20 @@
 <script lang='ts'>
     import { key as dataKey, type DataManager } from "$lib/data/dataManager";
     import { getContext } from "svelte";
+    import type { Writable } from "svelte/store";
 
 
-    const dataManager: DataManager = getContext(dataKey);
-    const player = dataManager.player;
-    const shots = dataManager.shotData.shots;
-    const goals = dataManager.shotData.scored;
-    const sumXG = dataManager.shotData.xG;
-    const sumMins = dataManager.matchData.minutes;
-    const sumNpXg = dataManager.shotData.npxG;
-    const matches = dataManager.matchData.matches;
-    const penalties = dataManager.shotData.penalties;
+    const dataManager: Writable<DataManager> = getContext(dataKey);
+    const player = $dataManager.player;
+    const shots = $dataManager.shotData.shots;
+    const goals = $dataManager.shotData.scored;
+    const sumXG = $dataManager.shotData.xG;
+    const sumMins = $dataManager.matchData.minutes;
+    const sumNpXg = $dataManager.shotData.npxG;
+    const matches = $dataManager.matchData.matches;
+    const penalties = $dataManager.shotData.penalties;
     const nonPenalties = shots - penalties;
-    const scoredPenalties = dataManager.shotData.penaltiesScored;
+    const scoredPenalties = $dataManager.shotData.penaltiesScored;
 </script>
 
 <p>

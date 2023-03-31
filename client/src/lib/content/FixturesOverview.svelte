@@ -3,13 +3,14 @@
     import FixtureList from '$lib/FixtureList.svelte';
     import { key as dataKey, type DataManager } from '$lib/data/dataManager';
     import { getContext } from 'svelte';
+    import type { Writable } from 'svelte/store';
 
-    const dataManager: DataManager = getContext(dataKey);
-    const player = dataManager.player;
-    const teams = dataManager.teams;
-    const fixtures = dataManager.fixtures;
+    const dataManager: Writable<DataManager> = getContext(dataKey);
+    const player = $dataManager.player;
+    const teams = $dataManager.teams;
+    const fixtures = $dataManager.fixtures;
 
-    const opponents = dataManager.opponents.teams;
+    const opponents = $dataManager.opponents.teams;
     $: averageXGA = (opponents.map(d => d.xGA / d.games).reduce((x,y) => x + y, 0) / opponents.length).toFixed(2);
 
 </script>

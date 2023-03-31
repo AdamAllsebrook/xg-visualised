@@ -2,11 +2,11 @@
     import type { SimpleShot } from '$client';
     import { type DataManager, key as dataKey } from '$lib/data/dataManager';
     import { getContext } from 'svelte';
+    import type { Writable } from 'svelte/store';
 
-    export let allShotsAgainstFixtures: SimpleShot[];
-    const dataManager: DataManager = getContext(dataKey);
-    const player = dataManager.player;
-    const shotData = dataManager.shotData;
+    const dataManager: Writable<DataManager> = getContext(dataKey);
+    const player = $dataManager.player;
+    const shotData = $dataManager.shotData;
 
     const shotsHome = shotData.home;
     const shotsAway = shotData.away;
@@ -15,7 +15,9 @@
     const shotsAwayPercent = shotData.strPercent(shotsAway);
 
     // h_a is reversed here as it refers to the player taking the shot
-    $: fixturesHome = allShotsAgainstFixtures.filter((d) => d.h_a == 'a');
+    $: shotsConceded = $dataManager.opponents.shotsConceded;
+    $: opponentsHomePercent = shotsConceded?.strPercent(shotsConceded?.home);
+    $: opponentsAwayPercent = shotsConceded?.strPercent(shotsConceded?.away);
 </script>
 
 <h3 class="font-bold text-2xl">Home and Away</h3>
@@ -26,7 +28,7 @@
 </p>
 <p>
     {player.team_title}'s next opponents have conceded {prefersHome
-        ? (100 - (fixturesHome.length / allShotsAgainstFixtures.length) * 100).toFixed(2)
-        : ((fixturesHome.length / allShotsAgainstFixtures.length) * 100).toFixed(2)}% of their shots
+        ? opponentsHomePercent
+        : opponentsAwayPercent}% of their shots
     {prefersHome ? 'away from' : 'at'} home.
 </p>

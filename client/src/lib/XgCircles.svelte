@@ -8,8 +8,8 @@
 
     export let data: any;
     export let rScale: any;
-    const dataManager: DataManager = getContext(dataKey);
-    const shots = dataManager.shots;
+    const dataManager: Writable<DataManager> = getContext(dataKey);
+    const shots = $dataManager.shots;
 
     let hoveredData: Writable<HoveredData | null> = getContext(hoveredDataKey);
 </script>
