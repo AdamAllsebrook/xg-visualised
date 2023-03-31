@@ -20,6 +20,8 @@ async def get_all_players() -> dict[int, Player]:
         int(player['id']): Player(**player)
         for player in understat_players
     }
+    for id, player in players.items():
+        player.player_name = player.player_name.replace('&#039;', "'")
     return players
 
 
