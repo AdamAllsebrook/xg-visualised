@@ -16,9 +16,15 @@
 
 <svelte:window bind:scrollY={y} bind:innerHeight={height} />
 <div
-    class="mb-16 h-[100vh] relative z-50 pl-4 lg:w-1/2"
-    style="background: linear-gradient(0deg, {colours.primary}33 0%, {colours.primary} {curtainReveal * 0.8}%, {colours.primary} 80%);"
+    class="my-16 h-[100vh] lg:h-auto relative z-50 lg:w-1/2 flex flex-col justify-between"
+    style="background: linear-gradient(0deg, {colours.primary}00 0%, {colours.primary} {curtainReveal * 0.8}%, {colours.primary} 80%);"
 >
-    <h1 class="text-6xl font-display font-bold text-stone-100 pb-2">{player.player_name}</h1>
-    <h2 class="text-md font-display text-stone-300 font-medium">Expected goals, visualised.</h2>
+    <div class='pl-4'>
+        <h1 class="text-6xl font-display font-bold text-stone-100 pb-2">{player.player_name}</h1>
+        <h2 class="text-md font-display text-stone-300 font-medium">Expected goals, visualised.</h2>
+    </div>
+
+    <div class='mb-32 w-full flex lg:hidden' style='opacity: {100 - curtainReveal * 10}%'>
+        <p class='text-white font-display mx-auto'>Scroll to begin.</p>
+    </div>
 </div>
