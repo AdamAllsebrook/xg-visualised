@@ -37,7 +37,7 @@
     $: width =
         screenWidth >= 1024
             ? (containerWidth * 2) / 5
-            : (screenWidth < 480 && currentStep == 0) || currentStep == undefined
+            : (screenWidth < 480 && currentStep < 5) || currentStep == undefined
             ? containerWidth * 1.25
             : containerWidth;
     let margin: Margin;
@@ -90,7 +90,7 @@
 
 <svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} />
 <div class="!px-0" style="contain: paint;" bind:clientWidth={containerWidth}>
-    <Title player={$dataManager.player} />
+    <Title />
     {#if isMounted}
         <VizContainer {width} {height} on:mouseleave={() => hoveredData.set(null)}>
             <svg {width} {height}>

@@ -1,12 +1,24 @@
-<script lang='ts'>
-    import type { Player } from '$client';
+<script lang="ts">
     import { colours } from '$lib/colours';
+    import { key as dataKey, type DataManager } from '$lib/data/dataManager';
+    import type { Writable } from 'svelte/store';
+    import { getContext } from 'svelte';
 
-    export let player: Player;
+    const dataManager: Writable<DataManager> = getContext(dataKey);
+    const player = $dataManager.player;
+
+    let curtainReveal = 0;
+    let y = 0;
+    let height = 1024;
+    $: curtainReveal = Math.min(100, y / height * 100);
+    $: y, height, console.log(y, height);
 </script>
 
-
-<div class='mb-16 relative z-50 lg:w-1/2' style='background-color: {colours.primary}'>
-    <h1 class="text-6xl font-display font-bold text-stone-100">{player.player_name}</h1>
-    <h2 class="text-md font-display text-stone-300 font-bold">The xG Story</h2>
+<svelte:window bind:scrollY={y} bind:innerHeight={height} />
+<div
+    class="mb-16 h-[100vh] relative z-50 pl-4 lg:w-1/2"
+    style="background: linear-gradient(0deg, {colours.primary}33 0%, {colours.primary} {curtainReveal * 0.8}%, {colours.primary} 80%);"
+>
+    <h1 class="text-6xl font-display font-bold text-stone-100 pb-2">{player.player_name}</h1>
+    <h2 class="text-md font-display text-stone-300 font-medium">Expected goals, visualised.</h2>
 </div>
