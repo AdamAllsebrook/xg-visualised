@@ -10,6 +10,8 @@
     let opponent: FixtureTeam = fixture[sideSwitch[fixture.side]];
     let opponentData = teams.get(opponent.title);
     let xGA = opponentData.xGA / opponentData.games;
+    const xgMin = 0.5;
+    const xgMax = 2.5;
 
     let el: HTMLElement;
     $: x = el ? el.getBoundingClientRect().x : 0;
@@ -18,8 +20,8 @@
     let height: number;
 
     let colourScale = scaleLinear()
-        .domain([3, 0])
-        .range([colours.secondary, colours.accent2]);
+        .domain([xgMax, xgMin])
+        .range([colours.xg + 'ff', colours.xg + '33']);
     let colour = colourScale(xGA);
 
     let hover = false;
@@ -29,18 +31,19 @@
     bind:this={el}
     bind:clientWidth={width}
     bind:clientHeight={height}
-    class='border inline-block m-1 relative rounded drop-shadow-lg z-0'
+    class='inline-block my-1 relative highlight w-full'
     on:mouseover={() => {hover = true}}
     on:focus={() => {hover = true}}
     on:mouseout={() => hover = false}
     on:blur={() => {hover = false}}
     tabindex="-1"
+    style='background: linear-gradient(90deg, {colour} 0%, {colour} {xGA/xgMax * 100}%, #00000000 {xGA/xgMax * 100}%, #00000000 100%)'
 >
     <!-- <div class='absolute opacity-20 w-full bottom-0' style='background-color: {colour}; height: {Math.min(xGA/3, 1) * 100}%' /> -->
-    <div class='w-2 h-full float-left border-r absolute' style='background-color: {colour}'/>
-    <div class='p-1 pl-3 float-right pointer-events-none'>
-        <p>{opponent.short_title} ({fixture.side.toUpperCase()})</p>
+    <div class='font-normal' >
+        <p>{opponent.title} ({fixture.side.toUpperCase()})</p>
     </div>
+    <p class='absolute top-1 pl-2 font-normal' style='left: {xGA/xgMax * 100}%'>{(opponentData?.xGA / opponentData?.games).toFixed(2)} <span class='text-grey'>xGA per 90</span></p>
     <!-- <p>{teams.get(opponent.title).xGA}</p> -->
     {#if hover}
         <div 
