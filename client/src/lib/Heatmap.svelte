@@ -26,12 +26,9 @@
         .radius(width/64)
         .extent([[0, 0], [width, customHeight]]);
     $: bins = hexmap(allShotsConceded.map(x => [xScale(x.Y), yScale(x.X)]));
-    $: {hexmap; console.log(hexmap)}
     $: colorScale = scaleLinear()
         .domain([0, Math.max(...bins.map(x => x.length))])
         .range([colours.primary, '#777'])
-        // .range(['yellow', 'red'])
-    $: console.log('max len', Math.max(...bins.map(x => x.length)))
 </script>
 
 <g transform='translate(0 {(height - customHeight) / 2})' transition:fade="{{delay: 0, duration: 300, easing: cubicOut}}">

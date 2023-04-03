@@ -1,35 +1,32 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import type { Spring } from 'svelte/motion';
-    import { onDestroy, setContext } from 'svelte';
+    import { setContext } from 'svelte';
     import { writable, type Writable } from 'svelte/store';
     import { scaleLinear } from 'd3-scale';
 
     import { PlayerService } from '$client';
-    import type { Player, Match, Season, Shot, SimpleShot, Fixture, Team } from '$client';
 
     import Scrolly from '$lib/Scrolly.svelte';
     import Tooltip from '$lib/Tooltip.svelte';
-    import ShotTooltip from '$lib/ShotTooltip.svelte';
     import VizContainer from '$lib/VizContainer.svelte';
     import XgCircles from '$lib/XgCircles.svelte';
     import ContentManager from '$lib/ContentManager.svelte';
     import VizManager from '$lib/VizManager.svelte';
-    import { colours } from '$lib/colours';
-    import { type HoveredData, HoveredDataType, key as hoveredDataKey } from '$lib/hoveredData';
     import type { Margin } from '$lib/margin';
     import { DataManager, key as dataKey } from '$lib/data/dataManager';
+    import { HoveredDataType } from '$lib/view/hoveredData';
 
     import Title from './Title.svelte';
     import { leagueShotsConceded } from './stores.js';
     import { LeagueShotsConceded, key as concedeKey } from '$lib/data/leagueShotsConceded';
+    import { ViewManager, viewKey } from '$lib/view/viewManager';
 
     export let data: any;
     const dataManager: Writable<DataManager> = writable(data.data);
     setContext(dataKey, dataManager);
 
     let isMounted = false;
-    let currentStep: number;
 
     let screenWidth: number;
     let screenHeight: number;
@@ -37,7 +34,7 @@
     $: width =
         screenWidth >= 1024
             ? (containerWidth * 2) / 5
-            : (screenWidth < 480 && currentStep < 5) || currentStep == undefined
+            : $currentStep == undefined || (screenWidth < 480 && $currentStep < 5)
             ? containerWidth * 1.25
             : containerWidth;
     let margin: Margin;
@@ -60,9 +57,11 @@
         y: tweenedY ? $tweenedY[index] : 0,
     }));
 
-    let hoveredData: Writable<HoveredData | null> = writable(null);
-    setContext(hoveredDataKey, hoveredData);
     setContext(concedeKey, leagueShotsConceded);
+    let viewManager = new ViewManager();
+    let currentStep = viewManager.currentStep;
+    let hoveredData = viewManager.hoveredData;
+    setContext(viewKey, viewManager);
 
     function injectShotsConceded(data: DataManager) {
         if ($leagueShotsConceded == null) {
@@ -99,7 +98,6 @@
                         {width}
                         {height}
                         {margin}
-                        {currentStep}
                         bind:tweenedX
                         bind:tweenedY
                     />
@@ -118,15 +116,15 @@
                     y={$tweenedY[$hoveredData.index] + margin.top}
                     offset={(rScale($hoveredData.data.xG) * 3) / 2}
                 >
-                    {#if hoveredData != null}
+                    {#if $hoveredData != null}
                         <svelte:component this={$hoveredData.component} data={$hoveredData.data} />
                     {/if}
                 </Tooltip>
             {/if}
         </VizContainer>
     {/if}
-    <Scrolly bind:value={currentStep}>
-        <ContentManager {currentStep} />
+    <Scrolly bind:value={$currentStep}>
+        <ContentManager />
     </Scrolly>
     <!-- {#if $hoveredData && $hoveredData.type == HoveredDataType.Fixture} -->
     <!--     <Tooltip -->

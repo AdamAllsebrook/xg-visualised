@@ -11,7 +11,6 @@
     let y = 0;
     let height = 1024;
     $: curtainReveal = Math.min(100, y / height * 100);
-    $: y, height, console.log(y, height);
 </script>
 
 <svelte:window bind:scrollY={y} bind:innerHeight={height} />

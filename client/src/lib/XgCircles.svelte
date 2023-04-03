@@ -2,16 +2,19 @@
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
     import Circle from '$lib/Circle.svelte';
-    import { type HoveredData, HoveredDataType, key as hoveredDataKey } from '$lib/hoveredData';
     import ShotTooltip from '$lib/ShotTooltip.svelte';
+    import { HoveredDataType } from '$lib/view/hoveredData';
     import { key as dataKey, type DataManager } from './data/dataManager';
+    import { viewKey, type ViewManager } from './view/viewManager';
 
     export let data: any;
     export let rScale: any;
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const shots = $dataManager.shots;
 
-    let hoveredData: Writable<HoveredData | null> = getContext(hoveredDataKey);
+    let viewManager: ViewManager = getContext(viewKey);
+    let hoveredData = viewManager.hoveredData;
+    $: hoveredData, console.log($hoveredData);
 </script>
 
 {#each data as d, i}
