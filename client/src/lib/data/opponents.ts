@@ -3,6 +3,7 @@ import { SimpleShotData } from './shotData';
 
 export class Opponents {
     teams: Team[];
+    sides: ('a' | 'h')[]; // note: reversed
     shotsConceded: SimpleShotData | null = null;
     teamShots: Map<string, SimpleShot[]> | null = null;
 
@@ -10,6 +11,7 @@ export class Opponents {
         this.teams = fixtures
             .map((d) => teams.get(Opponents.opponentName(d)))
             .filter((d) => d !== undefined) as Team[];
+        this.sides = fixtures.map((d) => d.side);
     }
 
     setShotsConceded(shotsConceded: Map<string, SimpleShot[]>) {

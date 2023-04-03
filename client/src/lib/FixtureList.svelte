@@ -1,15 +1,20 @@
 <script lang="ts">
-    import type { Fixture, Team } from '$client';
+    import { getContext } from 'svelte';
+    import type { Writable } from 'svelte/store';
+    import { DataManager, key as dataKey } from './data/dataManager';
+    import { key as shotsConcededKey, LeagueShotsConceded } from './data/leagueShotsConceded';
+    import type { Opponents } from './data/opponents';
+    import { SimpleShotData } from './data/shotData';
     import FixtureSummary from './FixtureSummary.svelte';
 
-    export let fixtures: Fixture[];
-    export let teams: Map<string, Team>;
+    const dataManager: Writable<DataManager> = getContext(dataKey);
+    const opponents: Opponents = $dataManager.opponents;
 </script>
 
-{#each fixtures as fixture}
+{#each opponents.teams as team, i}
     <FixtureSummary
-        {fixture}
-        {teams}
+        {team}
+        side={opponents.sides[i]}
     />
 {/each}
 
