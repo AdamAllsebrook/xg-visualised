@@ -4,6 +4,7 @@ import { SimpleShotData } from './shotData';
 export class Opponents {
     teams: Team[];
     shotsConceded: SimpleShotData | null = null;
+    teamShots: Map<string, SimpleShot[]> | null = null;
 
     constructor(fixtures: Fixture[], teams: Map<string, Team>) {
         this.teams = fixtures
@@ -16,6 +17,11 @@ export class Opponents {
             this.teams
                 .map((team) => shotsConceded.get(team.title) || [])
                 .reduce((arr, shots) => arr.concat(shots), []),
+        );
+        this.teamShots = new Map(
+            [...shotsConceded].filter(([title]) =>
+                this.teams.map((team) => team.title).includes(title),
+            ),
         );
     }
 
