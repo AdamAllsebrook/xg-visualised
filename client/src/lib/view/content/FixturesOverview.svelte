@@ -16,7 +16,7 @@
     {player.team_title}'s next {opponents.length} games are against:
 </p>
 <FixtureList />
-<p class='text-grey'>Select a team to view their heatmap.</p>
+<p class='text-white-800'>Select a team to view their heatmap.</p>
 <br>
 <p>
     Visualised: The combined heatmap of all shots against these teams this season.

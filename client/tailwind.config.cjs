@@ -12,13 +12,16 @@ module.exports = {
                 secondary: '#588646',
                 accent1: 'orange',
                 accent2: 'red',
-                white: 'white',
+                white: {
+                    900: '#eee',
+                    800: '#bbb',
+                },
                 grey: '#999',
                 black: '#060606',
 
                 shot: '#777',
                 goal: '#588646',
-                xg: '#36827F'
+                xg: '#36827F',
                 // shot: '#6c6c6c',
                 // goal: '#558A40',
                 // xg: '#416462'

@@ -35,7 +35,7 @@
 
 <div>
     <div 
-        class='inline-block my-1 relative highlight w-full font-normal transition-colors hover:bg-color'
+        class='inline-block my-1 relative highlight w-full font-normal transition-colors'
         tabindex="-1"
         style='background-color: {colour}; width: {xGA/xgMax * 100}%;'
         on:focus={() => $teamSelected = team.title}
@@ -43,5 +43,5 @@
     >
         <p>{team.title} ({side.toUpperCase()})</p>
     </div>
-    <p class='pb-4 lg:pb-0 lg:inline lg:pl-2 font-normal'>{xGA.toFixed(2)} <span class='text-grey'>xGA per 90</span></p>
+    <p class='pb-4 lg:pb-0 lg:inline lg:pl-2 font-normal'>{xGA.toFixed(2)} <span class='text-white-800'>xGA per 90</span></p>
 </div>

@@ -16,7 +16,7 @@
     const scoredPenalties = $dataManager.shotData.penaltiesScored;
 </script>
 
-<h2 class='text-2xl text-white font-extrabold mb-1'>Overview</h2>
+<h2 class='text-2xl font-extrabold mb-1'>The Season So Far</h2>
 <p>
     {player.player_name} has taken <span class='highlight bg-shot'>{shots} shots</span> this season, scoring <span class='highlight bg-goal'>{goals} goals.</span>
 </p>

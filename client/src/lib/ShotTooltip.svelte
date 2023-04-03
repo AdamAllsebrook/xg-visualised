@@ -3,7 +3,7 @@
     export let data: Shot;
 </script>
 
-<p class='font-medium'>{`${data.h_team} ${data.h_goals} - ${data.a_goals} ${data.a_team}`.replaceAll('rhampton Wanderers', 's')}</p>
+<p class='font-bold text-center'>{`${data.h_team} ${data.h_goals} - ${data.a_goals} ${data.a_team}`.replaceAll('rhampton Wanderers', 's')}</p>
 <p class='text-center mb-2 pb-2 border-b-[1px] border-slate-900'>{(new Date(data.date)).toLocaleDateString()}</p>
 <div class='inline-block pr-2 pl-3 text-right text-slate-900'>
     <p>Minute</p>

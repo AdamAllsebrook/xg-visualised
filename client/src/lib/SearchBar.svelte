@@ -86,7 +86,7 @@
 
 <div class="w-full relative">
     <input
-        class="w-full p-4 text-white text-md font-display rounded-sm bg-primary-900 transition-colors
+        class="w-full p-4 text-md font-display rounded-sm bg-primary-900 transition-colors
         focus:outline-none focus:bg-primary-800 hover:bg-primary-800 border-b border-primary-700"
         type="search"
         id="search"
@@ -103,7 +103,7 @@
     {#if searchText.length > 0 && isFocused && filteredItems.length > 0}
         <div
             bind:this={linksContainerEl}
-            class="absolute text-white left-0 right-0 text-md py-2 font-display bg-primary-800"
+            class="absolute left-0 right-0 text-md py-2 font-display bg-primary-800"
             transition:fade={{ duration: 100 }}
         >
             {#each filteredItems as item, i}

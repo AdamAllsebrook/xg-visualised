@@ -88,7 +88,7 @@
 </script>
 
 <svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} />
-<div class="!px-0" style="contain: paint;" bind:clientWidth={containerWidth}>
+<div class="!px-0 text-white-900 font-display" style="contain: paint;" bind:clientWidth={containerWidth}>
     <Title />
     {#if isMounted}
         <VizContainer {width} {height} on:mouseleave={() => hoveredData.set(null)}>

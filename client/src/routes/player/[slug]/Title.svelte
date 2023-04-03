@@ -19,11 +19,11 @@
     style="background: linear-gradient(0deg, {colours.primary}00 0%, {colours.primary} {curtainReveal * 0.8}%, {colours.primary} 80%);"
 >
     <div class='pl-4 lg:pl-16'>
-        <h1 class="text-6xl font-display font-bold text-stone-100 pb-2">{player.player_name}</h1>
-        <h2 class="text-md font-display text-stone-300 font-medium">Expected goals, visualised.</h2>
+        <h1 class="text-6xl font-bold pb-2">{player.player_name}</h1>
+        <h2 class="text-md font-medium text-white-800">Expected goals, visualised.</h2>
     </div>
 
     <div class='mb-32 w-full flex lg:hidden' style='opacity: {100 - curtainReveal * 10}%'>
-        <p class='text-white font-display mx-auto'>Scroll to begin.</p>
+        <p class='mx-auto'>Scroll to begin.</p>
     </div>
 </div>

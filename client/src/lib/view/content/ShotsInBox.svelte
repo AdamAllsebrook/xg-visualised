@@ -22,15 +22,3 @@
 </script>
 
 <h3 class="font-bold text-2xl">Fox in the Box</h3>
-<p>
-    Of {player.player_name}'s {shots} shots, {nPreferred} ({preferPercent}%) were from {prefersInBox
-        ? 'inside'
-        : 'outside'} of the box.
-</p>
-<p>
-    {player.team_title}'s next opponents have conceded
-    {(shotsInBox > shotsOutBox
-        ? opponentsInBoxPercent
-        : opponentsOutBoxPercent)}% of their shots from
-    {shotsInBox > shotsOutBox ? 'inside' : 'outside'} of the box.
-</p>
