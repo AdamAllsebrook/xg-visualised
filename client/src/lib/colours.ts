@@ -1,12 +1,14 @@
 export type ColourScheme = {
-    primary: string,
-    primary_light: string,
-    secondary: string,
-    accent1: string,
-    accent2: string,
-    white: string,
-    grey: string,
-    black: string
+    primary: string;
+    primary_light: string;
+    secondary: string;
+    accent1: string;
+    accent2: string;
+    white: string;
+    grey: string;
+    black: string;
+
+    xg: string;
 };
 
 export const colours: ColourScheme = {
@@ -18,7 +20,9 @@ export const colours: ColourScheme = {
     accent2: 'red',
     white: 'white',
     grey: '#999',
-    black: '#060606'
+    black: '#060606',
+
+    xg: '#36827F',
 };
 
 // export { type ColourScheme, colours };

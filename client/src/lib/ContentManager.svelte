@@ -14,7 +14,6 @@
     export let currentStep: number;
 
     const content = [
-        Intro,
         XgOverview,
         FixturesOverview,
         ShotsInBox,
@@ -28,14 +27,14 @@
 
 {#each content as item, i}
     <div 
-        class='h-[100vh] lg:h-[60vh] flex place-items-center justify-center lg:block lg:w-3/5 -translate-y-96 lg:-translate-y-0'
+        class='h-[100vh] lg:h-[60vh] flex place-items-center justify-center lg:block lg:w-3/5 -translate-y-96 lg:translate-y-32'
         class:active={currentStep === i}
     >
         <div 
-            class='p-8 w-full z-10 text-stone-100 font-display'
+            class='p-8 w-full z-10 text-stone-100 font-display lg:pl-16'
             style='background: linear-gradient(0deg, {colours.primary}33 0%, {colours.primary}ee 20%, {colours.primary}ee 80%, {colours.primary}33 100%)'
         >
-            <svelte:component this={item}/>
+        <svelte:component this={item}/>
         </div>
     </div>
 {/each}

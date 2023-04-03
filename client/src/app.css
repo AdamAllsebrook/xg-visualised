@@ -8,4 +8,9 @@
         text-decoration: underline;
         text-decoration-thickness: 0.15rem;
     }
+
+    .highlight {
+        padding: 0.25rem;
+        font-weight: bold;
+    }
 }
