@@ -14,11 +14,11 @@
 
     let viewManager: ViewManager = getContext(viewKey);
     let hoveredData = viewManager.hoveredData;
-    $: hoveredData, console.log($hoveredData);
 </script>
 
 {#each data as d, i}
     <Circle
+        id={i}
         cx={d.x}
         cy={d.y}
         r={rScale(shots[i].xG)}

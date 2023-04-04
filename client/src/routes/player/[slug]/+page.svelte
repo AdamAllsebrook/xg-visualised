@@ -98,6 +98,7 @@
                         {width}
                         {height}
                         {margin}
+                        {rScale}
                         bind:tweenedX
                         bind:tweenedY
                     />

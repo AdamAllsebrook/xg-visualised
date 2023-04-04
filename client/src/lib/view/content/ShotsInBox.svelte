@@ -7,14 +7,15 @@
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const player = $dataManager.player;
     const shots = $dataManager.shotData.shots;
+    const goals = $dataManager.goalData.shots;
 
-    const prefersInBox = $dataManager.shotData.insideBox > $dataManager.shotData.outsideBox;
-    const shotsInBox = $dataManager.shotData.insideBox;
-    const shotsOutBox = $dataManager.shotData.outsideBox;
-    const nPreferred = prefersInBox
+    const prefersInBox = $dataManager.shotData.insideBox >= $dataManager.shotData.outsideBox;
+    const preferredShots = prefersInBox
         ? $dataManager.shotData.insideBox
         : $dataManager.shotData.outsideBox;
-    const preferPercent = $dataManager.shotData.strPercent(nPreferred);
+    const preferredGoals = prefersInBox
+        ? $dataManager.goalData.insideBox
+        : $dataManager.goalData.outsideBox;
 
     $: shotsConceded = $dataManager.opponents.shotsConceded;
     $: opponentsInBoxPercent = shotsConceded?.strPercent(shotsConceded?.insideBox);
@@ -22,3 +23,15 @@
 </script>
 
 <h3 class="font-bold text-2xl">Fox in the Box</h3>
+<p>
+    {player.player_name} prefers to shoot from 
+    {prefersInBox ? 'inside' : 'outside'} the box, scoring 
+    <span class='highlight bg-goal'>{preferredGoals} goal{preferredGoals == 1 ? '' : 's'}</span> from 
+    <span class='highlight bg-shot'>{preferredShots} shot{preferredShots == 1 ? '' : 's'}</span>,
+</p>
+<p>
+    compared to his
+    <span class='highlight bg-goal'>{goals - preferredGoals} goal{goals - preferredGoals == 1 ? '' : 's'}</span> from
+    <span class='highlight bg-shot'>{shots - preferredShots} shot{shots - preferredShots == 1 ? '' : 's'} </span>
+    {prefersInBox ? 'outside' : 'inside'} the box.
+</p>

@@ -11,6 +11,7 @@
 
     export let width: number;
     export let height: number;
+    export let rScale: any, tweenedX: any, tweenedY: any;
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const viewManager: ViewManager = getContext(viewKey);
     const teamSelected: Writable<string | null> = viewManager.teamSelected;
@@ -36,8 +37,6 @@
     $: colorScale = scaleLinear()
         .domain([0, Math.max(...bins.map(x => x.length))])
         .range([colours.primary, '#777'])
-    $: bins, console.log(bins);
-    $: hexmap, console.log(hexmap.centers());
     $: binsIndexed = new Map(bins.map(x => [hexKey(x.x, x.y), x.length]));
 
     function hexKey(x: number, y: number) {

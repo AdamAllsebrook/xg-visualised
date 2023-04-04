@@ -7,6 +7,7 @@
     export let width: number;
     export let height: number;
     export let margin: Margin;
+    export let rScale: any;
     export let tweenedX: Spring<number[]>;
     export let tweenedY: Spring<number[]>;
 
@@ -20,6 +21,7 @@
         this={item}
         width={width - margin.left - margin.right}
         height={height - margin.top - margin.bottom}
+        {rScale}
         bind:tweenedX
         bind:tweenedY
     />

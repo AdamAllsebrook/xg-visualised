@@ -1,6 +1,7 @@
 <script lang='ts'>
     import { colours } from '$lib/colours';
 
+    export let id: number;
     export let cx: number;
     export let cy: number;
     export let r: number;
@@ -11,6 +12,7 @@
 </script>
 
 <circle
+    {id}
     {cx}
     {cy}
     {r}

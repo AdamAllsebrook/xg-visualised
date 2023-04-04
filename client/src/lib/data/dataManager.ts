@@ -13,6 +13,7 @@ export class DataManager {
     fixtures: Fixture[];
 
     shotData: ShotData;
+    goalData: ShotData;
     matchData: MatchData
     opponents: Opponents;
 
@@ -31,6 +32,7 @@ export class DataManager {
         this.fixtures = fixtures;
 
         this.shotData = new ShotData(shots);
+        this.goalData = new ShotData(shots.filter((shot) => shot.result === 'Goal'));
         this.matchData = new MatchData(matches);
         this.opponents = new Opponents(fixtures.slice(0, nFixtures), this.teams);
     }

@@ -30,7 +30,6 @@
             : colourScale(xgMin)
         : colourScale(xGA);
 
-    $: $teamSelected, console.log($teamSelected);
 </script>
 
 <div>
