@@ -1,6 +1,7 @@
 import XgOverview from './content/XgOverview.svelte';
 import FixturesOverview from './content/FixturesOverview.svelte';
 import ShotsInBox from './content/ShotsInBox.svelte';
+import FixturesInBox from './content/FixturesInBox.svelte';
 import Padding from './content/Padding.svelte';
 
 import Pitch from '../Pitch.svelte';
@@ -30,9 +31,9 @@ export let steps: Step[] = [
         shotLayout: 'box'
     },
     {
-        content: FixturesOverview,
+        content: FixturesInBox,
         visuals: [Pitch],
-        shotLayout: 'default'
+        shotLayout: 'box'
     },
     {
         content: Padding,

@@ -8,6 +8,7 @@ export type ColourScheme = {
     grey: string;
     black: string;
 
+    shot: string;
     xg: string;
 };
 
@@ -22,6 +23,7 @@ export const colours: ColourScheme = {
     grey: '#999',
     black: '#060606',
 
+    shot: '#777777',
     xg: '#36827F',
 };
 
