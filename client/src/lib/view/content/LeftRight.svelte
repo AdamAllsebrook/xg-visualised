@@ -7,9 +7,12 @@
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const player = $dataManager.player;
 
+    const shots = $dataManager.shotData.shots;
     const prefersLeft = $dataManager.shotData.left > $dataManager.shotData.right;
-    const leftShotsPercent = $dataManager.shotData.strPercent($dataManager.shotData.left);
-    const rightShotsPercent = $dataManager.shotData.strPercent($dataManager.shotData.right);
+    const leftShots = $dataManager.shotData.left;
+    const rightShots = $dataManager.shotData.right;
+    const leftXg = $dataManager.shotData.xgLeft.toFixed(2);
+    const rightXg = $dataManager.shotData.xgRight.toFixed(2);
 
     $: shotsConceded = $dataManager.opponents.shotsConceded;
     $: opponentsLeftPercent = shotsConceded?.strPercent(shotsConceded?.left);
@@ -18,14 +21,19 @@
 
 <h3 class="font-bold text-2xl">Left or Right?</h3>
 <p>
-    {player.player_name} prefers shooting from the {prefersLeft ? 'left' : 'right'} side, with {prefersLeft
-        ? leftShotsPercent
-        : rightShotsPercent}% of his shots coming from that side of the pitch.
+    {player.player_name} prefers shooting from the {prefersLeft ? 'left' : 'right'} side of the pitch, with 
+    <span class='highlight bg-shot'>{prefersLeft
+        ? leftShots
+        : rightShots} out of {shots} shots</span> coming from that half.
 </p>
 <p>
-    {player.team_title}'s next opponents have conceded
-    {prefersLeft
-        ? opponentsLeftPercent
-        : opponentsRightPercent}% of their total shots conceded from the
-    {prefersLeft ? 'left' : 'right'} side of the box.
+    He has totalled 
+    <span class='highlight bg-xg'>{prefersLeft 
+        ? leftXg
+        : rightXg} xG</span> from the 
+    {prefersLeft ? 'left' : 'right'}, compared to 
+    <span class='highlight bg-xg'>{prefersLeft
+        ? rightXg
+        : leftXg} xG</span> from the {prefersLeft ? 'right' : 'left'}.
 </p>
+        

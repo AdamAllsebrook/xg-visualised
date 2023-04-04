@@ -11,12 +11,16 @@ export class SimpleShotData {
 
     left: number;
     right: number;
+    xgLeft: number;
+    xgRight: number;
 
     firstHalf: number;
     secondHalf: number;
     
     home: number;
     away: number;
+
+    binnedY: SimpleShot[][];
 
     constructor(shots: SimpleShot[]) {
         this.shots = shots.length;
@@ -27,12 +31,16 @@ export class SimpleShotData {
 
         this.left = shots.filter(SimpleShotData.isLeft).length;
         this.right = this.shots - this.left;
+        this.xgLeft = SimpleShotData.xGsum(shots.filter(SimpleShotData.isLeft));
+        this.xgRight = this.xG - this.xgLeft;
 
         this.firstHalf = shots.filter(SimpleShotData.isFirstHalf).length;
         this.secondHalf = this.shots - this.firstHalf;
         
         this.home = shots.filter(SimpleShotData.isHome).length;
         this.away = this.shots - this.home;
+
+        this.binnedY = SimpleShotData.pitchYBins(shots);
     }
 
     strPercent(nShots: number, dp: number = 2, totalShots: number | null = null) {
@@ -44,18 +52,38 @@ export class SimpleShotData {
         return bins(minutes, nBins, 0, 90);
     }
 
-    static pitchXBins(shots: SimpleShot[], nBins: number): number[] {
-        let xs: number[] = shots.map((shot) => shot.X);
-        return bins(xs, nBins, 0, 1);
-    }
-
-    static pitchYBins(shots: SimpleShot[], nBins: number): number[] {
-        let ys: number[] = shots.map((shot) => shot.Y);
-        return bins(ys, nBins, 0, 1);
+    static pitchYBins(shots: SimpleShot[]): SimpleShot[][] {
+        return [
+            shots.filter(SimpleShotData.isWideLeft),
+            shots.filter(SimpleShotData.isInsideLeft),
+            shots.filter(SimpleShotData.isCentral),
+            shots.filter(SimpleShotData.isInsideRight),
+            shots.filter(SimpleShotData.isWideRight),
+        ];
     }
 
     static isInBox(shot: SimpleShot) {
         return shot.Y > 15 / 74 && shot.Y < 59 / 74 && shot.X > 97 / 115;
+    }
+
+    static isWideLeft(shot: SimpleShot) {
+        return shot.Y >= 59/74;
+    }
+
+    static isWideRight(shot: SimpleShot) {
+        return shot.Y < 15/74;
+    }
+
+    static isInsideLeft(shot: SimpleShot) {
+        return shot.Y < 59/74 && shot.Y >= 47/74;
+    }
+
+    static isInsideRight(shot: SimpleShot) {
+        return shot.Y >= 15/74 && shot.Y < 27/74;
+    }
+
+    static isCentral(shot: SimpleShot) {
+        return shot.Y >= 27/74 && shot.Y < 47/74;
     }
 
     private static isLeft(shot: SimpleShot) {
@@ -71,7 +99,7 @@ export class SimpleShotData {
     }
 
     protected static xGsum(shots: SimpleShot[]) {
-        return shots.map((x) => x.xG).reduce(sum);
+        return shots.map((x) => x.xG).reduce(sum, 0);
     }
 }
 

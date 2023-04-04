@@ -11,6 +11,7 @@
     import type { Writable } from 'svelte/store';
     import { viewKey, type ViewManager } from './view/viewManager';
     import { SimpleShotData } from './data/shotData';
+    import FixtureList from './FixtureList.svelte';
 
     export let width: number;
     export let height: number;
@@ -86,13 +87,15 @@
     ) {
         let shotMap = defaultLayout;
         const shotLayout = viewManager.steps[$currentStep || 0].shotLayout;
-        if (shotLayout == 'box') {
+        if (shotLayout === 'box') {
             shotMap = boxLayout;
+        }
+        else if (shotLayout === 'leftright') {
+            shotMap = leftRightLayout;
         }
         const layoutShots = shotMap(shots);
         tweenedX.set(layoutShots.map((shot) => shot.x));
         tweenedY.set(layoutShots.map((shot) => shot.y + (height - customHeight) / 2));
-        console.log('set tweened data!');
     }
 
     function defaultLayout(shots: Shot[]) {
@@ -169,6 +172,66 @@
         }
         return originalOrder;
     }
+
+    function leftRightLayout(shots: Shot[]) {
+        const order = shots.reduce((map, shot, i) => {
+            map.set(shot.id, i);
+            return map;
+        }, new Map());
+        const originalOrder = shots.map((shot) => {
+            return {
+                x: 0,
+                y: 0,
+            };
+        });
+
+        const xPos = [66.5 / 74, 53 / 74, 37 / 74, 21 / 74, 7.5 / 74];
+        for (let i = 0; i < $dataManager.shotData.binnedY.length; i++) {
+            let filteredShots = [...$dataManager.shotData.binnedY[i]];
+            filteredShots.sort((a, b) => b.xG - a.xG);
+            if (filteredShots.length === 0) {
+                continue;
+            }
+            const heightSum = filteredShots
+                .reduce(
+                    (acc: number[], shot: Shot) =>
+                        acc.concat([acc[acc.length - 1] + rScale(shot.xG) * 2]),
+                    [0],
+                )
+                .slice(1);
+
+            let columnStarts = [0];
+            let sum = 0;
+            for (let j = 0; j < heightSum.length; j++) {
+                if (heightSum[j] > customHeight + sum) {
+                    columnStarts.push(j);
+                    sum += customHeight;
+                }
+            }
+
+            const width = columnStarts.reduce((acc, j) => acc + rScale(filteredShots[j].xG) * 2, 0);
+            console.log('width', width);
+
+            let xAcc = 0;
+            let yAcc = 0;
+            let col = 0;
+            for (let j = 0; j < heightSum.length; j++) {
+                originalOrder[order.get(filteredShots[j].id)] = {
+                    x: xScale(xPos[i]) + xAcc - width / 2 + rScale(filteredShots[columnStarts[0]].xG),
+                    y: yAcc + rScale(filteredShots[j].xG),
+                };
+                yAcc += rScale(filteredShots[j].xG) * 2;
+                if (yAcc + rScale(filteredShots[j].xG) * 2 >= customHeight) {
+                    xAcc += rScale(filteredShots[columnStarts[col]].xG) * 2;
+                    yAcc = 0;
+                    col++;
+                }
+            }
+        }
+        console.log('doing left right stuff');
+        return originalOrder;
+    }
+
 </script>
 
 <!-- https://en.wikipedia.org/wiki/Football_pitch#/media/File:Soccer_pitch_dimensions.png -->
@@ -218,4 +281,32 @@
     <path transform="translate(0,0)" d={arcLeft()} fill="#999999" />
     <!-- right corner -->
     <path transform="translate({width},0)" d={arcRight()} fill="#999999" />
+
+
+    {#if viewManager.steps[$currentStep || 0].shotLayout === 'box'}
+        <rect
+            x={(width * ((74 - 44) / 2)) / 74}
+            width={(width * 44) / 74}
+            height={(customHeight * 18) / (115 / 2)}
+            fill="#3333"
+            stroke="none"
+        />
+    {:else if viewManager.steps[$currentStep || 0].shotLayout === 'leftright'}
+        <rect
+            x={15/74 * width}
+            y={0}
+            width={12/74 * width}
+            height={customHeight}
+            fill="#3333"
+            stroke="none"
+        />
+        <rect
+            x={47/74 * width}
+            y={0}
+            width={12/74 * width}
+            height={customHeight}
+            fill="#3333"
+            stroke="none"
+        />
+    {/if}
 </g>

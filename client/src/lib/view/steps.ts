@@ -2,6 +2,7 @@ import XgOverview from './content/XgOverview.svelte';
 import FixturesOverview from './content/FixturesOverview.svelte';
 import ShotsInBox from './content/ShotsInBox.svelte';
 import FixturesInBox from './content/FixturesInBox.svelte';
+import LeftRight from './content/LeftRight.svelte';
 import Padding from './content/Padding.svelte';
 
 import Pitch from '../Pitch.svelte';
@@ -11,7 +12,7 @@ import Matches from '../Matches.svelte';
 export type Step = {
     content: any; // svelte element
     visuals: any[]; // svelte element
-    shotLayout: 'default' | 'box';
+    shotLayout: 'default' | 'box' | 'leftright';
 };
 
 export let steps: Step[] = [
@@ -34,6 +35,11 @@ export let steps: Step[] = [
         content: FixturesInBox,
         visuals: [Pitch],
         shotLayout: 'box'
+    },
+    {
+        content: LeftRight,
+        visuals: [Pitch],
+        shotLayout: 'leftright'
     },
     {
         content: Padding,
