@@ -10,6 +10,7 @@
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
     import { viewKey, type ViewManager } from './view/viewManager';
+    import { SimpleShotData } from './data/shotData';
 
     export let width: number;
     export let height: number;
@@ -109,45 +110,62 @@
             map.set(shot.id, i);
             return map;
         }, new Map());
-        shots = [...shots].sort((a, b) => b.xG - a.xG);
-        // create array of cumulative circle radius
-        const widthSum = shots
-            .reduce(
-                (acc: number[], shot: Shot) =>
-                    acc.concat([acc[acc.length - 1] + rScale(shot.xG) * 2]),
-                [0],
-            )
-            .slice(1);
-        const rowWidth = maxWidth * 0.8;
-
-        const rowStarts = [0];
-        let sum = 0;
-        for (let i = 0; i < widthSum.length; i++) {
-            if (widthSum[i] > rowWidth + sum) {
-                rowStarts.push(i);
-                sum += rowWidth;
-            }
-        }
         const originalOrder = shots.map((shot) => {
             return {
                 x: 0,
                 y: 0,
             };
         });
-        const xOffset = (width - rowWidth) / 2;
-        const sumRowHeights = rowStarts.reduce((acc, i) => acc + rScale(shots[i].xG) * 2, 0);
-        const yOffset = (customHeight * 12) / (115 / 2) - sumRowHeights / 2;
-        let row = 0;
-        let height = 0;
-        for (let i = 0; i < widthSum.length; i++) {
-            if (rowStarts.includes(i) && i > 0) {
-                row++;
-                height += rScale(shots[i].xG) * 2;
+
+        for (let [filteredShots, pitchPosition] of [
+            [shots.filter((shot) => SimpleShotData.isInBox(shot)), (customHeight * 12) / (115 / 2)],
+            [shots.filter((shot) => !SimpleShotData.isInBox(shot)), (customHeight * 35) / (115 / 2)],
+        ]) {
+            let shots = [...filteredShots].sort((a, b) => b.xG - a.xG);
+            // create array of cumulative circle radius
+            const widthSum = shots
+                .reduce(
+                    (acc: number[], shot: Shot) =>
+                        acc.concat([acc[acc.length - 1] + rScale(shot.xG) * 2]),
+                    [0],
+                )
+                .slice(1);
+            let rowWidth = maxWidth * 0.6;
+
+            const rowStarts = [0];
+            let sum = 0;
+            for (let i = 0; i < widthSum.length; i++) {
+                if (widthSum[i] > rowWidth + sum) {
+                    // if (rowStarts.length === 1) {
+                    //     rowWidth = widthSum[i-1];
+                    // }
+                    rowStarts.push(i);
+                    sum += rowWidth;
+                }
             }
-            originalOrder[order.get(shots[i].id)] = {
-                x: (widthSum[i] % rowWidth) + xOffset,
-                y: height - rScale(shots[rowStarts[row]].xG) + yOffset,
-            };
+            const xOffset = (width - rowWidth) / 2;
+            const sumRowHeights = rowStarts.reduce((acc, i) => acc + rScale(shots[i].xG) * 2, 0);
+            const yOffset = pitchPosition - sumRowHeights / 2;
+            let row = 0;
+            let height = 0;
+            // let currentRowWidth = widthSum[rowStarts[1] - 1] - widthSum[rowStarts[0]] + rScale(shots[rowStarts[0]].xG);
+            // console.log('help', widthSum[rowStarts[1] - 1], widthSum[rowStarts[0]], rScale(shots[rowStarts[0]].xG), rScale(shots[rowStarts[1]-1].xG));
+            for (let i = 0; i < widthSum.length; i++) {
+                if (rowStarts.includes(i) && i > 0) {
+                    row++;
+                    height += rScale(shots[i].xG) * 2;
+                    // currentRowWidth = widthSum[(rowStarts[row + 1] || rowStarts.length) - 1] - widthSum[rowStarts[row]] + rScale(shots[rowStarts[row]].xG);
+                    // console.log('currentRowWidth', currentRowWidth, widthSum[(rowStarts[row + 1] || rowStarts[rowStarts.length-1]) - 1]);
+                }
+                originalOrder[order.get(shots[i].id)] = {
+                    x: (widthSum[i] % rowWidth) + xOffset - rScale(shots[rowStarts[row]].xG),// - (rowWidth - currentRowWidth) / 2,// - rScale(shots[rowStarts[row]].xG),
+                    y: height - rScale(shots[rowStarts[row]].xG) + yOffset,
+                };
+                // if (row === 0) {
+                //     console.log('currentRowWidth', currentRowWidth);
+                //     console.log(widthSum.slice(0, 10));
+                // }
+            }
         }
         return originalOrder;
     }
