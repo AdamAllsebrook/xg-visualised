@@ -3,6 +3,7 @@ import FixturesOverview from './content/FixturesOverview.svelte';
 import ShotsInBox from './content/ShotsInBox.svelte';
 import FixturesInBox from './content/FixturesInBox.svelte';
 import LeftRight from './content/LeftRight.svelte';
+import FixturesLeftRight from './content/FixturesLeftRight.svelte';
 import Padding from './content/Padding.svelte';
 
 import Pitch from '../Pitch.svelte';
@@ -38,6 +39,11 @@ export let steps: Step[] = [
     },
     {
         content: LeftRight,
+        visuals: [Pitch],
+        shotLayout: 'leftright'
+    },
+    {
+        content: FixturesLeftRight,
         visuals: [Pitch],
         shotLayout: 'leftright'
     },
