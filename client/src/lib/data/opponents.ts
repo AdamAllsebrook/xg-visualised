@@ -5,6 +5,7 @@ export class Opponents {
     teams: Team[];
     sides: ('a' | 'h')[]; // note: reversed
     shotsConceded: SimpleShotData | null = null;
+    shotsConcededList: SimpleShot[] | null = null;
     teamShots: Map<string, SimpleShot[]> | null = null;
 
     constructor(fixtures: Fixture[], teams: Map<string, Team>) {
@@ -20,6 +21,9 @@ export class Opponents {
                 .map((team) => shotsConceded.get(team.title) || [])
                 .reduce((arr, shots) => arr.concat(shots), []),
         );
+        this.shotsConcededList = this.teams
+                .map((team) => shotsConceded.get(team.title) || [])
+                .reduce((arr, shots) => arr.concat(shots), []),
         this.teamShots = new Map(
             [...shotsConceded].filter(([title]) =>
                 this.teams.map((team) => team.title).includes(title),

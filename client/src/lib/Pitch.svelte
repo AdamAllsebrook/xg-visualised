@@ -1,7 +1,7 @@
 <script lang="ts">
     import { arc } from 'd3-shape';
     import { scaleLinear } from 'd3-scale';
-    import type { Shot } from '$client';
+    import type { Shot, SimpleShot } from '$client';
     import type { Spring } from 'svelte/motion';
     import { spring } from 'svelte/motion';
     import { fade } from 'svelte/transition';
@@ -35,6 +35,15 @@
         : $teamSelected == null 
             ? shotsConceded
             : $leagueShotsConceded.data.get($teamSelected) || new SimpleShotData([]);;
+    let allShotsConcededList: SimpleShot[] | null = null;
+    $: allShotsConcededList = shotsConceded == null 
+        ? null 
+        : $teamSelected == null 
+            ? $dataManager.opponents.shotsConcededList
+            : $leagueShotsConceded.teamShots.get($teamSelected) || [];
+
+    $: minuteBins = allShotsConcededList === null ? [] : SimpleShotData.minuteBins(allShotsConcededList);
+    $: minuteXgs = minuteBins.map((bin) => bin.xG);
 
     $: customHeight = (width * 0.5 * 115) / 74;
 
@@ -343,6 +352,10 @@
                 style="transition: height 0.15s"
                 transition:fade={{ delay: 0, duration: 300, easing: cubicOut }}
             />
+        {/each}
+    {/if}
+    {#if allShotsConcededList !== null && viewManager.steps[$currentStep || 0].opponentsInfo === 'minutes'}
+        {#each minuteXgs as xg, i}
         {/each}
     {/if}
 </g>

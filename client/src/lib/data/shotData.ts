@@ -52,7 +52,7 @@ export class SimpleShotData {
 
     static minuteBins(shots: SimpleShot[]): SimpleShotData[] {
         return [...Array(6).keys()]
-            .map((i) => shots.filter((shot) => shot.minute >= i * 15 && shot.minute < (i + 1) * 15))
+            .map((i) => shots.filter((shot) => shot.minute >= i * 15 && (i == 5 || shot.minute < (i + 1) * 15)))
             .map((shots) => new SimpleShotData(shots));
     }
 

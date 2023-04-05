@@ -9,6 +9,8 @@
     import { ViewManager, viewKey } from './view/viewManager';
     import HomeAway from './view/content/HomeAway.svelte';
     import { SimpleShotData } from './data/shotData';
+    import { key as shotsConcededKey, type LeagueShotsConceded } from './data/leagueShotsConceded';
+    import { colours } from './colours';
 
     export let width: number;
     export let height: number;
@@ -21,6 +23,25 @@
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const shots: Shot[] = $dataManager.shots;
     const matches: Match[] = $dataManager.matches;
+
+    const teamSelected: Writable<string | null> = viewManager.teamSelected;
+    const leagueShotsConceded: Writable<LeagueShotsConceded> = getContext(shotsConcededKey);
+
+    $: shotsConceded = $dataManager.opponents.shotsConceded;
+    $: allShotsConceded = shotsConceded == null 
+        ? null 
+        : $teamSelected == null 
+            ? shotsConceded
+            : $leagueShotsConceded.data.get($teamSelected) || new SimpleShotData([]);;
+    $: shotsConcededList = $dataManager.opponents.shotsConcededList;
+    $: allShotsConcededList = shotsConcededList == null 
+        ? null 
+        : $teamSelected == null 
+            ? $dataManager.opponents.shotsConcededList
+            : $leagueShotsConceded.teamShots.get($teamSelected) || [];
+
+    $: opponentsMinuteBins = allShotsConcededList === null ? [] : SimpleShotData.minuteBins(allShotsConcededList);
+    $: opponentsMinuteXgs = opponentsMinuteBins.map((bin) => bin.xG);
 
     const minuteBins = SimpleShotData.minuteBins($dataManager.shots);
     const minuteXgs = minuteBins.map((bin) => bin.xG);
@@ -102,5 +123,21 @@
             style='transition: fill 0.2s'
             transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
         />
+    {/if}
+    {#if allShotsConcededList !== null && viewManager.steps[$currentStep || 0].opponentsInfo === 'minutes'}
+        {#each opponentsMinuteXgs as xg, i}
+            <rect
+                x={i * 15 * (width / 90) + 5}
+                width={15 * (width / 90) - 10}
+                y={-paddingY / 2}
+                height={3 * height * (1 - 1 / (matches.length + 1)) * (allShotsConceded === null ? 0 : xg / allShotsConceded.xG)}
+                rx="2"
+                stroke="black"
+                stroke-width="1"
+                fill="{colours.xg}99"
+                style='transition: fill 0.2s; transition: height 0.15s'
+                transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
+            />
+        {/each}
     {/if}
 </g>

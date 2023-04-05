@@ -8,6 +8,7 @@ import TimelineIntro from './content/TimelineIntro.svelte';
 import HomeAway from './content/HomeAway.svelte';
 import FixturesHomeAway from './content/FixturesHomeAway.svelte';
 import Minutes from './content/Minutes.svelte';
+import FixturesMinutes from './content/FixturesMinutes.svelte';
 import Padding from './content/Padding.svelte';
 
 import Pitch from '../Pitch.svelte';
@@ -18,7 +19,7 @@ export type Step = {
     content: any; // svelte element
     visuals: any[]; // svelte element
     shotLayout: 'default' | 'box' | 'leftright' | 'homeaway' | 'minutes';
-    opponentsInfo: 'default' | 'leftright';
+    opponentsInfo: 'default' | 'leftright' | 'minutes';
 };
 
 export let steps: Step[] = [
@@ -81,6 +82,12 @@ export let steps: Step[] = [
         visuals: [Matches],
         shotLayout: 'minutes',
         opponentsInfo: 'default'
+    },
+    {
+        content: FixturesMinutes,
+        visuals: [Matches],
+        shotLayout: 'default',
+        opponentsInfo: 'minutes'
     },
     {
         content: Padding,

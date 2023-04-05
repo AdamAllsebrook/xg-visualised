@@ -14,6 +14,7 @@
     let viewManager: ViewManager = getContext(viewKey);
     let currentStep = viewManager.currentStep;
     let visuals = viewManager.steps.map((step) => step.visuals);
+    $: console.log(visuals[$currentStep || 0]);
 </script>
 
 {#each visuals[$currentStep || 0] as item}
