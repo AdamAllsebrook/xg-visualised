@@ -8,6 +8,7 @@
     import type { Writable } from 'svelte/store';
     import { ViewManager, viewKey } from './view/viewManager';
     import HomeAway from './view/content/HomeAway.svelte';
+    import { SimpleShotData } from './data/shotData';
 
     export let width: number;
     export let height: number;
@@ -20,6 +21,11 @@
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const shots: Shot[] = $dataManager.shots;
     const matches: Match[] = $dataManager.matches;
+
+    const minuteBins = SimpleShotData.minuteBins($dataManager.shots);
+    const minuteXgs = minuteBins.map((bin) => bin.xG);
+    // argmax
+    const preferTime = minuteXgs.indexOf(Math.max(...minuteXgs));
 
     $: paddingY = height / (matches.length + 1);
     $: matchesSorted = matches.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
@@ -83,4 +89,18 @@
             style='transition: stroke 0.2s'
         />
     {/each}
+    {#if viewManager.steps[$currentStep || 0].shotLayout === 'minutes'}
+        <rect
+            x={preferTime * 15 * (width / 90)}
+            width={15 * (width / 90)}
+            y={-paddingY / 2}
+            height={height * (1 - 1 / (matches.length + 1))}
+            rx="2"
+            stroke="black"
+            stroke-width="1"
+            fill="#aaa3"
+            style='transition: fill 0.2s'
+            transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
+        />
+    {/if}
 </g>

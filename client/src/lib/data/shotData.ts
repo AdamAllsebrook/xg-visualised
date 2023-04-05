@@ -1,6 +1,5 @@
 import type { Shot, SimpleShot } from '$client';
-import { bins, sum } from './utils';
-
+import { sum } from './utils';
 
 export class SimpleShotData {
     shots: number;
@@ -16,7 +15,7 @@ export class SimpleShotData {
 
     firstHalf: number;
     secondHalf: number;
-    
+
     home: number;
     away: number;
     xgHome: number;
@@ -38,7 +37,7 @@ export class SimpleShotData {
 
         this.firstHalf = shots.filter(SimpleShotData.isFirstHalf).length;
         this.secondHalf = this.shots - this.firstHalf;
-        
+
         this.home = shots.filter(SimpleShotData.isHome).length;
         this.away = this.shots - this.home;
         this.xgHome = SimpleShotData.xGsum(shots.filter(SimpleShotData.isHome));
@@ -51,9 +50,10 @@ export class SimpleShotData {
         return ((nShots / (totalShots || this.shots)) * 100).toFixed(dp);
     }
 
-    static minuteBins(shots: SimpleShot[], nBins: number): number[] {
-        let minutes: number[] = shots.map((shot) => shot.minute);
-        return bins(minutes, nBins, 0, 90);
+    static minuteBins(shots: SimpleShot[]): SimpleShotData[] {
+        return [...Array(6).keys()]
+            .map((i) => shots.filter((shot) => shot.minute >= i * 15 && shot.minute < (i + 1) * 15))
+            .map((shots) => new SimpleShotData(shots));
     }
 
     static pitchYBins(shots: SimpleShot[]): SimpleShot[][] {
@@ -71,23 +71,23 @@ export class SimpleShotData {
     }
 
     static isWideLeft(shot: SimpleShot) {
-        return shot.Y >= 59/74;
+        return shot.Y >= 59 / 74;
     }
 
     static isWideRight(shot: SimpleShot) {
-        return shot.Y < 15/74;
+        return shot.Y < 15 / 74;
     }
 
     static isInsideLeft(shot: SimpleShot) {
-        return shot.Y < 59/74 && shot.Y >= 41/74;
+        return shot.Y < 59 / 74 && shot.Y >= 41 / 74;
     }
 
     static isInsideRight(shot: SimpleShot) {
-        return shot.Y >= 15/74 && shot.Y < 33/74;
+        return shot.Y >= 15 / 74 && shot.Y < 33 / 74;
     }
 
     static isCentral(shot: SimpleShot) {
-        return shot.Y >= 33/74 && shot.Y < 41/74;
+        return shot.Y >= 33 / 74 && shot.Y < 41 / 74;
     }
 
     private static isLeft(shot: SimpleShot) {
