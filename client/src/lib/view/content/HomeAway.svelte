@@ -7,28 +7,32 @@
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const player = $dataManager.player;
     const shotData = $dataManager.shotData;
+    const goalData = $dataManager.goalData;
+    const matchData = $dataManager.matchData;
 
+    const xgHome = shotData.xgHome;
+    const xgAway = shotData.xgAway;
     const shotsHome = shotData.home;
     const shotsAway = shotData.away;
-    const prefersHome = shotsHome > shotsAway;
-    const shotsHomePercent = shotData.strPercent(shotsHome);
-    const shotsAwayPercent = shotData.strPercent(shotsAway);
-
-    // h_a is reversed here as it refers to the player taking the shot
-    $: shotsConceded = $dataManager.opponents.shotsConceded;
-    $: opponentsHomePercent = shotsConceded?.strPercent(shotsConceded?.home);
-    $: opponentsAwayPercent = shotsConceded?.strPercent(shotsConceded?.away);
+    const goalsHome = goalData.home;
+    const goalsAway = goalData.away;
+    const homeMinutes = matchData.homeMinutes;
+    const awayMinutes = matchData.awayMinutes;
+    const homeXg90 = homeMinutes > 0 ? xgHome / homeMinutes * 90 : 0;
+    const awayXg90 = awayMinutes > 0 ? xgAway / awayMinutes * 90 : 0;
+    const prefersHome = homeXg90 > awayXg90;
 </script>
 
 <h3 class="font-bold text-2xl">Home and Away</h3>
-<p>
-    {player.player_name} has more shots in his {prefersHome ? 'home' : 'away'} games, with {prefersHome
-        ? shotsHomePercent
-        : shotsAwayPercent}% of his shots.
+<p>{player.player_name} prefers to play at {prefersHome ? 'home' : 'away'}, with a total of 
+    <span class='highlight bg-xg'>{(prefersHome ? homeXg90 : awayXg90).toFixed(2)} xG</span> per 90, compared to 
+    <span class='highlight bg-xg'>{(prefersHome ? awayXg90 : homeXg90).toFixed(2)} xG</span> per 90
+    {prefersHome ? 'away from home' : 'at home'}.
 </p>
 <p>
-    {player.team_title}'s next opponents have conceded {prefersHome
-        ? opponentsHomePercent
-        : opponentsAwayPercent}% of their shots
-    {prefersHome ? 'away from' : 'at'} home.
+    He has scored 
+    <span class='highlight bg-goal'>{goalsHome} goals</span> from
+    <span class='highlight bg-shot'>{shotsHome} shots</span> at home, and
+    <span class='highlight bg-goal'>{goalsAway} goals</span> from 
+    <span class='highlight bg-shot'>{shotsAway} shots</span> away.
 </p>

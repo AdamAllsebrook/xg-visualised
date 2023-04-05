@@ -19,6 +19,8 @@ export class SimpleShotData {
     
     home: number;
     away: number;
+    xgHome: number;
+    xgAway: number;
 
     binnedY: SimpleShot[][];
 
@@ -39,6 +41,8 @@ export class SimpleShotData {
         
         this.home = shots.filter(SimpleShotData.isHome).length;
         this.away = this.shots - this.home;
+        this.xgHome = SimpleShotData.xGsum(shots.filter(SimpleShotData.isHome));
+        this.xgAway = this.xG - this.xgHome;
 
         this.binnedY = SimpleShotData.pitchYBins(shots);
     }
