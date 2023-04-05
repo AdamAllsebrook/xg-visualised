@@ -6,6 +6,7 @@ import LeftRight from './content/LeftRight.svelte';
 import FixturesLeftRight from './content/FixturesLeftRight.svelte';
 import TimelineIntro from './content/TimelineIntro.svelte';
 import HomeAway from './content/HomeAway.svelte';
+import FixturesHomeAway from './content/FixturesHomeAway.svelte';
 import Padding from './content/Padding.svelte';
 
 import Pitch from '../Pitch.svelte';
@@ -64,6 +65,12 @@ export let steps: Step[] = [
     },
     {
         content: HomeAway,
+        visuals: [Matches],
+        shotLayout: 'homeaway',
+        opponentsInfo: 'default'
+    },
+    {
+        content: FixturesHomeAway,
         visuals: [Matches],
         shotLayout: 'homeaway',
         opponentsInfo: 'default'
