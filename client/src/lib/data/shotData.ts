@@ -75,15 +75,15 @@ export class SimpleShotData {
     }
 
     static isInsideLeft(shot: SimpleShot) {
-        return shot.Y < 59/74 && shot.Y >= 47/74;
+        return shot.Y < 59/74 && shot.Y >= 41/74;
     }
 
     static isInsideRight(shot: SimpleShot) {
-        return shot.Y >= 15/74 && shot.Y < 27/74;
+        return shot.Y >= 15/74 && shot.Y < 33/74;
     }
 
     static isCentral(shot: SimpleShot) {
-        return shot.Y >= 27/74 && shot.Y < 47/74;
+        return shot.Y >= 33/74 && shot.Y < 41/74;
     }
 
     private static isLeft(shot: SimpleShot) {

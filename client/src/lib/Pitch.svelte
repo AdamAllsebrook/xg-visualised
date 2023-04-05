@@ -25,7 +25,7 @@
     const shots: Shot[] = $dataManager.shots;
     const viewManager: ViewManager = getContext(viewKey);
     const currentStep: Writable<number | undefined> = viewManager.currentStep;
-    const leagueShotsConceded: LeagueShotsConceded = getContext(shotsConcededKey);
+    const leagueShotsConceded: Writable<LeagueShotsConceded> = getContext(shotsConcededKey);
 
     const teamSelected: Writable<string | null> = viewManager.teamSelected;
     $: shotsConceded = $dataManager.opponents.shotsConceded;
@@ -34,7 +34,7 @@
         ? null 
         : $teamSelected == null 
             ? shotsConceded
-            : leagueShotsConceded.data.get($teamSelected) || new SimpleShotData([]);;
+            : $leagueShotsConceded.data.get($teamSelected) || new SimpleShotData([]);;
 
     $: customHeight = (width * 0.5 * 115) / 74;
 
@@ -197,7 +197,7 @@
             };
         });
 
-        const xPos = [66.5 / 74, 53 / 74, 37 / 74, 21 / 74, 7.5 / 74];
+        const xPos = [66.5 / 74, 49 / 74, 37 / 74, 24 / 74, 7.5 / 74];
         for (let i = 0; i < $dataManager.shotData.binnedY.length; i++) {
             let filteredShots = [...$dataManager.shotData.binnedY[i]];
             filteredShots.sort((a, b) => b.xG - a.xG);
@@ -305,30 +305,43 @@
         />
     {:else if viewManager.steps[$currentStep || 0].shotLayout === 'leftright' && viewManager.steps[$currentStep || 0].opponentsInfo !== 'leftright'}
         <rect
-            x={15/74 * width}
+            x={33/74 * width}
             y={0}
-            width={12/74 * width}
+            width={8/74 * width}
             height={customHeight}
             fill="#3333"
             stroke="none"
+            transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
         />
         <rect
-            x={47/74 * width}
+            x={0/74 * width}
             y={0}
-            width={12/74 * width}
+            width={15/74 * width}
             height={customHeight}
             fill="#3333"
             stroke="none"
+            transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
+        />
+        <rect
+            x={59/74 * width}
+            y={0}
+            width={15/74 * width}
+            height={customHeight}
+            fill="#3333"
+            stroke="none"
+            transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
         />
     {:else if allShotsConceded !== null && viewManager.steps[$currentStep || 0].shotLayout === 'leftright'}
-        {#each [[0, 15/74, 0], [15/74, 12/74, 1], [27/74, 20/74, 2], [47/74, 12/74, 3], [59/74, 15/74, 4]] as [x, w, i]}
+        {#each [[0, 15/74, 0], [15/74, 18/74, 1], [33/74, 8/74, 2], [41/74, 18/74, 3], [59/74, 15/74, 4]] as [x, w, i]}
             <rect
-                x={x * width}
+                x={x * width + 10}
                 y={0}
-                width={w * width}
-                height={SimpleShotData.xGsum(allShotsConceded.binnedY[i]) * customHeight / 200}
-                fill="{colours.xg}33"
+                width={w * width - 20}
+                height={SimpleShotData.xGsum(allShotsConceded.binnedY[i]) * customHeight / allShotsConceded.xG}
+                fill="{colours.xg}88"
                 stroke="none"
+                style="transition: height 0.15s"
+                transition:fade={{ delay: 0, duration: 300, easing: cubicOut }}
             />
         {/each}
     {/if}
