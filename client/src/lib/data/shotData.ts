@@ -98,7 +98,7 @@ export class SimpleShotData {
         return shot.h_a === 'h';
     }
 
-    protected static xGsum(shots: SimpleShot[]) {
+    static xGsum(shots: SimpleShot[]) {
         return shots.map((x) => x.xG).reduce(sum, 0);
     }
 }

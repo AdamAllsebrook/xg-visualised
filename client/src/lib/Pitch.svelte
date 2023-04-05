@@ -12,6 +12,8 @@
     import { viewKey, type ViewManager } from './view/viewManager';
     import { SimpleShotData } from './data/shotData';
     import FixtureList from './FixtureList.svelte';
+    import { key as shotsConcededKey, LeagueShotsConceded } from './data/leagueShotsConceded';
+    import { colours } from './colours';
 
     export let width: number;
     export let height: number;
@@ -23,6 +25,16 @@
     const shots: Shot[] = $dataManager.shots;
     const viewManager: ViewManager = getContext(viewKey);
     const currentStep: Writable<number | undefined> = viewManager.currentStep;
+    const leagueShotsConceded: LeagueShotsConceded = getContext(shotsConcededKey);
+
+    const teamSelected: Writable<string | null> = viewManager.teamSelected;
+    $: shotsConceded = $dataManager.opponents.shotsConceded;
+    let allShotsConceded: SimpleShotData | null;
+    $: allShotsConceded = shotsConceded == null 
+        ? null 
+        : $teamSelected == null 
+            ? shotsConceded
+            : leagueShotsConceded.data.get($teamSelected) || new SimpleShotData([]);;
 
     $: customHeight = (width * 0.5 * 115) / 74;
 
@@ -291,7 +303,7 @@
             fill="#3333"
             stroke="none"
         />
-    {:else if viewManager.steps[$currentStep || 0].shotLayout === 'leftright'}
+    {:else if viewManager.steps[$currentStep || 0].shotLayout === 'leftright' && viewManager.steps[$currentStep || 0].opponentsInfo !== 'leftright'}
         <rect
             x={15/74 * width}
             y={0}
@@ -308,5 +320,16 @@
             fill="#3333"
             stroke="none"
         />
+    {:else if allShotsConceded !== null && viewManager.steps[$currentStep || 0].shotLayout === 'leftright'}
+        {#each [[0, 15/74, 0], [15/74, 12/74, 1], [27/74, 20/74, 2], [47/74, 12/74, 3], [59/74, 15/74, 4]] as [x, w, i]}
+            <rect
+                x={x * width}
+                y={0}
+                width={w * width}
+                height={SimpleShotData.xGsum(allShotsConceded.binnedY[i]) * customHeight / 200}
+                fill="{colours.xg}33"
+                stroke="none"
+            />
+        {/each}
     {/if}
 </g>

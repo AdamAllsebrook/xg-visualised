@@ -14,42 +14,50 @@ export type Step = {
     content: any; // svelte element
     visuals: any[]; // svelte element
     shotLayout: 'default' | 'box' | 'leftright';
+    opponentsInfo: 'default' | 'leftright';
 };
 
 export let steps: Step[] = [
     {
         content: XgOverview,
         visuals: [Pitch],
-        shotLayout: 'default'
+        shotLayout: 'default',
+        opponentsInfo: 'default'
     },
     {
         content: FixturesOverview,
         visuals: [Heatmap, Pitch],
-        shotLayout: 'default'
+        shotLayout: 'default',
+        opponentsInfo: 'default'
     },
     {
         content: ShotsInBox,
         visuals: [Pitch],
-        shotLayout: 'box'
+        shotLayout: 'box',
+        opponentsInfo: 'default'
     },
     {
         content: FixturesInBox,
         visuals: [Pitch],
-        shotLayout: 'box'
+        shotLayout: 'box',
+        opponentsInfo: 'default'
     },
     {
         content: LeftRight,
         visuals: [Pitch],
-        shotLayout: 'leftright'
+        shotLayout: 'leftright',
+        opponentsInfo: 'default'
     },
     {
         content: FixturesLeftRight,
         visuals: [Pitch],
-        shotLayout: 'leftright'
+        shotLayout: 'leftright',
+        opponentsInfo: 'leftright'
     },
     {
         content: Padding,
         visuals: [Pitch],
-        shotLayout: 'default'
+        shotLayout: 'default',
+        opponentsInfo: 'default'
     },
 ];
