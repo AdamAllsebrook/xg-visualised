@@ -39,7 +39,7 @@
     };
 
     $: {
-        scale;
+        scale, $currentStep;
         tweenedX.set(shots.map((shot) => scale(shot).x));
         tweenedY.set(shots.map((shot) => scale(shot).y));
     }
