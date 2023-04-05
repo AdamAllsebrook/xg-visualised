@@ -42,7 +42,7 @@
     <div 
         class='inline-block my-1 relative highlight w-full font-normal transition-colors'
         tabindex="-1"
-        style='background: linear-gradient(90deg, {colour1} 0%, {colour1} {left * 100}%, {colour2} {left * 100}%, {colour2} 100%);); border: 1px solid {colour}'
+        style='background: linear-gradient(90deg, {colour1} 0%, {colour1} {left * 100}%, {colour2} {left * 100}%, {colour2} 100%);); border: 1px solid {colour}; transition: border-color 0.15s'
         on:focus={() => $teamSelected = team.title}
         on:blur={() => {if ($teamSelected == team.title) {$teamSelected = null}}}
     >
