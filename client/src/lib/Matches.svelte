@@ -6,11 +6,16 @@
     import { key as dataKey, type DataManager } from './data/dataManager';
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
+    import { ViewManager, viewKey } from './view/viewManager';
+    import HomeAway from './view/content/HomeAway.svelte';
 
     export let width: number;
     export let height: number;
     export let tweenedX: Spring<number[]>;
     export let tweenedY: Spring<number[]>;
+
+    const viewManager: ViewManager = getContext(viewKey);
+    const currentStep = viewManager.currentStep;
 
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const shots: Shot[] = $dataManager.shots;
@@ -41,8 +46,13 @@
             x2={(match.time_started * width) / 90}
             y1={Math.round(i * paddingY)}
             y2={Math.round(i * paddingY)}
-            stroke="#aaaaaa66"
+            stroke="{viewManager.steps[$currentStep || 0].shotLayout === 'homeaway' 
+                ? match.h_a === 'h'
+                    ? '#aaa9'
+                    : '#aaa3'
+                : '#aaa6'}"
             stroke-width="1"
+            style='transition: stroke 0.2s'
         />
         <rect
             x={(match.time_started * width) / 90}
@@ -52,15 +62,25 @@
             rx="2"
             stroke="black"
             stroke-width="1"
-            fill="#aaaaaa66"
+            fill="{viewManager.steps[$currentStep || 0].shotLayout === 'homeaway' 
+                ? match.h_a === 'h'
+                    ? '#aaa9'
+                    : '#aaa3'
+                : '#aaa6'}"
+            style='transition: fill 0.2s'
         />
         <line
             x1={((match.time_started + match.time) * width) / 90}
             x2={width}
             y1={Math.round(i * paddingY)}
             y2={Math.round(i * paddingY)}
-            stroke="#aaaaaa66"
             stroke-width="1"
+            stroke="{viewManager.steps[$currentStep || 0].shotLayout === 'homeaway' 
+                ? match.h_a === 'h'
+                    ? '#aaa9'
+                    : '#aaa3'
+                : '#aaa6'}"
+            style='transition: stroke 0.2s'
         />
     {/each}
 </g>

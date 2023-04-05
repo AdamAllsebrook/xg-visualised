@@ -12,8 +12,9 @@
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const shots = $dataManager.shots;
 
-    let viewManager: ViewManager = getContext(viewKey);
+    const viewManager: ViewManager = getContext(viewKey);
     let hoveredData = viewManager.hoveredData;
+    const currentStep = viewManager.currentStep;
 </script>
 
 {#each data as d, i}
@@ -23,7 +24,7 @@
         cy={d.y}
         r={rScale(shots[i].xG)}
         highlight={shots[i].result == 'Goal'}
-        faded={$hoveredData != null && $hoveredData.index != i}
+        faded={($hoveredData != null && $hoveredData.index != i) || (viewManager.steps[$currentStep || 0].shotLayout === 'homeaway' && shots[i].h_a === 'a')}
         spotlight={$hoveredData != null && $hoveredData.index == i}
         on:mouseover={() => {
            $hoveredData = {data: shots[i], index: i, component: ShotTooltip, type: HoveredDataType.Shot};

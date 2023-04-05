@@ -15,7 +15,7 @@ import Matches from '../Matches.svelte';
 export type Step = {
     content: any; // svelte element
     visuals: any[]; // svelte element
-    shotLayout: 'default' | 'box' | 'leftright';
+    shotLayout: 'default' | 'box' | 'leftright' | 'homeaway';
     opponentsInfo: 'default' | 'leftright';
 };
 
@@ -65,7 +65,7 @@ export let steps: Step[] = [
     {
         content: HomeAway,
         visuals: [Matches],
-        shotLayout: 'default',
+        shotLayout: 'homeaway',
         opponentsInfo: 'default'
     },
     {

@@ -36,3 +36,5 @@
     <span class='highlight bg-goal'>{goalsAway} goals</span> from 
     <span class='highlight bg-shot'>{shotsAway} shots</span> away.
 </p>
+
+<p class='text-white-800 pt-4'>Visualised: Home games are highlighted.</p>
