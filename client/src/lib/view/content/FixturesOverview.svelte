@@ -18,6 +18,6 @@
 <FixtureList />
 <p class='text-white-800'>Select a team to view their heatmap.</p>
 <br>
-<p>
+<p class='text-white-800'>
     Visualised: The combined heatmap of all shots against these teams this season.
 </p>
