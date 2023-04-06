@@ -15,7 +15,7 @@
         class:active={$currentStep === i}
     >
         <div 
-            class='p-8 w-full z-10 text-stone-100 font-display lg:pl-16'
+            class='p-8 w-full z-10 relative text-stone-100 font-display lg:pl-16 '
             style='background: linear-gradient(0deg, {colours.primary}33 0%, {colours.primary}ee 20%, {colours.primary}ee 80%, {colours.primary}33 100%)'
         >
         <svelte:component this={item}/>

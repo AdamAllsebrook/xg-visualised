@@ -25,7 +25,7 @@
 
 <svelte:window bind:innerWidth={screenWidth}/>
 <div 
-    class='fixed bg-[#e5e7ffcc] -translate-x-1/2 transition-all pointer-events-none shadow-lg p-2 rounded-sm whitespace-nowrap text-black' 
+    class='fixed bg-[#e5e7ffcc] -translate-x-1/2 transition-all pointer-events-none shadow-lg p-2 rounded-sm whitespace-nowrap text-black z-20' 
     style='top: {y + offset + selfHeight > limits.bottom ? y - selfHeight - offset : y + offset}px;
            left: {screenWidth < 480 ? limits.right / 2 + limits.left : (x + selfWidth / 2 > limits.right ? limits.right - selfWidth / 2 + limits.left : x)}px;'
     bind:clientWidth={selfWidth} 
