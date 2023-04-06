@@ -89,10 +89,4 @@ export let steps: Step[] = [
         shotLayout: 'default',
         opponentsInfo: 'minutes'
     },
-    {
-        content: Padding,
-        visuals: [Pitch],
-        shotLayout: 'default',
-        opponentsInfo: 'default'
-    },
 ];

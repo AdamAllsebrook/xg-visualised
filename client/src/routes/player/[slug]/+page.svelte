@@ -34,7 +34,7 @@
     $: width =
         screenWidth >= 1024
             ? (containerWidth * 2) / 5
-            : $currentStep == undefined || (screenWidth < 480 && $currentStep < 5)
+            : $currentStep == undefined || (screenWidth < 480 && $currentStep < 6)
             ? containerWidth * 1.25
             : containerWidth;
     let margin: Margin;
@@ -60,6 +60,9 @@
     setContext(concedeKey, leagueShotsConceded);
     let viewManager = new ViewManager();
     let currentStep = viewManager.currentStep;
+    let currentStepTemp: number | undefined = undefined;
+    let scrollY = 0;
+    $: $currentStep = currentStepTemp === undefined && scrollY > screenHeight ? viewManager.steps.length - 1 : currentStepTemp;
     let hoveredData = viewManager.hoveredData;
     setContext(viewKey, viewManager);
 
@@ -85,9 +88,11 @@
             dataManager.update(injectShotsConceded);
         }
     });
+
+    $: $currentStep, console.log('currentStep', $currentStep);
 </script>
 
-<svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} />
+<svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} bind:scrollY={scrollY} />
 <div class="!px-0 text-white-900 font-display" style="contain: paint;" bind:clientWidth={containerWidth}>
     <Title />
     {#if isMounted}
@@ -124,7 +129,7 @@
             {/if}
         </VizContainer>
     {/if}
-    <Scrolly bind:value={$currentStep}>
+    <Scrolly bind:value={currentStepTemp}>
         <ContentManager />
     </Scrolly>
     <!-- {#if $hoveredData && $hoveredData.type == HoveredDataType.Fixture} -->

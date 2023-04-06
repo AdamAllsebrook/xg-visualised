@@ -34,7 +34,7 @@
             class='my-1 highlight inline-block'
             style='width: {xg * 75 / minuteXgs[preferTime]}%; background: {colourScale(xg)};'
         >
-            <p class='font-normal'>{i * 15} - {(i + 1) * 15} mins</p>
+            <p class='font-normal whitespace-nowrap'>{i * 15} - {(i + 1) * 15} mins</p>
         </div>
         <p class='pb-4 lg:pb-0 lg:inline lg:pl-2 font-normal'>{xg.toFixed(2)} <span class='text-white-800'>xG</span></p>
         <div />
