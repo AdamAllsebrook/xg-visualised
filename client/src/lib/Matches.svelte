@@ -17,6 +17,7 @@
     export let height: number;
     export let tweenedX: Spring<number[]>;
     export let tweenedY: Spring<number[]>;
+    export let rScale: any;
 
     const viewManager: ViewManager = getContext(viewKey);
     const currentStep = viewManager.currentStep;

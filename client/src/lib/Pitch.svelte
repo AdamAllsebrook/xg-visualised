@@ -79,8 +79,6 @@
         setTweenedData(tweenedX, tweenedY, rScale, viewManager, shots);
     }
 
-    // $: currentStep, console.log($currentStep);
-
     function setTweenedData(
         tweenedX: Spring<number[]>,
         tweenedY: Spring<number[]>,
@@ -213,7 +211,6 @@
             }
 
             const width = columnStarts.reduce((acc, j) => acc + rScale(filteredShots[j].xG) * 2, 0);
-            console.log('width', width);
 
             let xAcc = 0;
             let yAcc = 0;
@@ -231,7 +228,6 @@
                 }
             }
         }
-        console.log('doing left right stuff');
         return originalOrder;
     }
 

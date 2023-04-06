@@ -88,8 +88,6 @@
             dataManager.update(injectShotsConceded);
         }
     });
-
-    $: $currentStep, console.log('currentStep', $currentStep);
 </script>
 
 <svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} bind:scrollY={scrollY} />

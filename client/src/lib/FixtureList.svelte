@@ -14,7 +14,6 @@
     // this is a constant redefined from another file, probably should fix that... 
     const xgMax = 2.5;
 
-    $: $leagueShotsConceded, console.log($leagueShotsConceded?.data.values());
     $: averageXGA = $leagueShotsConceded == null ? 0 : Array.from($leagueShotsConceded.data.entries()).reduce((a, [team, shots]) => a + shots.xG / $dataManager.teams.get(team).games, 0) / $leagueShotsConceded.data.size;
 </script>
 <AveragePointer percentage={averageXGA / xgMax * 100} text={`League average ${averageXGA.toFixed(2)} xGA per 90`} />
