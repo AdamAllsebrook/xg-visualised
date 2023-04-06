@@ -94,6 +94,9 @@
 </script>
 
 <svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} bind:scrollY={scrollY} />
+<svelte:head>
+    <title>{$dataManager.player.player_name} - xG Visualised</title>
+</svelte:head>
 <div class="!px-0 text-white-900 font-display" style="contain: paint;" bind:clientWidth={containerWidth}>
     <Title />
     {#if isMounted}
