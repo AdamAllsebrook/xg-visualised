@@ -1,8 +1,11 @@
-# import asyncio
+import os
 from redis import asyncio as aioredis
 import functools
 import pickle
 from typing import Callable, Any, ParamSpec, TypeVar, Awaitable
+
+
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
 
 
 P = ParamSpec('P')
@@ -16,7 +19,7 @@ def generate_cache_key(func: Callable[P, Awaitable[R]], *args: P.args, **kwargs:
 
 def init_redis():
     global redis
-    redis = aioredis.from_url("redis://localhost:6379")
+    redis = aioredis.from_url(REDIS_URL)
 
 
 def cache(func: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R]]:
