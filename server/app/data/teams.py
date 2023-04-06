@@ -51,7 +51,7 @@ async def get_team_fixtures(team_name: str, year: int) -> Union[list[Fixture], N
 #         fpl = FPL(session)
 #         matches: Any = await fpl.get_fixtures(return_json=True)
 #     return [
-#         Result(**match) if match['finished'] else Fixture(**match) 
+#         Result(**match) if match['finished'] else Fixture(**match)
 #         for match in matches
 #         ]
 
