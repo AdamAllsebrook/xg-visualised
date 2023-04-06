@@ -24,6 +24,6 @@
     </div>
 
     <div class='mb-32 w-full flex lg:hidden' style='opacity: {100 - curtainReveal * 10}%'>
-        <p class='mx-auto'>Scroll to begin.</p>
+        <p class='mx-auto pb-4'>Scroll to begin.</p>
     </div>
 </div>

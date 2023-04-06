@@ -133,7 +133,7 @@
     <Scrolly bind:value={currentStepTemp}>
         <ContentManager />
     </Scrolly>
-    <a href='/' class='mb-16 pl-4 lg:pl-16 font-medium text-md underline text-white-800'>Return to home page</a>
+    <a href='/' class='mb-16 pl-16 font-medium text-md underline text-white-800'>Return to home page</a>
     <!-- {#if $hoveredData && $hoveredData.type == HoveredDataType.Fixture} -->
     <!--     <Tooltip -->
     <!--         limits={{right: screenWidth, bottom: screenHeight, left: 0}} -->
