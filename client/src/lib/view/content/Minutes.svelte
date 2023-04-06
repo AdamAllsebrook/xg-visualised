@@ -22,21 +22,23 @@
 </script>
 
 <h3 class="font-bold text-2xl">Minutes</h3>
-<p>
-    {player.player_name} is most likely to score between 
-    {preferTime * 15} and 
-    {(preferTime + 1) * 15} minutes, totalling 
-    <span class='highlight bg-xg'>{minuteXgs[preferTime].toFixed(2)} xG</span> in this time period.
+<p class="pb-4">
+    {player.player_name} is most likely to score between
+    {preferTime * 15} and
+    {(preferTime + 1) * 15} minutes, totalling
+    <span class="highlight bg-xg">{minuteXgs[preferTime].toFixed(2)} xG</span> in this time period.
 </p>
-<div class='w-full'>
+<div class="w-full">
     {#each minuteXgs as xg, i}
         <div
-            class='my-1 highlight inline-block'
-            style='width: {xg * 75 / minuteXgs[preferTime]}%; background: {colourScale(xg)};'
+            class="my-1 highlight inline-block"
+            style="width: {(xg * 75) / minuteXgs[preferTime]}%; background: {colourScale(xg)};"
         >
-            <p class='font-normal whitespace-nowrap'>{i * 15} - {(i + 1) * 15} mins</p>
+            <p class="font-normal whitespace-nowrap">{i * 15} - {(i + 1) * 15} mins</p>
         </div>
-        <p class='pb-4 lg:pb-0 lg:inline lg:pl-2 font-normal'>{xg.toFixed(2)} <span class='text-white-800'>xG</span></p>
+        <p class="pb-4 lg:pb-0 inline lg:pl-2 font-normal">
+            {xg.toFixed(2)} <span class="text-white-800">xG</span>
+        </p>
         <div />
     {/each}
 </div>

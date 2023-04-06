@@ -46,5 +46,5 @@
     >
         <p>{team.title} ({side.toUpperCase()})</p>
     </div>
-    <p class='pb-4 lg:pb-0 lg:inline lg:pl-2 font-normal'>{((prefersInBox ? inBox : outBox) * 100).toFixed(2)}% <span class='text-white-800'>of shots conceded</span></p>
+    <p class='pb-4 lg:pb-0 inline lg:pl-2 font-normal'>{((prefersInBox ? inBox : outBox) * 100).toFixed(2)}% <span class='text-white-800 hidden lg:visible'>of shots conceded</span></p>
 </div>

@@ -48,11 +48,14 @@
     >
         <p>{team.title} ({side.toUpperCase()})</p>
     </div>
-    <div class='flex items-center absolute h-full top-0 pr-2 text-white-{left >= right ? 900 : 800} pointer-events-none' style='right: {100 - left * 100}%'>
-        <p class=' font-normal' >{(left * 100).toFixed(2)}%</p>
-    </div>
-    <div class='flex items-center absolute h-full top-0 pl-2 text-white-{left >= right ? 800 : 900} pointer-events-none' style='left: {100 - right * 100}%'>
-        <p class=' font-normal' >{(right * 100).toFixed(2)}%</p>
+    <div class='flex absolute right-2 lg:right-auto top-2 lg:block lg:relative lg:-translate-y-8'>
+        <div class='flex items-center lg:absolute h-full top-0 pr-2 text-white-{left >= right ? 900 : 800} pointer-events-none' style='right: {100 - left * 100}%'>
+            <p class=' font-normal' >{(left * 100).toFixed(0)}%</p>
+        </div>
+        <p class='lg:hidden text-white-800'>/</p>
+        <div class='flex items-center lg:absolute h-full top-0 pl-2 text-white-{left >= right ? 800 : 900} pointer-events-none' style='left: {100 - right * 100}%'>
+            <p class=' font-normal' >{(right * 100).toFixed(0)}%</p>
+        </div>
     </div>
 </div>
 

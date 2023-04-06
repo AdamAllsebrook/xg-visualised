@@ -42,5 +42,5 @@
     >
         <p>{team.title} ({side.toUpperCase()})</p>
     </div>
-    <p class='pb-4 lg:pb-0 lg:inline lg:pl-2 font-normal'>{xGA.toFixed(2)} <span class='text-white-800'>xGA per 90</span></p>
+    <p class='pb-4 lg:pb-0 inline lg:pl-2 font-normal'>{xGA.toFixed(2)} <span class='text-white-800'>xGA <span class='hidden lg:visible'>per 90</span></span></p>
 </div>

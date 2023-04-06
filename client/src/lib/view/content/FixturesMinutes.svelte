@@ -10,7 +10,7 @@
 
 </script>
 
-<p>Select a team to view their xG conceded for each time period.</p>
+<p>Select a team to view their xG conceded for each 15 minute time period.</p>
 {#each opponents.teams as team, i}
     <FixtureMinutes
         {team}
