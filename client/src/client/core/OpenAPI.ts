@@ -26,6 +26,6 @@ export const OpenAPI: OpenAPIConfig = {
     TOKEN: undefined,
     USERNAME: undefined,
     PASSWORD: undefined,
-    HEADERS: undefined,
+    HEADERS: {'Access-Control-Allow-Origin': '*'},
     ENCODE_PATH: undefined,
 };

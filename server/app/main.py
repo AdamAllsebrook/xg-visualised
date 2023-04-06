@@ -13,7 +13,6 @@ def custom_generate_unique_id(route: APIRoute):
 
 
 SERVER_URL = os.getenv('SERVER_URL', 'http://localhost:8000')
-VERCEL_URL = os.getenv('VERCEL_URL', 'http://localhost:5173')
 
 
 app = FastAPI(
@@ -23,7 +22,12 @@ app = FastAPI(
 app.include_router(api_router)
 
 origins = [
-    VERCEL_URL
+    'http://localhost:5173',
+    'localhost:5173',
+    'http://xgvisualised.com',
+    'http://www.xgvisualised.com',
+    'https://xgvisualised.com',
+    'https://www.xgvisualised.com',
 ]
 
 app.add_middleware(
