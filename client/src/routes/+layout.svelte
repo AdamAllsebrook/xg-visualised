@@ -4,7 +4,7 @@
 
 </script>
 
-<body style='background-color: {colours.primary}'>
+<body>
     <slot></slot>
 </body>
 
