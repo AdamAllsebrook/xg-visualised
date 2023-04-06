@@ -14,6 +14,7 @@
     import FixtureList from './FixtureList.svelte';
     import { key as shotsConcededKey, LeagueShotsConceded } from './data/leagueShotsConceded';
     import { colours } from './colours';
+    import { initSprings } from './initSprings';
 
     export let width: number;
     export let height: number;
@@ -65,22 +66,12 @@
         .startAngle(Math.PI)
         .endAngle((Math.PI * 3) / 2);
 
-    const springConfig = {
-        stiffness: 0.05,
-        damping: 0.3,
-        precision: 0.01,
-    };
     $: {
         xScale, yScale;
         if (!tweenedX && xScale && yScale) {
-            tweenedX = spring(
-                shots.map((shot) => xScale(shot.Y)),
-                springConfig,
-            );
-            tweenedY = spring(
-                shots.map((shot) => yScale(shot.X) + (height - customHeight) / 2),
-                springConfig,
-            );
+            let xs = shots.map((shot) => xScale(shot.Y));
+            let ys = shots.map((shot) => yScale(shot.X) + (height - customHeight) / 2);
+            [tweenedX, tweenedY] = initSprings(xs, ys);
         }
     }
     $: {

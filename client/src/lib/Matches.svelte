@@ -11,6 +11,7 @@
     import { SimpleShotData } from './data/shotData';
     import { key as shotsConcededKey, type LeagueShotsConceded } from './data/leagueShotsConceded';
     import { colours } from './colours';
+    import { initSprings } from './initSprings';
 
     export let width: number;
     export let height: number;
@@ -52,6 +53,14 @@
     $: matchesSorted = matches.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     $: matchesMap = new Map(matchesSorted.map((match, i) => [match.id, i]));
 
+    $: {
+        scale;
+        if (!tweenedX && scale) {
+            let xs = shots.map((shot) => scale(shot).x);
+            let ys = shots.map((shot) => scale(shot).y);
+            [tweenedX, tweenedY] = initSprings(xs, ys);
+        }
+    }
     $: scale = (shot: Shot) => {
         return {
             x: (Math.min(shot.minute, 90) * width) / 90,
