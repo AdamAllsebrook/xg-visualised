@@ -1,5 +1,5 @@
 import { error, type Load } from '@sveltejs/kit';
-import { PlayerService, TeamService } from '$client';
+import { PlayerService, TeamService, type SimpleShot } from '$client';
 import type { Player, Match, Shot, Fixture, Team } from '$client';
 import { DataManager } from '$lib/data/dataManager';
 
@@ -8,12 +8,13 @@ export const load: Load = async ({ params }) => {
 
     let id = parseInt(params.slug);
 
-    const [player, matches, shots, fixtures, teams]: [Player, Match[], Shot[], Fixture[], Team[]] = await Promise.all([
+    const [player, matches, shots, fixtures, teams, shotsAgainst]: [Player, Match[], Shot[], Fixture[], Team[], Record<string, SimpleShot[]>] = await Promise.all([
         PlayerService.playerRead(id),
         PlayerService.playerReadMatches(id),
         PlayerService.playerReadShots(id),
         PlayerService.playerReadFixtures(id),
-        TeamService.teamReadAll() 
+        TeamService.teamReadAll(),
+        PlayerService.playerReadAllShots()
     ]);
 
     return {
@@ -22,7 +23,8 @@ export const load: Load = async ({ params }) => {
             shots,
             teams,
             matches,
-            fixtures
-        )
+            fixtures,
+        ),
+        shotsAgainst: shotsAgainst
     };
 }

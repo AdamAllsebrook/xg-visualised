@@ -25,6 +25,10 @@
     export let data: any;
     const dataManager: Writable<DataManager> = writable(data.data);
     setContext(dataKey, dataManager);
+    const leagueShotsConcededObject = new LeagueShotsConceded(data.shotsAgainst);
+    leagueShotsConceded.set(leagueShotsConcededObject);
+    dataManager.update(injectShotsConceded);
+    setContext(concedeKey, leagueShotsConceded);
 
     let isMounted = false;
 
@@ -57,7 +61,6 @@
         y: tweenedY ? $tweenedY[index] : 0,
     }));
 
-    setContext(concedeKey, leagueShotsConceded);
     let viewManager = new ViewManager();
     let currentStep = viewManager.currentStep;
     let currentStepTemp: number | undefined = undefined;
@@ -77,16 +80,16 @@
 
     onMount(async () => {
         isMounted = true;
-        if ($leagueShotsConceded == null) {
-            PlayerService.playerReadAllShots().then((data) => {
-                const leagueShotsConcededObject = new LeagueShotsConceded(data);
-                leagueShotsConceded.set(leagueShotsConcededObject);
-                dataManager.update(injectShotsConceded);
-            });
-        }
-        if ($leagueShotsConceded != null) {
-            dataManager.update(injectShotsConceded);
-        }
+        // if ($leagueShotsConceded == null) {
+        //     PlayerService.playerReadAllShots().then((data) => {
+        //         const leagueShotsConcededObject = new LeagueShotsConceded(data);
+        //         leagueShotsConceded.set(leagueShotsConcededObject);
+        //         dataManager.update(injectShotsConceded);
+        //     });
+        // }
+        // if ($leagueShotsConceded != null) {
+        //     dataManager.update(injectShotsConceded);
+        // }
     });
 </script>
 
