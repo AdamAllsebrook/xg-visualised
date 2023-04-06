@@ -22,7 +22,7 @@
     $: opponentsOutBoxPercent = shotsConceded?.strPercent(shotsConceded?.outsideBox);
 </script>
 
-<h3 class="font-bold text-2xl">Fox in the Box</h3>
+<h3 class="font-bold text-2xl">In or Around the Box</h3>
 <p>
     {player.player_name} prefers to shoot from 
     {prefersInBox ? 'inside' : 'outside'} the box, scoring 

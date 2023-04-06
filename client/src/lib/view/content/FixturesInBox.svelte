@@ -18,7 +18,6 @@
 
 </script>
 
-<h3 class='font-bold text-2xl'>Opponents {prefersInBox ? 'Inside' : 'Outside'} the Box</h3>
 <p>{$dataManager.player.team_title}'s next opponents' percentage of shots conceded {prefersInBox ? 'inside' : 'outside'} the box:</p>
 <AveragePointer percentage={averagePercent} text={`League average ${averagePercent.toFixed(2)}% of shots conceded`} />
 {#each opponents.teams as team, i}
