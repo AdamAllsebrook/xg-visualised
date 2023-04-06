@@ -1,10 +1,15 @@
-<script lang='ts'>
+<script lang="ts">
     export let percentage: number;
     export let text: string;
+
+    let height = 0;
 </script>
 
-<span style='margin-left: {percentage}%' />
-<p class='inline-block -translate-x-1/2 text-white-800 pt-2'>{text}</p>
-<div />
-<span style='margin-left: {percentage}%' />
-<p class='inline-block -translate-x-1/2 text-white-800'>v</p>
+<p
+    class="absolute -translate-x-1/2 text-white-800 text-center"
+    style="left: {percentage}%"
+    bind:clientHeight={height}
+>
+    {text}<br /> v
+</p>
+<div class="mb-4" style="height: {height}px" />
