@@ -11,7 +11,7 @@
 
 {#each content as item, i}
     <div 
-        class='mb-[75vh] lg:mb-[60vh] flex place-items-center justify-center lg:block lg:w-3/5 -translate-y-96 lg:translate-y-32'
+        class='mb-[75vh] lg:mb-[60vh] last:mb-[32vh] flex place-items-center justify-center lg:block lg:w-3/5 -translate-y-96 lg:translate-y-32'
         class:active={$currentStep === i}
     >
         <div 
