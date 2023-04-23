@@ -29,6 +29,7 @@ async def get_all_players() -> dict[int, Player]:
 async def get_player(id: int) -> Union[Player, None]:
     try:
         player: Player = (await get_all_players())[id]
+
     except KeyError:
         return None
     return player
@@ -71,7 +72,7 @@ async def get_player_matches(id: int, year: Union[int, None] = None) -> Union[li
                                                      ][player_roster_id]['roster_out']
                 match['time_started'] = time_started
 
-    return [Match(**match) for match in matches]
+    return [Match(**match) for match in reversed(matches)]
 
 
 @cache

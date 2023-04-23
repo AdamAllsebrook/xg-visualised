@@ -1,11 +1,14 @@
 import os
-from typing import Union
+import asyncio
+import uvicorn
+import logging
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api_v1.api import api_router
 from app.redis_utils import init_redis
+from scheduler import app as app_rocketry
 
 
 def custom_generate_unique_id(route: APIRoute):
@@ -38,7 +41,37 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.on_event('startup')
 async def init():
     init_redis()
+
+
+class Server(uvicorn.Server):
+    """
+    Customized uvicorn.Server
+
+    Uvicorn server overrides signals and we need to include
+    Rocketry to the signals.
+    """
+
+    def handle_exit(self, sig: int, frame) -> None:
+        app_rocketry.session.shut_down()
+        return super().handle_exit(sig, frame)
+
+
+async def main():
+    "Run Rocketry and FastAPI"
+    server = Server(config=uvicorn.Config(app, workers=1, loop="asyncio"))
+
+    api = asyncio.create_task(server.serve())
+    sched = asyncio.create_task(app_rocketry.serve())
+
+    await asyncio.wait([sched, api])
+
+if __name__ == "__main__":
+    # Print Rocketry's logs to terminal
+    logger = logging.getLogger("rocketry.task")
+    logger.addHandler(logging.StreamHandler())
+
+    # Run both applications
+    asyncio.run(main())

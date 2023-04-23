@@ -7,6 +7,8 @@ class Player(BaseModel):
     id: int
     player_name: str
     team_title: str
+    # time is used for cache invalidation
+    time: int
 
 
 class Season(BaseModel):

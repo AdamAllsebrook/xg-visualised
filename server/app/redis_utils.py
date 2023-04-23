@@ -2,7 +2,7 @@ import os
 from redis import asyncio as aioredis
 import functools
 import pickle
-from typing import Callable, Any, ParamSpec, TypeVar, Awaitable
+from typing import Callable, ParamSpec, TypeVar, Awaitable
 
 
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
@@ -33,7 +33,6 @@ def cache(func: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R]]:
             await redis.set(cache_key, bytes_value)
         else:
             value = pickle.loads(value)
-        
         return value
     return wrapper
 

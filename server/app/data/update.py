@@ -1,18 +1,14 @@
 # Check if the cache needs updating every so often
-
-from arq import cron
-from typing import Any
-
+import os
+import asyncio
+import time
 from app.data.year import get_year
 from app.data.players import get_all_players, get_player, get_player_matches, get_player_shots, get_all_shots_against_teams
 from app.data.teams import get_all_teams, get_team_fixtures
 from app.redis_utils import init_redis, reset_cache, is_cached
 
 
-init_redis()
-
-
-async def update_players(ctx: dict[Any, Any], *args: Any, **kwargs: Any) -> Any:
+async def update_players():
     players = await get_all_players()
     year = await get_year()
 
@@ -28,20 +24,25 @@ async def update_players(ctx: dict[Any, Any], *args: Any, **kwargs: Any) -> Any:
     await get_all_shots_against_teams(year=year)
 
 
-async def update_teams(ctx: dict[Any, Any], *args: Any, **kwargs: Any):
+async def update_teams():
     year = await get_year()
     teams = await get_all_teams(year=year)
     for team in teams:
         await reset_cache(get_team_fixtures, team.title, year=year)
 
 
-async def update_year(ctx: dict[Any, Any], *args: Any, **kwargs: Any):
+async def update_year():
     await reset_cache(get_year)
 
 
-class WorkerSettings:
-    cron_jobs = [
-        cron(update_year, minute=[0, 30]),
-        cron(update_players, minute=[0, 30]),
-        cron(update_teams, minute=[0, 30]),
-    ]
+async def update_cache():
+    interval = os.getenv('CACHE_UPDATE_INTERVAL', 60 * 60 * 24)
+    print(f'Starting cache with interval {interval} seconds')
+    while True:
+        init_redis()
+        await update_year()
+        await update_players()
+        await update_teams()
+        print(f'Completed cache update at {time.strftime("%H:%M:%S")}, interval is {interval} seconds')
+        time.sleep(interval)
+

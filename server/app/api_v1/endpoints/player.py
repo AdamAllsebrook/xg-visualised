@@ -35,11 +35,13 @@ async def read_seasons(id: int):
 
 
 @router.get('/{id}/matches', response_model=List[schemas.Match], tags=['player'])
-async def read_matches(id: int):
-    matches = await get_player_matches(id)
+async def read_matches(id: int, year: Union[int, None] = None):
+    if year is None:
+        year = await get_year()
+    matches = await get_player_matches(id, year=year)
     if matches is None:
         raise HTTPException(status_code=404, detail="Item not found")
-    return list(reversed(matches))
+    return matches
 
 
 @router.get('/{id}/fixtures', response_model=List[schemas.Fixture], tags=['player'])
