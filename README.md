@@ -1,23 +1,17 @@
+# Expected goals, visualised.
 
-# Development Server
+[*xgvisualised.com*](https://www.xgvisualised.com)  
+A data visualisation article with up-to-date stats for every Premier League player.
 
-To run backend:
-`uvicorn main:app --reload`
+![image](https://user-images.githubusercontent.com/51888045/233871115-d28e3f34-fd16-4c5c-b50d-bb57c45838fe.png)
 
-To run frontend:
-`npm run dev`
+## Frontend
 
+Built with [Svelte](https://svelte.dev/) and [SvelteKit](https://kit.svelte.dev/)  
+Deployed on [Vercel](https://vercel.com/)
 
-# Docs
+## Backend
 
-- [Svelte kit](https://kit.svelte.dev/docs/introduction)
-- [Svelte](https://svelte.dev/docs#getting-started)
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [picocss](https://picocss.com/docs/)
-
-- [FPL API docs](https://fpl.readthedocs.io/en/latest/)
-- [FPL API Github](https://github.com/amosbastian/fpl/blob/master/fpl/fpl.py)
-- [Understat API docs](https://understat.readthedocs.io/en/latest/)
-- [Understat API Github](https://github.com/amosbastian/understat/blob/master/understat/understat.py)
-
-- [Backend structure example](https://github.com/tiangolo/full-stack-fastapi-postgresql/tree/master/%7B%7Bcookiecutter.project_slug%7D%7D/backend)
+Serves as a caching layer for [Understat](https://understat.com/) data (scraped using this [understat python package](https://understat.readthedocs.io/en/latest/))  
+API is built with [FastAPI](https://fastapi.tiangolo.com/), using [Redis](https://redis.io/) for caching  
+Deployed on [Railway.app](https://railway.app/)
