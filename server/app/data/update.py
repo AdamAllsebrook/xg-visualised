@@ -37,12 +37,9 @@ async def update_year():
 
 async def update_cache():
     interval = int(os.getenv('CACHE_UPDATE_INTERVAL', 60 * 60 * 24))
-    print(f'Starting cache with interval {interval} seconds')
-    while True:
-        init_redis()
-        await update_year()
-        await update_players()
-        await update_teams()
-        print(f'Completed cache update at {time.strftime("%H:%M:%S")}, interval is {interval} seconds')
-        time.sleep(interval)
-
+    print(f'Starting cache update at {time.strftime("%H:%M:%S")}, interval is {interval} seconds')
+    init_redis()
+    await update_year()
+    await update_players()
+    await update_teams()
+    print(f'Completed cache update at {time.strftime("%H:%M:%S")}')
