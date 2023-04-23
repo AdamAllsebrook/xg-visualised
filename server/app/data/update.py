@@ -36,7 +36,7 @@ async def update_year():
 
 
 async def update_cache():
-    interval = os.getenv('CACHE_UPDATE_INTERVAL', 60 * 60 * 24)
+    interval = int(os.getenv('CACHE_UPDATE_INTERVAL', 60 * 60 * 24))
     print(f'Starting cache with interval {interval} seconds')
     while True:
         init_redis()
