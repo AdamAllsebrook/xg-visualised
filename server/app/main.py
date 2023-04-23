@@ -2,6 +2,7 @@ import os
 import asyncio
 import uvicorn
 import logging
+import sys
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api_v1.api import api_router
 from app.redis_utils import init_redis
 from scheduler import app as app_rocketry
+
+
+host = sys.argv[1] if len(sys.argv) > 1 else '0.0.0.0'
+port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
 
 
 def custom_generate_unique_id(route: APIRoute):
@@ -61,7 +66,7 @@ class Server(uvicorn.Server):
 
 async def main():
     "Run Rocketry and FastAPI"
-    server = Server(config=uvicorn.Config(app, workers=1, loop="asyncio"))
+    server = Server(config=uvicorn.Config(app, host=host, port=port, workers=1, loop="asyncio"))
 
     api = asyncio.create_task(server.serve())
     sched = asyncio.create_task(app_rocketry.serve())
