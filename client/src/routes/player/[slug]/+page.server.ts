@@ -8,23 +8,24 @@ export const load: Load = async ({ params }) => {
 
     let id = parseInt(params.slug);
 
-    const [player, matches, shots, fixtures, teams, shotsAgainst]: [Player, Match[], Shot[], Fixture[], Team[], Record<string, SimpleShot[]>] = await Promise.all([
+    const [player, matches, shots, fixtures, teams]: [
+        Player,
+        Match[],
+        Shot[],
+        Fixture[],
+        Team[],
+        // Record<string, SimpleShot[]>,
+    ] = await Promise.all([
         PlayerService.playerRead(id),
         PlayerService.playerReadMatches(id),
         PlayerService.playerReadShots(id),
         PlayerService.playerReadFixtures(id),
         TeamService.teamReadAll(),
-        PlayerService.playerReadAllShots()
+        // PlayerService.playerReadAllShots(),
     ]);
 
     return {
-        data: new DataManager(
-            player,
-            shots,
-            teams,
-            matches,
-            fixtures,
-        ),
-        shotsAgainst: shotsAgainst
+        data: [player, shots, teams, matches, fixtures],
+        // shotsAgainst: shotsAgainst,
     };
-}
+};
