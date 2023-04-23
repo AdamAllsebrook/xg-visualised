@@ -25,9 +25,9 @@
     export let data: any;
     const dataManager: Writable<DataManager> = writable(new DataManager(...data.data));
     setContext(dataKey, dataManager);
-    // const leagueShotsConcededObject = new LeagueShotsConceded(data.shotsAgainst);
-    // leagueShotsConceded.set(leagueShotsConcededObject);
-    // dataManager.update(injectShotsConceded);
+    const leagueShotsConcededObject = new LeagueShotsConceded(data.shotsAgainst);
+    leagueShotsConceded.set(leagueShotsConcededObject);
+    dataManager.update(injectShotsConceded);
     setContext(concedeKey, leagueShotsConceded);
 
     let isMounted = false;
@@ -80,16 +80,16 @@
 
     onMount(async () => {
         isMounted = true;
-        if ($leagueShotsConceded == null) {
-            PlayerService.playerReadAllShots().then((data) => {
-                const leagueShotsConcededObject = new LeagueShotsConceded(data);
-                leagueShotsConceded.set(leagueShotsConcededObject);
-                dataManager.update(injectShotsConceded);
-            });
-        }
-        if ($leagueShotsConceded != null) {
-            dataManager.update(injectShotsConceded);
-        }
+        // if ($leagueShotsConceded == null) {
+        //     PlayerService.playerReadAllShots().then((data) => {
+        //         const leagueShotsConcededObject = new LeagueShotsConceded(data);
+        //         leagueShotsConceded.set(leagueShotsConcededObject);
+        //         dataManager.update(injectShotsConceded);
+        //     });
+        // }
+        // if ($leagueShotsConceded != null) {
+        //     dataManager.update(injectShotsConceded);
+        // }
     });
 </script>
 
