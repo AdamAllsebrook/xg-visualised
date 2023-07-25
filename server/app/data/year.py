@@ -1,12 +1,15 @@
 from fpl import FPL
 import aiohttp
 from typing import Any
+import os
 
 from app.redis_utils import cache
 
 
 @cache
 async def get_year() -> int:
+    if os.environ.get('YEAR'):
+        return int(os.environ.get('YEAR'))
     async with aiohttp.ClientSession() as session:
         fpl = FPL(session)
         gameweek_1: Any = await fpl.get_gameweek(1, return_json=True)
