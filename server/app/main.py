@@ -26,7 +26,7 @@ SERVER_URL = os.getenv('SERVER_URL', 'http://localhost:8000')
 app = FastAPI(
     servers=[{'url': SERVER_URL}],
     generate_unique_id_function=custom_generate_unique_id
-    )
+)
 app.include_router(api_router)
 
 origins = [
@@ -45,6 +45,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.on_event('startup')
 async def init():
@@ -66,7 +67,8 @@ class Server(uvicorn.Server):
 
 async def main():
     "Run Rocketry and FastAPI"
-    server = Server(config=uvicorn.Config(app, host=host, port=port, workers=1, loop="asyncio"))
+    server = Server(config=uvicorn.Config(
+        app, host=host, port=port, workers=1, loop="asyncio"))
 
     api = asyncio.create_task(server.serve())
     sched = asyncio.create_task(app_rocketry.serve())

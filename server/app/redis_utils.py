@@ -5,7 +5,7 @@ import pickle
 from typing import Callable, ParamSpec, TypeVar, Awaitable
 
 
-REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
+REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379')
 
 
 P = ParamSpec('P')
@@ -13,7 +13,8 @@ R = TypeVar('R')
 
 
 def generate_cache_key(func: Callable[P, Awaitable[R]], *args: P.args, **kwargs: P.kwargs) -> str:
-    cache_key = func.__name__ + ':' + ':'.join([str(v) for v in list(args) + list(kwargs.values())])
+    cache_key = func.__name__ + ':' + \
+        ':'.join([str(v) for v in list(args) + list(kwargs.values())])
     return cache_key
 
 

@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  xgvisualised-api:
+    # image: xgvisualised-api:latest
+    build: ./
+    depends_on:
+    - redis
+    ports:
+    - 8001:8001
+    networks:
+    - api_network
+
+  redis:
+    image: redis:latest
+    networks:
+    - api_network
+
+networks:
+  api_network:
