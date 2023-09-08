@@ -14,4 +14,4 @@ Deployed on [Vercel](https://vercel.com/)
 
 Serves as a caching layer for [Understat](https://understat.com/) data (scraped using this [understat python package](https://understat.readthedocs.io/en/latest/))  
 API is built with [FastAPI](https://fastapi.tiangolo.com/), using [Redis](https://redis.io/) for caching  
-Deployed on [Railway.app](https://railway.app/)
+Deployed on a digital ocean droplet
