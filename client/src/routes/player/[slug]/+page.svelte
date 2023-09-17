@@ -25,10 +25,10 @@
     export let data: any;
     const dataManager: Writable<DataManager> = writable(new DataManager(...data.data));
     setContext(dataKey, dataManager);
-    const leagueShotsConcededObject = new LeagueShotsConceded(data.shotsAgainst);
-    leagueShotsConceded.set(leagueShotsConcededObject);
-    dataManager.update(injectShotsConceded);
-    setContext(concedeKey, leagueShotsConceded);
+    // const leagueShotsConcededObject = new LeagueShotsConceded(data.shotsAgainst);
+    // leagueShotsConceded.set(leagueShotsConcededObject);
+    // dataManager.update(injectShotsConceded);
+    // setContext(concedeKey, leagueShotsConceded);
 
     let isMounted = false;
 
@@ -65,7 +65,10 @@
     let currentStep = viewManager.currentStep;
     let currentStepTemp: number | undefined = undefined;
     let scrollY = 0;
-    $: $currentStep = currentStepTemp === undefined && scrollY > screenHeight ? viewManager.steps.length - 1 : currentStepTemp;
+    $: $currentStep =
+        currentStepTemp === undefined && scrollY > screenHeight
+            ? viewManager.steps.length - 1
+            : currentStepTemp;
     let hoveredData = viewManager.hoveredData;
     setContext(viewKey, viewManager);
 
@@ -80,6 +83,12 @@
 
     onMount(async () => {
         isMounted = true;
+
+        const shotsAgainst = await data.streamed.shotsAgainst;
+        const leagueShotsConcededObject = new LeagueShotsConceded(shotsAgainst);
+        leagueShotsConceded.set(leagueShotsConcededObject);
+        dataManager.update(injectShotsConceded);
+        setContext(concedeKey, leagueShotsConceded);
         // if ($leagueShotsConceded == null) {
         //     PlayerService.playerReadAllShots().then((data) => {
         //         const leagueShotsConcededObject = new LeagueShotsConceded(data);
@@ -93,24 +102,21 @@
     });
 </script>
 
-<svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} bind:scrollY={scrollY} />
+<svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} bind:scrollY />
 <svelte:head>
     <title>{$dataManager.player.player_name} - xG Visualised</title>
 </svelte:head>
-<div class="!px-0 text-white-900 font-display" style="contain: paint;" bind:clientWidth={containerWidth}>
+<div
+    class="!px-0 text-white-900 font-display"
+    style="contain: paint;"
+    bind:clientWidth={containerWidth}
+>
     <Title />
     {#if isMounted}
         <VizContainer {width} {height} on:mouseleave={() => hoveredData.set(null)}>
             <svg {width} {height}>
                 <g transform="translate({margin.left}, {margin.top})">
-                    <VizManager
-                        {width}
-                        {height}
-                        {margin}
-                        {rScale}
-                        bind:tweenedX
-                        bind:tweenedY
-                    />
+                    <VizManager {width} {height} {margin} {rScale} bind:tweenedX bind:tweenedY />
                     <XgCircles {rScale} data={tweenedData} />
                 </g>
             </svg>
@@ -136,7 +142,9 @@
     <Scrolly bind:value={currentStepTemp}>
         <ContentManager />
     </Scrolly>
-    <a href='/' class='mb-16 pl-16 font-medium text-md underline text-white-800'>Return to home page</a>
+    <a href="/" class="mb-16 pl-16 font-medium text-md underline text-white-800"
+        >Return to home page</a
+    >
     <!-- {#if $hoveredData && $hoveredData.type == HoveredDataType.Fixture} -->
     <!--     <Tooltip -->
     <!--         limits={{right: screenWidth, bottom: screenHeight, left: 0}} -->
