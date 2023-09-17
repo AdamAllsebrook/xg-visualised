@@ -88,7 +88,7 @@
 
 <svelte:window bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} bind:scrollY />
 <svelte:head>
-    <title>{$dataManager.player.player_name} - xG Visualised</title>
+    <title>{$dataManager.player.player_name} - Expected goals, visualised.</title>
 </svelte:head>
 <div
     class="!px-0 text-white-900 font-display"
