@@ -4,7 +4,7 @@ WORKDIR /src
 
 ADD ./ /src
 
-ENV YEAR=2022
+ENV YEAR=2023
 ENV CACHE_UPDATE_INTERVAL=3600
 
 RUN pip install --upgrade pip

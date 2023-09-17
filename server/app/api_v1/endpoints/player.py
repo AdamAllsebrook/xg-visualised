@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from typing import Union, List
 
 from app import schemas
-from app.data.players import get_player, get_player_matches, get_player_seasons, get_player_shots, get_all_shots_against_teams 
+from app.data.players import get_player, get_player_matches, get_player_seasons, get_player_shots, get_all_shots_against_teams
 from app.data.teams import get_team_fixtures
 from app.data.year import get_year
 
@@ -19,8 +19,10 @@ async def read_all_shots(year: Union[int, None] = None):
 
 
 @router.get('/{id}', response_model=schemas.Player, tags=['player'])
-async def read(id: int):
-    player = await get_player(id)
+async def read(id: int, year: Union[int, None] = None):
+    if year is None:
+        year = await get_year()
+    player = await get_player(id, year)
     if player is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return player
@@ -38,7 +40,7 @@ async def read_seasons(id: int):
 async def read_matches(id: int, year: Union[int, None] = None):
     if year is None:
         year = await get_year()
-    matches = await get_player_matches(id, year=year)
+    matches = await get_player_matches(id, year)
     if matches is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return matches
@@ -48,7 +50,7 @@ async def read_matches(id: int, year: Union[int, None] = None):
 async def read_fixtures(id: int, year: Union[int, None] = None):
     if year is None:
         year = await get_year()
-    player = await get_player(id)
+    player = await get_player(id, year)
     if player is None:
         raise HTTPException(status_code=404, detail="Item not found")
     fixtures = await get_team_fixtures(player.team_title, year)
@@ -61,7 +63,7 @@ async def read_fixtures(id: int, year: Union[int, None] = None):
 async def read_shots(id: int, year: Union[int, None] = None):
     if year is None:
         year = await get_year()
-    shots = await get_player_shots(id, year=year)
+    shots = await get_player_shots(id, year)
     if shots is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return shots

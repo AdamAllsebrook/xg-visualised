@@ -1,15 +1,14 @@
 import os
-import asyncio
 import uvicorn
-import logging
 import sys
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_utils.tasks import repeat_every
 
 from app.api_v1.api import api_router
 from app.redis_utils import init_redis
-from scheduler import app as app_rocketry
+from app.data.update import update_cache
 
 
 host = sys.argv[1] if len(sys.argv) > 1 else '0.0.0.0'
@@ -52,33 +51,12 @@ async def init():
     init_redis()
 
 
-class Server(uvicorn.Server):
-    """
-    Customized uvicorn.Server
+@app.on_event("startup")
+@repeat_every(seconds=60 * 60)
+async def update_cache_task():
+    print('updating cache')
+    await update_cache()
 
-    Uvicorn server overrides signals and we need to include
-    Rocketry to the signals.
-    """
-
-    def handle_exit(self, sig: int, frame) -> None:
-        app_rocketry.session.shut_down()
-        return super().handle_exit(sig, frame)
-
-
-async def main():
-    "Run Rocketry and FastAPI"
-    server = Server(config=uvicorn.Config(
-        app, host=host, port=port, workers=1, loop="asyncio"))
-
-    api = asyncio.create_task(server.serve())
-    sched = asyncio.create_task(app_rocketry.serve())
-
-    await asyncio.wait([sched, api])
 
 if __name__ == "__main__":
-    # Print Rocketry's logs to terminal
-    logger = logging.getLogger("rocketry.task")
-    logger.addHandler(logging.StreamHandler())
-
-    # Run both applications
-    asyncio.run(main())
+    uvicorn.run(app, host=host, port=port)

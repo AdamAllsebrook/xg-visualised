@@ -1,7 +1,5 @@
 from understat import Understat
 import aiohttp
-import os
-import csv
 from typing import Any, Union
 
 from app.schemas import Player, Match, Season, Shot, SimpleShot
@@ -11,8 +9,9 @@ from app.redis_utils import cache
 
 
 @cache
-async def get_all_players() -> dict[int, Player]:
-    year = await get_year()
+async def get_all_players(year: int) -> dict[int, Player]:
+    if year is None:
+        year = await get_year()
     async with aiohttp.ClientSession() as session:
         understat = Understat(session)
         understat_players = await understat.get_league_players('epl', year)
@@ -26,9 +25,9 @@ async def get_all_players() -> dict[int, Player]:
 
 
 @cache
-async def get_player(id: int) -> Union[Player, None]:
+async def get_player(id: int, year: int) -> Union[Player, None]:
     try:
-        player: Player = (await get_all_players())[id]
+        player: Player = (await get_all_players(year))[id]
 
     except KeyError:
         return None
@@ -36,9 +35,7 @@ async def get_player(id: int) -> Union[Player, None]:
 
 
 @cache
-async def get_player_matches(id: int, year: Union[int, None] = None) -> Union[list[Match], None]:
-    if year is None:
-        year = await get_year()
+async def get_player_matches(id: int, year: int) -> Union[list[Match], None]:
     async with aiohttp.ClientSession() as session:
         understat = Understat(session)
         matches: list[Any] = await understat.get_player_matches(id, {'season': str(year)})
@@ -86,7 +83,7 @@ async def get_player_shots(id: int, year: int) -> Union[list[Shot], None]:
 @cache
 async def get_all_shots_against_teams(year: int) -> dict[str, list[SimpleShot]]:
     h_a_rev = {'a': 'h', 'h': 'a'}
-    players = await get_all_players()
+    players = await get_all_players(year)
     teams = await get_all_teams(year)
     shots = {team.title: [] for team in teams}
     for id, _ in players.items():
