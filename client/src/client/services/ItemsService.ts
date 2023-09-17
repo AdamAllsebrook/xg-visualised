@@ -12,13 +12,22 @@ export class ItemsService {
 
     /**
      * Read
+     * @param year
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static itemsRead(): CancelablePromise<Array<(PlayerSearch | TeamSearch)>> {
+    public static itemsRead(
+        year?: number,
+    ): CancelablePromise<Array<(PlayerSearch | TeamSearch)>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/items/',
+            query: {
+                'year': year,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
         });
     }
 

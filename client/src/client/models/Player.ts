@@ -6,5 +6,6 @@ export type Player = {
     id: number;
     player_name: string;
     team_title: string;
+    time: number;
 };
 
