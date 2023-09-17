@@ -32,7 +32,8 @@
     {#each minuteXgs as xg, i}
         <div
             class="my-1 highlight inline-block"
-            style="width: {(xg * 75) / minuteXgs[preferTime]}%; background: {colourScale(xg)};"
+            style="width: calc(11ch + {(xg * 40) /
+                minuteXgs[preferTime]}%); background: {colourScale(xg)};"
         >
             <p class="font-normal whitespace-nowrap">{i * 15} - {(i + 1) * 15} mins</p>
         </div>

@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
     import type { Team } from '$client';
     import { scaleLinear } from 'd3-scale';
     import { colours } from '$lib/colours';
@@ -13,38 +13,44 @@
     const viewManager: ViewManager = getContext(viewKey);
     let teamSelected: Writable<string | null> = viewManager.teamSelected;
 
-
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const prefersInBox = $dataManager.shotData.insideBox >= $dataManager.shotData.outsideBox;
-    
+
     export let team: Team;
     let shots: SimpleShotData | undefined;
-    export let side: ('a' | 'h');
+    export let side: 'a' | 'h';
 
     $: shots = $leagueShotsConceded?.data.get(team.title);
-    $: inBox = shots ? shots?.insideBox / shots?.shots: 0;
-    $: outBox = shots ? shots?.outsideBox / shots?.shots: 0;
+    $: inBox = shots ? shots?.insideBox / shots?.shots : 0;
+    $: outBox = shots ? shots?.outsideBox / shots?.shots : 0;
 
     let colourScale = scaleLinear()
         .domain([0, 1])
         .range([colours.shot + 'ff', colours.shot + '33']);
-    $: colour = $teamSelected != null 
-        ? $teamSelected == team.title 
-            ? colourScale(0) 
-            : colourScale(1)
-        : colourScale(inBox);
-
+    $: colour =
+        $teamSelected != null
+            ? $teamSelected == team.title
+                ? colourScale(0)
+                : colourScale(1)
+            : colourScale(inBox);
 </script>
 
 <div>
-    <div 
-        class='inline-block my-1 relative highlight w-full font-normal transition-colors'
+    <div
+        class="inline-block my-1 relative highlight w-full font-normal transition-colors whitespace-nowrap"
         tabindex="-1"
-        style='background-color: {colour}; width: {(prefersInBox ? inBox : outBox) * 100}%;'
-        on:focus={() => $teamSelected = team.title}
-        on:blur={() => {if ($teamSelected == team.title) {$teamSelected = null}}}
+        style="background-color: {colour}; width: {(prefersInBox ? inBox : outBox) * 100}%;"
+        on:focus={() => ($teamSelected = team.title)}
+        on:blur={() => {
+            if ($teamSelected == team.title) {
+                $teamSelected = null;
+            }
+        }}
     >
         <p>{team.title} ({side.toUpperCase()})</p>
     </div>
-    <p class='pb-4 lg:pb-0 inline lg:pl-2 font-normal'>{((prefersInBox ? inBox : outBox) * 100).toFixed(2)}% <span class='text-white-800 hidden lg:visible'>of shots conceded</span></p>
+    <p class="pt-2 lg:pt-0 inline lg:pl-2 font-normal float-right lg:float-none">
+        {((prefersInBox ? inBox : outBox) * 100).toFixed(2)}%
+        <span class="text-white-800 hidden lg:visible">of shots conceded</span>
+    </p>
 </div>
