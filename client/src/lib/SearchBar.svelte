@@ -65,12 +65,13 @@
     }
 
     function normalize(text: string) {
+        text = text.toLowerCase();
         var from = 'ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;';
         var to = 'aaaaaeeeeeiiiiooooouuuunc------';
         for (let i = 0, l = from.length; i < l; i++) {
             text = text.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
         }
-        return text.toLowerCase();
+        return text;
     }
 </script>
 
