@@ -28,7 +28,7 @@
     // const leagueShotsConcededObject = new LeagueShotsConceded(data.shotsAgainst);
     // leagueShotsConceded.set(leagueShotsConcededObject);
     // dataManager.update(injectShotsConceded);
-    // setContext(concedeKey, leagueShotsConceded);
+    setContext(concedeKey, leagueShotsConceded);
 
     let isMounted = false;
 
@@ -88,7 +88,6 @@
         const leagueShotsConcededObject = new LeagueShotsConceded(shotsAgainst);
         leagueShotsConceded.set(leagueShotsConcededObject);
         dataManager.update(injectShotsConceded);
-        setContext(concedeKey, leagueShotsConceded);
         // if ($leagueShotsConceded == null) {
         //     PlayerService.playerReadAllShots().then((data) => {
         //         const leagueShotsConcededObject = new LeagueShotsConceded(data);

@@ -14,7 +14,6 @@ export const load: Load = async ({ url, params }) => {
             year = YEAR;
         }
     }
-    console.log('year', year)
 
     const id = parseInt(params.slug);
     const yearInt = parseInt(year as string);
