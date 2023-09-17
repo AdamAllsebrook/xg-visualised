@@ -1,9 +1,8 @@
 <script lang="ts">
     import { arc } from 'd3-shape';
     import { scaleLinear } from 'd3-scale';
-    import type { Shot, SimpleShot } from '$client';
+    import type { Shot } from '$client';
     import type { Spring } from 'svelte/motion';
-    import { spring } from 'svelte/motion';
     import { fade } from 'svelte/transition';
     import { cubicOut } from 'svelte/easing';
     import { key as dataKey, type DataManager } from './data/dataManager';
@@ -11,7 +10,6 @@
     import type { Writable } from 'svelte/store';
     import { viewKey, type ViewManager } from './view/viewManager';
     import { SimpleShotData } from './data/shotData';
-    import FixtureList from './FixtureList.svelte';
     import { key as shotsConcededKey, LeagueShotsConceded } from './data/leagueShotsConceded';
     import { colours } from './colours';
     import { initSprings } from './initSprings';
@@ -77,13 +75,12 @@
     }
     $: {
         xScale, yScale, $currentStep;
-        setTweenedData(tweenedX, tweenedY, rScale, viewManager, shots);
+        setTweenedData(tweenedX, tweenedY, viewManager, shots);
     }
 
     function setTweenedData(
         tweenedX: Spring<number[]>,
         tweenedY: Spring<number[]>,
-        rScale: any,
         viewManager: ViewManager,
         shots: Shot[],
     ) {
@@ -146,9 +143,6 @@
             let sum = 0;
             for (let i = 0; i < widthSum.length; i++) {
                 if (widthSum[i] > rowWidth + sum) {
-                    // if (rowStarts.length === 1) {
-                    //     rowWidth = widthSum[i-1];
-                    // }
                     rowStarts.push(i);
                     sum += rowWidth;
                 }
@@ -158,23 +152,16 @@
             const yOffset = pitchPosition - sumRowHeights / 2;
             let row = 0;
             let height = 0;
-            // let currentRowWidth = widthSum[rowStarts[1] - 1] - widthSum[rowStarts[0]] + rScale(shots[rowStarts[0]].xG);
-            // console.log('help', widthSum[rowStarts[1] - 1], widthSum[rowStarts[0]], rScale(shots[rowStarts[0]].xG), rScale(shots[rowStarts[1]-1].xG));
+
             for (let i = 0; i < widthSum.length; i++) {
                 if (rowStarts.includes(i) && i > 0) {
                     row++;
                     height += rScale(shots[i].xG) * 2;
-                    // currentRowWidth = widthSum[(rowStarts[row + 1] || rowStarts.length) - 1] - widthSum[rowStarts[row]] + rScale(shots[rowStarts[row]].xG);
-                    // console.log('currentRowWidth', currentRowWidth, widthSum[(rowStarts[row + 1] || rowStarts[rowStarts.length-1]) - 1]);
                 }
                 originalOrder[order.get(shots[i].id)] = {
-                    x: (widthSum[i] % rowWidth) + xOffset - rScale(shots[rowStarts[row]].xG), // - (rowWidth - currentRowWidth) / 2,// - rScale(shots[rowStarts[row]].xG),
+                    x: (widthSum[i] % rowWidth) + xOffset - rScale(shots[rowStarts[row]].xG),
                     y: height - rScale(shots[rowStarts[row]].xG) + yOffset,
                 };
-                // if (row === 0) {
-                //     console.log('currentRowWidth', currentRowWidth);
-                //     console.log(widthSum.slice(0, 10));
-                // }
             }
         }
         return originalOrder;

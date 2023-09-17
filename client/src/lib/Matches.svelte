@@ -7,7 +7,6 @@
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
     import { ViewManager, viewKey } from './view/viewManager';
-    import HomeAway from './view/content/HomeAway.svelte';
     import { SimpleShotData } from './data/shotData';
     import { key as shotsConcededKey, type LeagueShotsConceded } from './data/leagueShotsConceded';
     import { colours } from './colours';
@@ -17,7 +16,6 @@
     export let height: number;
     export let tweenedX: Spring<number[]>;
     export let tweenedY: Spring<number[]>;
-    export let rScale: any;
 
     const viewManager: ViewManager = getContext(viewKey);
     const currentStep = viewManager.currentStep;
@@ -30,19 +28,22 @@
     const leagueShotsConceded: Writable<LeagueShotsConceded> = getContext(shotsConcededKey);
 
     $: shotsConceded = $dataManager.opponents.shotsConceded;
-    $: allShotsConceded = shotsConceded == null 
-        ? null 
-        : $teamSelected == null 
+    $: allShotsConceded =
+        shotsConceded == null
+            ? null
+            : $teamSelected == null
             ? shotsConceded
-            : $leagueShotsConceded.data.get($teamSelected) || new SimpleShotData([]);;
+            : $leagueShotsConceded.data.get($teamSelected) || new SimpleShotData([]);
     $: shotsConcededList = $dataManager.opponents.shotsConcededList;
-    $: allShotsConcededList = shotsConcededList == null 
-        ? null 
-        : $teamSelected == null 
+    $: allShotsConcededList =
+        shotsConcededList == null
+            ? null
+            : $teamSelected == null
             ? $dataManager.opponents.shotsConcededList
             : $leagueShotsConceded.teamShots.get($teamSelected) || [];
 
-    $: opponentsMinuteBins = allShotsConcededList === null ? [] : SimpleShotData.minuteBins(allShotsConcededList);
+    $: opponentsMinuteBins =
+        allShotsConcededList === null ? [] : SimpleShotData.minuteBins(allShotsConcededList);
     $: opponentsMinuteXgs = opponentsMinuteBins.map((bin) => bin.xG);
 
     const minuteBins = SimpleShotData.minuteBins($dataManager.shots);
@@ -83,13 +84,13 @@
             x2={(match.time_started * width) / 90}
             y1={Math.round(i * paddingY)}
             y2={Math.round(i * paddingY)}
-            stroke="{viewManager.steps[$currentStep || 0].shotLayout === 'homeaway' 
+            stroke={viewManager.steps[$currentStep || 0].shotLayout === 'homeaway'
                 ? match.h_a === 'h'
                     ? '#aaa9'
                     : '#aaa3'
-                : '#aaa6'}"
+                : '#aaa6'}
             stroke-width="1"
-            style='transition: stroke 0.2s'
+            style="transition: stroke 0.2s"
         />
         <rect
             x={(match.time_started * width) / 90}
@@ -99,12 +100,12 @@
             rx="2"
             stroke="black"
             stroke-width="1"
-            fill="{viewManager.steps[$currentStep || 0].shotLayout === 'homeaway' 
+            fill={viewManager.steps[$currentStep || 0].shotLayout === 'homeaway'
                 ? match.h_a === 'h'
                     ? '#aaa9'
                     : '#aaa3'
-                : '#aaa6'}"
-            style='transition: fill 0.2s'
+                : '#aaa6'}
+            style="transition: fill 0.2s"
         />
         <line
             x1={((match.time_started + match.time) * width) / 90}
@@ -112,12 +113,12 @@
             y1={Math.round(i * paddingY)}
             y2={Math.round(i * paddingY)}
             stroke-width="1"
-            stroke="{viewManager.steps[$currentStep || 0].shotLayout === 'homeaway' 
+            stroke={viewManager.steps[$currentStep || 0].shotLayout === 'homeaway'
                 ? match.h_a === 'h'
                     ? '#aaa9'
                     : '#aaa3'
-                : '#aaa6'}"
-            style='transition: stroke 0.2s'
+                : '#aaa6'}
+            style="transition: stroke 0.2s"
         />
     {/each}
     {#if viewManager.steps[$currentStep || 0].shotLayout === 'minutes'}
@@ -130,7 +131,7 @@
             stroke="black"
             stroke-width="1"
             fill="#aaa3"
-            style='transition: fill 0.2s'
+            style="transition: fill 0.2s"
             transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
         />
     {/if}
@@ -140,12 +141,15 @@
                 x={i * 15 * (width / 90) + 5}
                 width={15 * (width / 90) - 10}
                 y={-paddingY / 2}
-                height={3 * height * (1 - 1 / (matches.length + 1)) * (allShotsConceded === null ? 0 : xg / allShotsConceded.xG)}
+                height={3 *
+                    height *
+                    (1 - 1 / (matches.length + 1)) *
+                    (allShotsConceded === null ? 0 : xg / allShotsConceded.xG)}
                 rx="2"
                 stroke="black"
                 stroke-width="1"
                 fill="{colours.xg}99"
-                style='transition: fill 0.2s; transition: height 0.15s'
+                style="transition: fill 0.2s; transition: height 0.15s"
                 transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
             />
         {/each}

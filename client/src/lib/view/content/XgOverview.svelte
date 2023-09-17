@@ -16,22 +16,18 @@
     const scoredPenalties = $dataManager.shotData.penaltiesScored;
 </script>
 
-<h2 class='text-2xl font-extrabold mb-1'>The Season So Far</h2>
+<h2 class="text-2xl font-extrabold mb-1">The Season So Far</h2>
 <p>
-    {player.player_name} has taken <span class='highlight bg-shot'>{shots} shots</span> this season, scoring <span class='highlight bg-goal'>{goals} goals.</span>
+    {player.player_name} has taken <span class="highlight bg-shot">{shots} shots</span> this season,
+    scoring <span class="highlight bg-goal">{goals} goals.</span>
 </p>
 <p>
-    He has accumulated a total of <span class='highlight bg-xg'>{sumXG.toFixed(2)} xG</span> over {matches} matches, or
+    He has accumulated a total of <span class="highlight bg-xg">{sumXG.toFixed(2)} xG</span> over {matches}
+    matches, or
     <span class="highlight bg-xg">
         {((sumXG / sumMins) * 90).toFixed(2)} xG
     </span> per 90.
 </p>
-<!-- <p> -->
-<!--     This means he is {goals > sumXG ? 'over' : 'under'}performing by {( -->
-<!--         (Math.abs(goals - sumXG) / sumMins) * -->
-<!--         90 -->
-<!--     ).toFixed(2)} xG90. -->
-<!-- </p> -->
 <br />
 <p>
     {#if nonPenalties == shots}

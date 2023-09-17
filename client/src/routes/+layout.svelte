@@ -1,11 +1,9 @@
 <script>
     import '../app.css';
-    import { colours } from '$lib/colours';
-
 </script>
 
 <body>
-    <slot></slot>
+    <slot />
 </body>
 
 <style>

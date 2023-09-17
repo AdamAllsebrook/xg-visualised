@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { SimpleShot } from '$client';
     import { type DataManager, key as dataKey } from '$lib/data/dataManager';
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';

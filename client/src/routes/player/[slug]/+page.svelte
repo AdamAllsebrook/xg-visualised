@@ -5,8 +5,6 @@
     import { writable, type Writable } from 'svelte/store';
     import { scaleLinear } from 'd3-scale';
 
-    import { PlayerService } from '$client';
-
     import Scrolly from '$lib/Scrolly.svelte';
     import Tooltip from '$lib/Tooltip.svelte';
     import VizContainer from '$lib/VizContainer.svelte';
@@ -25,9 +23,6 @@
     export let data: any;
     const dataManager: Writable<DataManager> = writable(new DataManager(...data.data));
     setContext(dataKey, dataManager);
-    // const leagueShotsConcededObject = new LeagueShotsConceded(data.shotsAgainst);
-    // leagueShotsConceded.set(leagueShotsConcededObject);
-    // dataManager.update(injectShotsConceded);
     setContext(concedeKey, leagueShotsConceded);
 
     let isMounted = false;
@@ -88,16 +83,6 @@
         const leagueShotsConcededObject = new LeagueShotsConceded(shotsAgainst);
         leagueShotsConceded.set(leagueShotsConcededObject);
         dataManager.update(injectShotsConceded);
-        // if ($leagueShotsConceded == null) {
-        //     PlayerService.playerReadAllShots().then((data) => {
-        //         const leagueShotsConcededObject = new LeagueShotsConceded(data);
-        //         leagueShotsConceded.set(leagueShotsConcededObject);
-        //         dataManager.update(injectShotsConceded);
-        //     });
-        // }
-        // if ($leagueShotsConceded != null) {
-        //     dataManager.update(injectShotsConceded);
-        // }
     });
 </script>
 
@@ -144,14 +129,4 @@
     <a href="/" class="mb-16 pl-16 font-medium text-md underline text-white-800"
         >Return to home page</a
     >
-    <!-- {#if $hoveredData && $hoveredData.type == HoveredDataType.Fixture} -->
-    <!--     <Tooltip -->
-    <!--         limits={{right: screenWidth, bottom: screenHeight, left: 0}} -->
-    <!--         x={$hoveredData.data.position.x} -->
-    <!--         y={$hoveredData.data.position.y} -->
-    <!--         offset={0} -->
-    <!--     > -->
-    <!--         <svelte:component this={$hoveredData.component} data={$hoveredData.data} /> -->
-    <!--     </Tooltip> -->
-    <!-- {/if} -->
 </div>

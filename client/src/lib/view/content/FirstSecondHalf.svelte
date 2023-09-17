@@ -1,6 +1,5 @@
 <script lang="ts">
     import { key as dataKey, type DataManager } from '$lib/data/dataManager';
-    import type { Opponents } from '$lib/data/opponents';
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
 
@@ -12,12 +11,8 @@
     const firstHalfPercent = shotData.strPercent(shotData.firstHalf);
     const secondHalfPercent = shotData.strPercent(shotData.secondHalf);
     $: shotsConceded = $dataManager.opponents.shotsConceded;
-    $: opponentsFirstHalfPercent = shotsConceded?.strPercent(
-        shotsConceded?.firstHalf,
-    ) || '';
-    $: opponentsSecondHalfPercent = shotsConceded?.strPercent(
-        shotsConceded?.secondHalf,
-    ) || '';
+    $: opponentsFirstHalfPercent = shotsConceded?.strPercent(shotsConceded?.firstHalf) || '';
+    $: opponentsSecondHalfPercent = shotsConceded?.strPercent(shotsConceded?.secondHalf) || '';
 </script>
 
 <h3 class="font-bold text-2xl">First or Second Half</h3>

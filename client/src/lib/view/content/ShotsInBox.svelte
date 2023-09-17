@@ -1,6 +1,5 @@
 <script lang="ts">
     import { getContext } from 'svelte';
-    import type { SimpleShot } from '$client';
     import { key as dataKey, type DataManager } from '$lib/data/dataManager';
     import type { Writable } from 'svelte/store';
 
@@ -16,22 +15,24 @@
     const preferredGoals = prefersInBox
         ? $dataManager.goalData.insideBox
         : $dataManager.goalData.outsideBox;
-
-    $: shotsConceded = $dataManager.opponents.shotsConceded;
-    $: opponentsInBoxPercent = shotsConceded?.strPercent(shotsConceded?.insideBox);
-    $: opponentsOutBoxPercent = shotsConceded?.strPercent(shotsConceded?.outsideBox);
 </script>
 
 <h3 class="font-bold text-2xl">In or Around the Box</h3>
 <p>
-    {player.player_name} prefers to shoot from 
-    {prefersInBox ? 'inside' : 'outside'} the box, scoring 
-    <span class='highlight bg-goal'>{preferredGoals} goal{preferredGoals == 1 ? '' : 's'}</span> from 
-    <span class='highlight bg-shot'>{preferredShots} shot{preferredShots == 1 ? '' : 's'}</span>,
+    {player.player_name} prefers to shoot from
+    {prefersInBox ? 'inside' : 'outside'} the box, scoring
+    <span class="highlight bg-goal">{preferredGoals} goal{preferredGoals == 1 ? '' : 's'}</span>
+    from
+    <span class="highlight bg-shot">{preferredShots} shot{preferredShots == 1 ? '' : 's'}</span>,
 </p>
 <p>
     compared to his
-    <span class='highlight bg-goal'>{goals - preferredGoals} goal{goals - preferredGoals == 1 ? '' : 's'}</span> from
-    <span class='highlight bg-shot'>{shots - preferredShots} shot{shots - preferredShots == 1 ? '' : 's'} </span>
+    <span class="highlight bg-goal"
+        >{goals - preferredGoals} goal{goals - preferredGoals == 1 ? '' : 's'}</span
+    >
+    from
+    <span class="highlight bg-shot"
+        >{shots - preferredShots} shot{shots - preferredShots == 1 ? '' : 's'}
+    </span>
     {prefersInBox ? 'outside' : 'inside'} the box.
 </p>

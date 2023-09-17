@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
     import FixtureList from '$lib/FixtureList.svelte';
     import { key as dataKey, type DataManager } from '$lib/data/dataManager';
     import { getContext } from 'svelte';
@@ -8,16 +8,15 @@
     const player = $dataManager.player;
 
     const opponents = $dataManager.opponents.teams;
-
 </script>
 
-<h3 class='font-bold text-2xl'>Fixtures</h3>
+<h3 class="font-bold text-2xl">Fixtures</h3>
 <p>
     {player.team_title}'s next {opponents.length} games are against:
 </p>
 <FixtureList />
-<p class='text-white-800'>Select a team to view their heatmap.</p>
-<br>
-<p class='text-white-800'>
+<p class="text-white-800">Select a team to view their heatmap.</p>
+<br />
+<p class="text-white-800">
     Visualised: The combined heatmap of all shots against these teams this season.
 </p>

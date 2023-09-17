@@ -1,5 +1,5 @@
 import { error, type Load } from '@sveltejs/kit';
-import { PlayerService, TeamService, type SimpleShot } from '$client';
+import { PlayerService, TeamService } from '$client';
 import type { Player, Match, Shot, Fixture, Team } from '$client';
 import { YEAR } from '$env/static/private'
 

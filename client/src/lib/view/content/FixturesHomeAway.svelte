@@ -16,4 +16,3 @@
 {#each opponents.teams as team, i}
     <FixtureHomeAway {team} side={opponents.sides[i]} />
 {/each}
-<!-- <p class='pt-4'>Visualised: The total xG conceded by the selected teams per region. </p> -->

@@ -27,4 +27,3 @@ export const colours: ColourScheme = {
     xg: '#36827F',
 };
 
-// export { type ColourScheme, colours };

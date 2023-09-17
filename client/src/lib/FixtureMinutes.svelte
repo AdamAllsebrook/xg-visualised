@@ -7,13 +7,10 @@
     import { key as shotsConcededKey, type LeagueShotsConceded } from './data/leagueShotsConceded';
     import { getContext } from 'svelte';
     import { viewKey, ViewManager } from './view/viewManager';
-    import { DataManager, key as dataKey } from './data/dataManager';
 
     let leagueShotsConceded: Writable<LeagueShotsConceded | null> = getContext(shotsConcededKey);
     const viewManager: ViewManager = getContext(viewKey);
     let teamSelected: Writable<string | null> = viewManager.teamSelected;
-
-    const dataManager: Writable<DataManager> = getContext(dataKey);
 
     export let team: Team;
     let shots: SimpleShot[] | undefined;
@@ -41,7 +38,9 @@
 <div class="relative">
     <div
         class="border lg:w-1/2 my-1 relative highlight w-full font-normal transition-colors"
-        style="border-color: {colour}; background-color: {$teamSelected == team.title ? colour : 'transparent'};}"
+        style="border-color: {colour}; background-color: {$teamSelected == team.title
+            ? colour
+            : 'transparent'};}"
         tabindex="-1"
         on:focus={() => ($teamSelected = team.title)}
         on:blur={() => {
@@ -52,14 +51,4 @@
     >
         <p>{team.title} ({side.toUpperCase()})</p>
     </div>
-    <!-- {#each minuteXgs as xg, i} -->
-    <!--     <div -->
-    <!--         class="inline-block border text-white-900 pointer-events-none h-8" -->
-    <!--         style="width: {shotData === undefined ? 0 : (xg / shotData.xG) * 100}%; border-color: {colour}" -->
-    <!--     > -->
-            <!-- <p class=" font-normal"> -->
-            <!--     {Math.round(shotData === undefined ? 0 : (xg / shotData.xG) * 100)}% -->
-            <!-- </p> -->
-        <!-- </div> -->
-    <!-- {/each} -->
 </div>

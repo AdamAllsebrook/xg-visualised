@@ -1,7 +1,6 @@
 <script lang="ts">
     import { scaleLinear } from 'd3-scale';
     import { key as dataKey, type DataManager } from '$lib/data/dataManager';
-    import type { Opponents } from '$lib/data/opponents';
     import { SimpleShotData } from '$lib/data/shotData';
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
@@ -9,7 +8,6 @@
 
     const dataManager: Writable<DataManager> = getContext(dataKey);
     const player = $dataManager.player;
-    const shotData = $dataManager.shotData;
 
     const minuteBins = SimpleShotData.minuteBins($dataManager.shots);
     const minuteXgs = minuteBins.map((bin) => bin.xG);
