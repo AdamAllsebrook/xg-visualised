@@ -18,6 +18,7 @@ export const load: Load = async ({ url, params }) => {
     const id = parseInt(params.slug);
     const yearInt = parseInt(year as string);
 
+    const start = Date.now();
     const [player, matches, shots, fixtures, teams]: [
         Player,
         Match[],
@@ -31,6 +32,8 @@ export const load: Load = async ({ url, params }) => {
         PlayerService.playerReadFixtures(id, yearInt),
         TeamService.teamReadAll(yearInt),
     ]);
+    const end = Date.now();
+    console.log(`Request time (get player data): ${end - start} ms`);
 
     return {
         data: [player, shots, teams, matches, fixtures],

@@ -14,7 +14,10 @@ export const load: Load = async ({ url }) => {
     }
     const yearInt = parseInt(year as string);
 
+    const start = Date.now();
     const items = await ItemsService.itemsRead(yearInt);
+    const end = Date.now();
+    console.log(`Request time (get items): ${end - start} ms`);
 
     return {
         items: items
