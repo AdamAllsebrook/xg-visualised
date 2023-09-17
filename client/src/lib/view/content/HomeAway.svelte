@@ -18,23 +18,25 @@
     const goalsAway = goalData.away;
     const homeMinutes = matchData.homeMinutes;
     const awayMinutes = matchData.awayMinutes;
-    const homeXg90 = homeMinutes > 0 ? xgHome / homeMinutes * 90 : 0;
-    const awayXg90 = awayMinutes > 0 ? xgAway / awayMinutes * 90 : 0;
+    const homeXg90 = homeMinutes > 0 ? (xgHome / homeMinutes) * 90 : 0;
+    const awayXg90 = awayMinutes > 0 ? (xgAway / awayMinutes) * 90 : 0;
     const prefersHome = homeXg90 > awayXg90;
 </script>
 
 <h3 class="font-bold text-2xl">Home and Away</h3>
-<p>{player.player_name} prefers to play at {prefersHome ? 'home' : 'away'}, with a total of 
-    <span class='highlight bg-xg'>{(prefersHome ? homeXg90 : awayXg90).toFixed(2)} xG</span> per 90, compared to 
-    <span class='highlight bg-xg'>{(prefersHome ? awayXg90 : homeXg90).toFixed(2)} xG</span> per 90
+<p>
+    {player.player_name} prefers to play {prefersHome ? 'at home' : 'away'}, with a total of
+    <span class="highlight bg-xg">{(prefersHome ? homeXg90 : awayXg90).toFixed(2)} xG</span> per 90,
+    compared to
+    <span class="highlight bg-xg">{(prefersHome ? awayXg90 : homeXg90).toFixed(2)} xG</span> per 90
     {prefersHome ? 'away from home' : 'at home'}.
 </p>
 <p>
-    He has scored 
-    <span class='highlight bg-goal'>{goalsHome} goals</span> from
-    <span class='highlight bg-shot'>{shotsHome} shots</span> at home, and
-    <span class='highlight bg-goal'>{goalsAway} goals</span> from 
-    <span class='highlight bg-shot'>{shotsAway} shots</span> away.
+    He has scored
+    <span class="highlight bg-goal">{goalsHome} goals</span> from
+    <span class="highlight bg-shot">{shotsHome} shots</span> at home, and
+    <span class="highlight bg-goal">{goalsAway} goals</span> from
+    <span class="highlight bg-shot">{shotsAway} shots</span> away.
 </p>
 
-<p class='text-white-800 pt-4'>Visualised: Home games are highlighted.</p>
+<p class="text-white-800 pt-4">Visualised: Home games are highlighted.</p>

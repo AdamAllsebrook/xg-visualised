@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
     import type { Team } from '$client';
     import { scaleLinear } from 'd3-scale';
     import { colours } from '$lib/colours';
@@ -11,12 +11,12 @@
     let leagueShotsConceded: Writable<LeagueShotsConceded | null> = getContext(shotsConcededKey);
     const viewManager: ViewManager = getContext(viewKey);
     let teamSelected: Writable<string | null> = viewManager.teamSelected;
-    
+
     export let team: Team;
     let shots: SimpleShotData | undefined;
-    export let side: ('a' | 'h');
+    export let side: 'a' | 'h';
     const xgMin = 0.5;
-    const xgMax = 2.5;
+    const xgMax = 3;
 
     $: shots = $leagueShotsConceded?.data.get(team.title);
     $: xGA = shots == undefined ? 0 : shots.xG / team.games;
@@ -24,23 +24,30 @@
     let colourScale = scaleLinear()
         .domain([xgMax, xgMin])
         .range([colours.xg + 'ff', colours.xg + '33']);
-    $: colour = $teamSelected != null 
-        ? $teamSelected == team.title 
-            ? colourScale(xgMax) 
-            : colourScale(xgMin)
-        : colourScale(xGA);
-
+    $: colour =
+        $teamSelected != null
+            ? $teamSelected == team.title
+                ? colourScale(xgMax)
+                : colourScale(xgMin)
+            : colourScale(xGA);
 </script>
 
 <div>
-    <div 
-        class='inline-block my-1 relative highlight w-full font-normal transition-colors'
+    <div
+        class="inline-block my-1 relative highlight w-full font-normal transition-colors"
         tabindex="-1"
-        style='background-color: {colour}; width: {xGA/xgMax * 100}%;'
-        on:focus={() => $teamSelected = team.title}
-        on:blur={() => {if ($teamSelected == team.title) {$teamSelected = null}}}
+        style="background-color: {colour}; width: {(xGA / xgMax) * 100}%;"
+        on:focus={() => ($teamSelected = team.title)}
+        on:blur={() => {
+            if ($teamSelected == team.title) {
+                $teamSelected = null;
+            }
+        }}
     >
         <p>{team.title} ({side.toUpperCase()})</p>
     </div>
-    <p class='pb-4 lg:pb-0 inline lg:pl-2 font-normal'>{xGA.toFixed(2)} <span class='text-white-800'>xGA <span class='hidden lg:visible'>per 90</span></span></p>
+    <p class="pb-4 lg:pb-0 inline lg:pl-2 font-normal">
+        {xGA.toFixed(2)}
+        <span class="text-white-800">xGA <span class="hidden lg:visible">per 90</span></span>
+    </p>
 </div>
