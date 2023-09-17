@@ -31,11 +31,12 @@
     const teamSelected: Writable<string | null> = viewManager.teamSelected;
     $: shotsConceded = $dataManager.opponents.shotsConceded;
     let allShotsConceded: SimpleShotData | null;
-    $: allShotsConceded = shotsConceded == null 
-        ? null 
-        : $teamSelected == null 
+    $: allShotsConceded =
+        shotsConceded == null
+            ? null
+            : $teamSelected == null
             ? shotsConceded
-            : $leagueShotsConceded.data.get($teamSelected) || new SimpleShotData([]);;
+            : $leagueShotsConceded.data.get($teamSelected) || new SimpleShotData([]);
 
     $: customHeight = (width * 0.5 * 115) / 74;
 
@@ -90,8 +91,7 @@
         const shotLayout = viewManager.steps[$currentStep || 0].shotLayout;
         if (shotLayout === 'box') {
             shotMap = boxLayout;
-        }
-        else if (shotLayout === 'leftright') {
+        } else if (shotLayout === 'leftright') {
             shotMap = leftRightLayout;
         }
         const layoutShots = shotMap(shots);
@@ -123,8 +123,14 @@
 
         for (let [filteredShots, pitchPosition] of [
             [shots.filter((shot) => SimpleShotData.isInBox(shot)), (customHeight * 12) / (115 / 2)],
-            [shots.filter((shot) => !SimpleShotData.isInBox(shot)), (customHeight * 35) / (115 / 2)],
+            [
+                shots.filter((shot) => !SimpleShotData.isInBox(shot)),
+                (customHeight * 35) / (115 / 2),
+            ],
         ]) {
+            if (filteredShots.length === 0) {
+                continue;
+            }
             let shots = [...filteredShots].sort((a, b) => b.xG - a.xG);
             // create array of cumulative circle radius
             const widthSum = shots
@@ -162,7 +168,7 @@
                     // console.log('currentRowWidth', currentRowWidth, widthSum[(rowStarts[row + 1] || rowStarts[rowStarts.length-1]) - 1]);
                 }
                 originalOrder[order.get(shots[i].id)] = {
-                    x: (widthSum[i] % rowWidth) + xOffset - rScale(shots[rowStarts[row]].xG),// - (rowWidth - currentRowWidth) / 2,// - rScale(shots[rowStarts[row]].xG),
+                    x: (widthSum[i] % rowWidth) + xOffset - rScale(shots[rowStarts[row]].xG), // - (rowWidth - currentRowWidth) / 2,// - rScale(shots[rowStarts[row]].xG),
                     y: height - rScale(shots[rowStarts[row]].xG) + yOffset,
                 };
                 // if (row === 0) {
@@ -217,7 +223,11 @@
             let col = 0;
             for (let j = 0; j < heightSum.length; j++) {
                 originalOrder[order.get(filteredShots[j].id)] = {
-                    x: xScale(xPos[i]) + xAcc - width / 2 + rScale(filteredShots[columnStarts[0]].xG),
+                    x:
+                        xScale(xPos[i]) +
+                        xAcc -
+                        width / 2 +
+                        rScale(filteredShots[columnStarts[0]].xG),
                     y: yAcc + rScale(filteredShots[j].xG),
                 };
                 yAcc += rScale(filteredShots[j].xG) * 2;
@@ -230,7 +240,6 @@
         }
         return originalOrder;
     }
-
 </script>
 
 <!-- https://en.wikipedia.org/wiki/Football_pitch#/media/File:Soccer_pitch_dimensions.png -->
@@ -281,7 +290,6 @@
     <!-- right corner -->
     <path transform="translate({width},0)" d={arcRight()} fill="#999999" />
 
-
     {#if viewManager.steps[$currentStep || 0].shotLayout === 'box'}
         <rect
             x={(width * ((74 - 44) / 2)) / 74}
@@ -292,39 +300,40 @@
         />
     {:else if viewManager.steps[$currentStep || 0].shotLayout === 'leftright' && viewManager.steps[$currentStep || 0].opponentsInfo !== 'leftright'}
         <rect
-            x={33/74 * width}
+            x={(33 / 74) * width}
             y={0}
-            width={8/74 * width}
+            width={(8 / 74) * width}
             height={customHeight}
             fill="#3333"
             stroke="none"
             transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
         />
         <rect
-            x={0/74 * width}
+            x={(0 / 74) * width}
             y={0}
-            width={15/74 * width}
+            width={(15 / 74) * width}
             height={customHeight}
             fill="#3333"
             stroke="none"
             transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
         />
         <rect
-            x={59/74 * width}
+            x={(59 / 74) * width}
             y={0}
-            width={15/74 * width}
+            width={(15 / 74) * width}
             height={customHeight}
             fill="#3333"
             stroke="none"
             transition:fade={{ delay: 0, duration: 150, easing: cubicOut }}
         />
     {:else if allShotsConceded !== null && viewManager.steps[$currentStep || 0].shotLayout === 'leftright'}
-        {#each [[0, 15/74, 0], [15/74, 18/74, 1], [33/74, 8/74, 2], [41/74, 18/74, 3], [59/74, 15/74, 4]] as [x, w, i]}
+        {#each [[0, 15 / 74, 0], [15 / 74, 18 / 74, 1], [33 / 74, 8 / 74, 2], [41 / 74, 18 / 74, 3], [59 / 74, 15 / 74, 4]] as [x, w, i]}
             <rect
                 x={x * width + 10}
                 y={0}
                 width={w * width - 20}
-                height={SimpleShotData.xGsum(allShotsConceded.binnedY[i]) * customHeight / allShotsConceded.xG}
+                height={(SimpleShotData.xGsum(allShotsConceded.binnedY[i]) * customHeight) /
+                    allShotsConceded.xG}
                 fill="{colours.xg}88"
                 stroke="none"
                 style="transition: height 0.15s"
