@@ -1,11 +1,8 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { ItemsService } from '$client';
     import type { PlayerSearch, TeamSearch } from '$client';
-    import { colours } from './colours';
     import { fade } from 'svelte/transition';
 
-    let items: (PlayerSearch | TeamSearch)[] = [];
+    export let items: (PlayerSearch | TeamSearch)[] = [];
     let searchText = '';
     let prevSearchText = '';
     let filteredItems: (PlayerSearch | TeamSearch)[];
@@ -13,11 +10,6 @@
     let searchEl: HTMLInputElement;
     let linksContainerEl: HTMLElement;
     let isFocused = false;
-
-    // load
-    onMount(async () => {
-        ItemsService.itemsRead().then((data) => (items = data));
-    });
 
     // behaviour
     $: filteredItems = items
