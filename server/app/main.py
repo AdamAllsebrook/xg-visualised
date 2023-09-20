@@ -52,7 +52,7 @@ async def init():
 
 
 @app.on_event("startup")
-@repeat_every(seconds=60 * 60 * 24)
+@repeat_every(seconds=60 * 60)
 async def update_cache_task():
     print('updating cache')
     await update_cache()
